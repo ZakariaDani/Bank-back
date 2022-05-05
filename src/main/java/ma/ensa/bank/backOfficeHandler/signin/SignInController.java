@@ -14,6 +14,9 @@ public class SignInController {
     private SignInService signInService;
     @PostMapping
     public ResponseBackOffice login(@RequestBody BackOffice backOffice) {
+        if(backOffice.getPassword()=="" || backOffice.getEmail()==""){
+            throw new IllegalStateException("Please Fill All Inputs!");
+        }
         return signInService.login(backOffice);
     }
 }

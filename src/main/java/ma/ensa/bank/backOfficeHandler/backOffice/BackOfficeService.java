@@ -20,16 +20,21 @@ public class BackOfficeService {
     private final AgentRepository agentRepository;
 
     public ResponseBackOffice signin(BackOffice backOffice) {
-        boolean present1 = backOfficeRepository.findByEmail(backOffice.getEmail()).isPresent();
-        if (present1) {
+        boolean present = backOfficeRepository.findByEmail(backOffice.getEmail()).isPresent();
+        if (present) {
             BackOffice value = backOfficeRepository.findByEmail(backOffice.getEmail()).get();
-            ResponseBackOffice responseBackOffice = new ResponseBackOffice();
-            BeanUtils.copyProperties(responseBackOffice, value);
-            backOfficeRepository.save(value);
-            return responseBackOffice;
+            if(backOffice.getPassword().equals(value.getPassword())) {
+                ResponseBackOffice responseBackOffice = new ResponseBackOffice();
+                BeanUtils.copyProperties(value, responseBackOffice);
+                backOfficeRepository.save(value);
+                return responseBackOffice;
+            }
+            else {
+                throw new IllegalStateException("email or password invalid");
+            }
         }
         else {
-            throw new IllegalStateException("invalid");
+            throw new IllegalStateException("invalid request");
         }
     }
 

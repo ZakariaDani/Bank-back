@@ -1,8 +1,6 @@
 package ma.ensa.bank.backOfficeHandler.backOffice;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ma.ensa.bank.Agent.Agent;
 
 
@@ -10,16 +8,18 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Data
+@ToString
 public class BackOffice implements Serializable {
     @Id
     @Column(name = "back_id", nullable = false)
-    private UUID back_id;
+    private String backId;
 
     @Column(unique = true)
     private String email;
