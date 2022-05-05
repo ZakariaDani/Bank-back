@@ -2,27 +2,37 @@ package ma.ensa.bank.backOfficeHandler.backOffice;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.Id;
+import lombok.NoArgsConstructor;
+import ma.ensa.bank.Agent.Agent;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
+@NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class BackOffice implements Serializable {
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "back_id", columnDefinition = "VARCHAR(255)")
-    private String back_id;
+    @Column(name = "back_id", nullable = false)
+    private UUID back_id;
 
     @Column(unique = true)
     private String email;
     private String password;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    @JoinColumn(name = "backoffice_id")
+    private List<Agent> agents = new ArrayList<>();
+
+
 
     public BackOffice(String email, String password) {
         this.email = email;
