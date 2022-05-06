@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Entity
+@Entity(name = "back_office")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -21,8 +21,9 @@ public class BackOffice implements Serializable {
     @Column(name = "back_id", nullable = false)
     private String backId;
 
-    @Column(unique = true)
+    @Column(name = "email",unique = true)
     private String email;
+    @Column(name = "password",unique = true)
     private String password;
 
     @OneToMany(
@@ -38,6 +39,7 @@ public class BackOffice implements Serializable {
         this.email = email;
         this.password = password;
     }
+
 
 
 }
