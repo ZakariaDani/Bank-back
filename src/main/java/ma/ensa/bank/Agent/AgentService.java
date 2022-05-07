@@ -1,13 +1,11 @@
 package ma.ensa.bank.Agent;
 
-import net.bytebuddy.agent.builder.AgentBuilder;
+import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,9 +27,10 @@ public class AgentService {
         Optional<Agent> opt2 = agentRepository.findAgentById(agent.getIdCardNumber());
         Optional<Agent> opt3 = agentRepository.findAgentByPhone(agent.getPhone());
         if(opt1.isPresent() || opt2.isPresent() || opt3.isPresent()){
-            throw new IllegalStateException("Douplicate Data in the database!!");
+            throw new IllegalStateException("Duplicate Data in the database!!");
         }else{
             System.out.println(agent);
+            agent.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode(agent.getPassword()));
             agentRepository.save(agent);
         }
     }
@@ -68,6 +67,10 @@ public class AgentService {
         }else {
             throw new IllegalStateException("This Id doesn't exist!");
         }
+    }
+
+    public Agent getAgentByEmail(String email){
+        return agentRepository.findByEmail(email);
     }
 
 }
