@@ -11,6 +11,8 @@ import java.util.UUID;
 @Repository
 public interface AgentRepository extends JpaRepository<Agent, String> {
 
+    Agent findByEmail(String email);
+
     @Query("SELECT s FROM Agent s WHERE s.email=?1")
     Optional<Agent> findAgentByEmail(String email);
 

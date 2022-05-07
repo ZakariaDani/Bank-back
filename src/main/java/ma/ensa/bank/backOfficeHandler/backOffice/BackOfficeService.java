@@ -37,7 +37,9 @@ public class BackOfficeService {
             throw new IllegalStateException("invalid request");
         }
     }
-
+    public BackOffice getBackOfficeByEmail(String email){
+        return backOfficeRepository.findByEmail(email).get();
+    }
     public List<Agent> getAllAgents(){
         return agentRepository.findAll();
     }

@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 @Transactional(readOnly = true)
 public interface BackOfficeRepository extends JpaRepository<BackOffice, String> {
+
     Optional<BackOffice> findByEmail(String email);
 }

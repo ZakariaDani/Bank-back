@@ -2,6 +2,9 @@ package ma.ensa.bank.backOfficeHandler.backOffice;
 
 import lombok.*;
 import ma.ensa.bank.Agent.Agent;
+import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 import javax.persistence.*;
@@ -31,13 +34,16 @@ public class BackOffice implements Serializable {
             fetch = FetchType.EAGER)
     @JoinColumn(name = "backoffice_id")
     private List<Agent> agents = new ArrayList<>();
-
+    
 
 
     public BackOffice(String email, String password) {
         this.email = email;
-        this.password = password;
+        this.password = PasswordEncoder.bCryptPasswordEncoder().encode(password);
     }
-
-
+    public BackOffice(String backId, String email, String password) {
+        this.backId = backId;
+        this.email = email;
+        this.password = PasswordEncoder.bCryptPasswordEncoder().encode(password);
+    }
 }
