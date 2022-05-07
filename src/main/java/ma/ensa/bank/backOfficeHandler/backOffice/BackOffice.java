@@ -3,8 +3,10 @@ package ma.ensa.bank.backOfficeHandler.backOffice;
 import lombok.*;
 import ma.ensa.bank.Agent.Agent;
 import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 
 import javax.persistence.*;
@@ -13,19 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Entity
+@Entity(name = "back_office")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@Data
 @ToString
+@Getter
 public class BackOffice implements Serializable {
     @Id
     @Column(name = "back_id", nullable = false)
     private String backId;
 
-    @Column(unique = true)
+    @Column(name = "email",unique = true)
     private String email;
+    @Column(name = "password")
     private String password;
 
     @OneToMany(
@@ -46,4 +49,6 @@ public class BackOffice implements Serializable {
         this.email = email;
         this.password = PasswordEncoder.bCryptPasswordEncoder().encode(password);
     }
+
+
 }

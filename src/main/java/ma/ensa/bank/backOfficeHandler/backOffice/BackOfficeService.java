@@ -6,6 +6,7 @@ import ma.ensa.bank.Agent.Agent;
 import ma.ensa.bank.Agent.AgentDTO;
 import ma.ensa.bank.Agent.AgentRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,18 +19,22 @@ public class BackOfficeService {
 
     private final BackOfficeRepository backOfficeRepository;
     private final AgentRepository agentRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
 
     public ResponseBackOffice signin(BackOffice backOffice) {
         boolean present = backOfficeRepository.findByEmail(backOffice.getEmail()).isPresent();
         if (present) {
             BackOffice value = backOfficeRepository.findByEmail(backOffice.getEmail()).get();
-            if(backOffice.getPassword().equals(value.getPassword())) {
+            if(bCryptPasswordEncoder.matches(backOffice.getPassword(), value.getPassword())) {
                 ResponseBackOffice responseBackOffice = new ResponseBackOffice();
                 BeanUtils.copyProperties(value, responseBackOffice);
                 backOfficeRepository.save(value);
                 return responseBackOffice;
             }
             else {
+                System.out.println(backOffice.getPassword()+"   "+backOffice.getEmail());
                 throw new IllegalStateException("email or password invalid");
             }
         }
