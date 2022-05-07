@@ -1,5 +1,6 @@
 package ma.ensa.bank.ClientHandler.Client;
 
+import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ public class ClientService {
             throw new IllegalStateException("Client already exist!!");
         }else{
             System.out.println(client);
+            client.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode(client.getPassword()));
             clientRepository.save(client);
         }
     }
@@ -76,6 +78,9 @@ public class ClientService {
         }
     }
 
+    public Client getClientByPhone(String phone){
+        return clientRepository.findByPhone(phone);
+    }
 }
 
 

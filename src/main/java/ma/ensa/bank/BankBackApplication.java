@@ -1,9 +1,12 @@
 package ma.ensa.bank;
 
 
+
 import ma.ensa.bank.Agent.Agent;
 import ma.ensa.bank.Agent.AgentService;
 
+import ma.ensa.bank.ClientHandler.Client.Client;
+import ma.ensa.bank.ClientHandler.Client.ClientService;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOfficeRepository;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOfficeService;
@@ -28,7 +31,7 @@ public class BankBackApplication {
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(AgentService agentService){
+	CommandLineRunner commandLineRunner(AgentService agentService, ClientService clientService){
 		return args -> {
 			agentService.addAgent(new Agent(
 					"EE256945",
@@ -46,6 +49,15 @@ public class BankBackApplication {
 					"agen2@gmail.com",
 					LocalDate.of(1999, 05, 04))
 			);
+
+			clientService.addClient(new Client("EE168423",
+					"ahmed",
+					"zibout",
+					"0685412369",
+					"ahmed@gmail.com",
+					LocalDate.of(2000, 03, 05),
+					"15963"));
+
 			BackOffice backOffice = new BackOffice("1",
 					"office@gmail.com",
 					"123456"
