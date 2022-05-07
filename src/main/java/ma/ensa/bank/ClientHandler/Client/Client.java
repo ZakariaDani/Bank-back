@@ -1,4 +1,4 @@
-package ma.ensa.bank.Client;
+package ma.ensa.bank.ClientHandler.Client;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

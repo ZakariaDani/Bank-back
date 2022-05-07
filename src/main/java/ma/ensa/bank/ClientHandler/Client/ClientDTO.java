@@ -1,4 +1,4 @@
-package ma.ensa.bank.Client;
+package ma.ensa.bank.ClientHandler.Client;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,4 +17,5 @@ public class ClientDTO {
     private String phone;
     private String email;
     private LocalDate birth;
+    private String password;
 }
