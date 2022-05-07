@@ -1,11 +1,10 @@
-package ma.ensa.bank.Client;
+package ma.ensa.bank.ClientHandler.Client;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 @Service
@@ -33,6 +32,17 @@ public class ClientService {
         }
         else {
             throw new IllegalStateException("invalid request");
+        }
+    }
+
+    public void addClient(Client client){
+        Optional<Client> opt1 = clientRepository.findClientByPhone(client.getPhone());
+        Optional<Client> opt2 = clientRepository.findClientById(client.getIdCardNumber());
+        if(opt1.isPresent() || opt2.isPresent() ){
+            throw new IllegalStateException("Client already exist!!");
+        }else{
+            System.out.println(client);
+            clientRepository.save(client);
         }
     }
 

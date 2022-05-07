@@ -1,4 +1,4 @@
-package ma.ensa.bank.Client;
+package ma.ensa.bank.ClientHandler.Client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +10,16 @@ public class ClientController {
     @Autowired
     public ClientController(ClientService clientService) {
         this.clientService = clientService;
+    }
+
+    @CrossOrigin
+    @PostMapping("/addclient")
+    public void addClient(@RequestBody Client client){
+        if(client==null){
+            throw new IllegalStateException("All Information Are Required");
+        }else{
+            clientService.addClient(client);
+        }
     }
 
     @CrossOrigin
