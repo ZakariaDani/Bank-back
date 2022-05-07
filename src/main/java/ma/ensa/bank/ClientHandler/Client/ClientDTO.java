@@ -11,11 +11,11 @@ import java.time.LocalDate;
 @Data
 
 public class ClientDTO {
-    private String idCardNumber;
+    private String id;
     private String fname;
     private String lname;
     private String phone;
     private String email;
-    private LocalDate birth;
     private String password;
+    private String solde;
 }

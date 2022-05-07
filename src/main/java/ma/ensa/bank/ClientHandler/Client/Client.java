@@ -3,9 +3,7 @@ package ma.ensa.bank.ClientHandler.Client;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -14,26 +12,25 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Client {
 
-        @Id
-        private String idCardNumber;
+        @Id @GeneratedValue(strategy=GenerationType.AUTO)
+        private String id;
         private String fname;
         private String lname;
         private String phone;
         private String email;
-        private LocalDate birth;
         private String password;
+        private double solde;
 
 
         public Client(){super();}
 
 
-        public Client(String fname, String lname, String phone, String email, LocalDate birth, String idCardNumber) {
+        public Client(String fname, String lname, String phone, String email, double solde) {
             this.fname = fname;
             this.lname = lname;
             this.phone = phone;
             this.email = email;
-            this.birth = birth;
-            this.idCardNumber = idCardNumber;
+            this.solde=solde;
         }
 
 
