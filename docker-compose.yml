@@ -1,0 +1,24 @@
+version: "3"
+services:
+  ebanking-app:
+    container_name: ebanking-docker
+    image: ebanking-app
+    ports:
+      - 8081:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/ebanking
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    restart: always
+    depends_on:
+      - mysqldb
+  mysqldb:
+    container_name: mysqldb
+    image: mysql:8.0.28
+    volumes:
+      -  /dockerdata/mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: ebanking
+      MYSQL_ROOT_PASSWORD: root
