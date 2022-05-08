@@ -63,9 +63,9 @@
 			<version>3.19.1</version>
 		</dependency>
 
-
-		<groupId>org.springframework.security</groupId>
-		<artifactId>spring-security-crypto</artifactId>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-crypto</artifactId>
 		</dependency>
 
 	</dependencies>

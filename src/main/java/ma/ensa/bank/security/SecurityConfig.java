@@ -3,6 +3,8 @@ package ma.ensa.bank.security;
 
 import ma.ensa.bank.Agent.Agent;
 import ma.ensa.bank.Agent.AgentService;
+import ma.ensa.bank.ClientHandler.Client.Client;
+import ma.ensa.bank.ClientHandler.Client.ClientService;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOfficeService;
 import ma.ensa.bank.filter.AuthenticationFilter;
@@ -31,6 +33,7 @@ import java.util.Collection;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired private AgentService agentService;
     @Autowired private BackOfficeService backOfficeService;
+    @Autowired private ClientService clientService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -38,24 +41,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
                 User user ;
-                Agent agent = agentService.getAgentByEmail(username);
-                if(agent != null){
+                Client client = clientService.getClientByPhone(username);
+                System.out.println(client);
+                if(client != null){
                     Collection<GrantedAuthority> authorities = new ArrayList<>();
-                    SimpleGrantedAuthority roleAuthority = new SimpleGrantedAuthority("ROLE_AGENT");
+                    SimpleGrantedAuthority roleAuthority = new SimpleGrantedAuthority("ROLE_CLIENT");
                     authorities.add(roleAuthority);
-                    user = new User(agent.getEmail(),agent.getPassword(), authorities );
-                }else {
-                    BackOffice backOffice = backOfficeService.getBackOfficeByEmail(username);
-                    if(backOffice != null){
+                    user = new User(client.getPhone(),client.getPassword(), authorities );
+                }else{
+                    Agent agent = agentService.getAgentByEmail(username);
+                    if(agent != null){
                         Collection<GrantedAuthority> authorities = new ArrayList<>();
-                        SimpleGrantedAuthority backOfficeAuthority = new SimpleGrantedAuthority("ROLE_BACKOFFICE");
-                        authorities.add(backOfficeAuthority);
-                        user = new User(backOffice.getEmail(),backOffice.getPassword(), authorities );
-                    }
-                    else {
-                        user = null;
-                    }
-                }
+                        SimpleGrantedAuthority roleAuthority = new SimpleGrantedAuthority("ROLE_AGENT");
+                        authorities.add(roleAuthority);
+                        user = new User(agent.getEmail(),agent.getPassword(), authorities );
+                    }else {
+                        BackOffice backOffice = backOfficeService.getBackOfficeByEmail(username);
+                        if(backOffice != null){
+                            Collection<GrantedAuthority> authorities = new ArrayList<>();
+                            SimpleGrantedAuthority backOfficeAuthority = new SimpleGrantedAuthority("ROLE_BACKOFFICE");
+                            authorities.add(backOfficeAuthority);
+                            user = new User(backOffice.getEmail(),backOffice.getPassword(), authorities );
+                        }
+                        else {
+                            user = null;
+                        }
+                    }}
                 return user;
             }
         });

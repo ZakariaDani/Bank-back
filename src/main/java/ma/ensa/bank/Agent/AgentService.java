@@ -61,7 +61,7 @@ public class AgentService {
         }
     }
     public void deleteAgent(String id){
-        Optional<Agent> opt1 = agentRepository.findAgentByEmail(id);
+        Optional<Agent> opt1 = agentRepository.findAgentById(id);
         if(opt1.isPresent()){
             agentRepository.deleteById(id);
         }else {

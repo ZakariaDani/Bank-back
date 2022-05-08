@@ -1,5 +1,6 @@
 package ma.ensa.bank.ClientHandler.Client;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -18,6 +19,10 @@ public class Client {
         private String lname;
         private String phone;
         private String email;
+
+        private LocalDate birth;
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+
         private String password;
         private double solde;
 
