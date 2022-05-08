@@ -15,7 +15,7 @@ public class AgentController {
         this.agentService = agentService;
     }
     @CrossOrigin
-    @GetMapping("/getagents")
+    @GetMapping("w")
     public List<Agent> getAgents(){
         return agentService.getAgents();
     }

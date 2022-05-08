@@ -3,6 +3,7 @@ package ma.ensa.bank.ClientHandler.Client;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 public class Client {
 
         @Id @GeneratedValue(strategy=GenerationType.AUTO)
-        private String id;
+        private Long id;
         private String fname;
         private String lname;
         private String phone;
