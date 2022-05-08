@@ -38,7 +38,7 @@ public class ClientService {
 
     public void addClient(Client client){
         Optional<Client> opt1 = clientRepository.findClientByPhone(client.getPhone());
-        Optional<Client> opt2 = clientRepository.findClientById(client.getIdCardNumber());
+        Optional<Client> opt2 = clientRepository.findClientById(client.getId());
         if(opt1.isPresent() || opt2.isPresent() ){
             throw new IllegalStateException("Client already exist!!");
         }else{
@@ -73,9 +73,7 @@ public class ClientService {
             }
             clientdb.setPhone(client.getPhone());
         }
-        if(client.getBirth()!=null){
-            clientdb.setBirth(client.getBirth());
-        }
+
     }
 
     public Client getClientByPhone(String phone){

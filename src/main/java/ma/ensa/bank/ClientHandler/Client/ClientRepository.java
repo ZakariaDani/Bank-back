@@ -10,6 +10,7 @@ import java.util.Optional;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, String> {
 
+
     Client findByPhone(String phone);
 
     @Query("SELECT s FROM Client s WHERE s.email=?1")
