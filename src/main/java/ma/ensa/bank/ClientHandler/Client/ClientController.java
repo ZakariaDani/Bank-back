@@ -23,8 +23,8 @@ public class ClientController {
     }
 
     @CrossOrigin
-    @PutMapping(value="/updateClient/{ClientCardId}")
-    public void updateClient(@PathVariable("ClientCardId") String ClientCardId, @RequestBody Client client){
-        clientService.updateClient(ClientCardId,client);
+    @PutMapping(value="/updateClient/{ClientId}")
+    public void updateClient(@PathVariable("ClientId") String ClientId, @RequestBody Client client){
+        clientService.updateClient(ClientId,client);
     }
 }
