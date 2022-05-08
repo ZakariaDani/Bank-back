@@ -49,7 +49,7 @@ public class ClientService {
     }
 
     @Transactional
-    public void updateClient(String ClientCardId,Client client){
+    public void updateClient(Long ClientCardId,Client client){
         Client clientdb = clientRepository.findClientById(ClientCardId).orElseThrow(
                 ()-> new IllegalStateException("Client doesn't exist!!")
         );
