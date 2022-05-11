@@ -50,34 +50,64 @@ public class BackOfficeService {
     }
 
     public Optional<Agent> getAgentById(String id){
-       return agentRepository.findAgentById(id);
+        return agentRepository.findAgentById(id);
     }
 
     public Agent saveAgent(AgentDTO agentDTO){
         Agent agent = new Agent();
-        agent.setName(agentDTO.getName());
+        agent.setFirstName(agentDTO.getFirstName());
+        agent.setLastName(agentDTO.getLastName());
         agent.setPhone(agentDTO.getPhone());
         agent.setEmail(agentDTO.getEmail());
-        agent.setBirth(agentDTO.getBirth());
+        agent.setDateOfBirth(agentDTO.getDateOfBirth());
+        agent.setPatente(agentDTO.getPatente());
+        agent.setMatricule(agentDTO.getMatricule());
+        agent.setAdress(agentDTO.getAdress());
+        agent.setDescription(agentDTO.getDescription());
+        agent.setFile(agentDTO.getFile());
         return agentRepository.save(agent);
     }
 
     public Agent updateAgent(Agent existedAgent, AgentDTO agentDTO){
-        String name = agentDTO.getName();
-        if(name != null) {
-            existedAgent.setName(name);;
+        String firstName = agentDTO.getFirstName();
+        if(firstName != null) {
+            existedAgent.setFirstName(firstName);
+        }
+        String lastName = agentDTO.getLastName();
+        if(lastName != null) {
+            existedAgent.setLastName(lastName);
         }
         String phone = agentDTO.getPhone();
         if(phone != null) {
-            existedAgent.setPhone(phone);;
+            existedAgent.setPhone(phone);
         }
         String email = agentDTO.getEmail();
         if(email != null) {
-            existedAgent.setEmail(email);;
+            existedAgent.setEmail(email);
         }
-        LocalDate birth = agentDTO.getBirth();
-        if(birth != null) {
-            existedAgent.setBirth(birth);
+        String description = agentDTO.getDescription();
+        if(description != null) {
+            existedAgent.setDescription(description);
+        }
+        String patente = agentDTO.getPatente();
+        if(patente != null) {
+            existedAgent.setPatente(patente);
+        }
+        String adress = agentDTO.getAdress();
+        if(adress != null) {
+            existedAgent.setAdress(adress);
+        }
+        String matricule = agentDTO.getMatricule();
+        if(matricule != null) {
+            existedAgent.setMatricule(matricule);
+        }
+        String file = agentDTO.getFile();
+        if(file != null) {
+            existedAgent.setFile(file);
+        }
+        LocalDate dateOfBirth = agentDTO.getDateOfBirth();
+        if(dateOfBirth != null) {
+            existedAgent.setDateOfBirth(dateOfBirth);
         }
         return agentRepository.save(existedAgent);
     }

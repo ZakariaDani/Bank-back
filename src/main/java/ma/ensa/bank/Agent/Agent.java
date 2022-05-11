@@ -16,23 +16,32 @@ import java.util.UUID;
 public class Agent {
     @Id
     private String idCardNumber;
-    private String name;
+    private String firstName, LastName, adress, email, phone, matricule, patente, description, file;
+    private LocalDate dateOfBirth;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-    private String phone;
-    private String email;
-    private LocalDate birth;
+
 
 
     public Agent(){super();}
 
 
-    public Agent(String name, String phone, String email, LocalDate birth, String idCardNumber) {
-        this.name = name;
+    public Agent(String firstName, String phone, String email, LocalDate dateOfBirth, String idCardNumber) {
+        this.firstName = firstName;
         this.phone = phone;
         this.email = email;
-        this.birth = birth;
+        this.dateOfBirth = dateOfBirth;
         this.idCardNumber = idCardNumber;
+    }
+
+    public Agent(String idCardNumber, String firstName, String password, String phone, String email, LocalDate dateOfBirth) {
+        this.idCardNumber = idCardNumber;
+        this.firstName = firstName;
+        this.password = password;
+        this.phone = phone;
+        this.email = email;
+        this.dateOfBirth = dateOfBirth;
+
     }
 }

@@ -11,8 +11,6 @@ import java.time.LocalDate;
 @Data
 public class AgentDTO {
     private String idCardNumber;
-    private String name;
-    private String phone;
-    private String email;
-    private LocalDate birth;
+    private String firstName, LastName, adress, email, phone, matricule, patente, description, file, password;
+    private LocalDate dateOfBirth;
 }
