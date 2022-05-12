@@ -39,8 +39,8 @@ public class AgentService {
         Agent dbagent = agentRepository.findAgentById(agentCardId).orElseThrow(
                 ()-> new IllegalStateException("Agent don't exist!!")
         );
-        if(agent.getName()!=null && agent.getName().length()>3 && !Objects.equals(dbagent.getName(),agent.getName())){
-            dbagent.setName(agent.getName());
+        if(agent.getFirstName()!=null && agent.getFirstName().length()>3 && !Objects.equals(dbagent.getFirstName(),agent.getFirstName())){
+            dbagent.setFirstName(agent.getFirstName());
         }
         if(agent.getEmail()!=null && agent.getEmail().length()>7 && !Objects.equals(dbagent.getEmail(),agent.getEmail())){
             Optional<Agent> opt = agentRepository.findAgentByEmail(agent.getEmail());
@@ -56,8 +56,8 @@ public class AgentService {
             }
             dbagent.setPhone(agent.getPhone());
         }
-        if(agent.getBirth()!=null){
-            dbagent.setBirth(agent.getBirth());
+        if(agent.getDateOfBirth()!=null){
+            dbagent.setDateOfBirth(agent.getDateOfBirth());
         }
     }
     public void deleteAgent(String id){
