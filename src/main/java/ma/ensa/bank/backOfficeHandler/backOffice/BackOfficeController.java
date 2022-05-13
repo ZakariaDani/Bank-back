@@ -22,7 +22,7 @@ public class BackOfficeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAgent(@PathVariable("id") final String id) {
+    public ResponseEntity<?> getAgent(@PathVariable("id") final Long id) {
         Optional<Agent> agent = backOfficeService.getAgentById(id);
         if(agent.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(agent.get());
@@ -42,7 +42,7 @@ public class BackOfficeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateAgent(@PathVariable("id") final String id, @RequestBody AgentDTO agentDTO) {
+    public ResponseEntity<?> updateAgent(@PathVariable("id") final Long id, @RequestBody AgentDTO agentDTO) {
         if (agentDTO == null)
             return ResponseEntity.badRequest().body("The provided agent is not valid");
 
@@ -59,7 +59,7 @@ public class BackOfficeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAgent(@PathVariable("id") String id) {
+    public ResponseEntity<?> deleteAgent(@PathVariable("id") Long id) {
         if (id == null)
             return ResponseEntity.badRequest().body("The given id is not valid");
         backOfficeService.deleteAgent(id);

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 public class AgentDTO {
-    private String idCardNumber;
+    private Long idCardNumber;
     private String firstName, LastName, adress, email, phone, matricule, patente, description, file, password;
     private LocalDate dateOfBirth;
 }

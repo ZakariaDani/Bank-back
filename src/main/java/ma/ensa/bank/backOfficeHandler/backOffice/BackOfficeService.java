@@ -49,7 +49,7 @@ public class BackOfficeService {
         return agentRepository.findAll();
     }
 
-    public Optional<Agent> getAgentById(String id){
+    public Optional<Agent> getAgentById(Long id){
         return agentRepository.findAgentById(id);
     }
 
@@ -112,7 +112,7 @@ public class BackOfficeService {
         return agentRepository.save(existedAgent);
     }
 
-    public void deleteAgent(String id){
+    public void deleteAgent(Long id){
         agentRepository.deleteById(id);
     }
 }

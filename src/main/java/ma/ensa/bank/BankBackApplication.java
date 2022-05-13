@@ -33,30 +33,30 @@ public class BankBackApplication {
 	@Bean
 	CommandLineRunner commandLineRunner(AgentService agentService, ClientService clientService){
 		return args -> {
-			agentService.addAgent(new Agent(
-					"EE256945",
-					"agent1",
-					"1234",
-					"0696785179",
-					"agen1@gmail.com",
-					LocalDate.of(2000, 02, 04))
-			);
-			agentService.addAgent(new Agent(
-					"EE128964",
-					"agent2",
-					"1234",
-					"0696785579",
-					"agen2@gmail.com",
-					LocalDate.of(1999, 05, 04))
-			);
-			clientService.addClient(new Client(null,
-					"ahmed",
-					"zibout",
-					"0685412369",
-					"ahmed@gmail.com",
-					LocalDate.of(2000, 03, 05),
-					"15963",
-					150.6));
+//			agentService.addAgent(new Agent(
+//					null,
+//					"agent1",
+//					"1234",
+//					"0696785179",
+//					"agen1@gmail.com",
+//					LocalDate.of(2000, 02, 04))
+//			);
+//			agentService.addAgent(new Agent(
+//					null,
+//					"agent2",
+//					"1234",
+//					"0696785579",
+//					"agen2@gmail.com",
+//					LocalDate.of(1999, 05, 04))
+//			);
+//			clientService.addClient(new Client(null,
+//					"ahmed",
+//					"zibout",
+//					"0685412369",
+//					"ahmed@gmail.com",
+//					LocalDate.of(2000, 03, 05),
+//					"15963",
+//					150.6));
 
 
 
