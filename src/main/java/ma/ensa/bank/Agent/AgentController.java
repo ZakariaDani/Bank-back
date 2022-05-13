@@ -30,7 +30,7 @@ public class AgentController {
     }
     @CrossOrigin
     @DeleteMapping(value="/deleteagent/{agentCardId}")
-    public void deleteagent(@PathVariable("agentCardId") String agentCardId){
+    public void deleteagent(@PathVariable("agentCardId") Long agentCardId){
         if(agentCardId==null){
             throw new IllegalStateException("Please Enter a valid CardId");
         }else {
@@ -39,7 +39,7 @@ public class AgentController {
     }
     @CrossOrigin
     @PutMapping(value="/updateagent/{agentCardId}")
-    public void updateagent(@PathVariable("agentCardId") String agentCardId,@RequestBody Agent agent){
+    public void updateagent(@PathVariable("agentCardId") Long agentCardId,@RequestBody Agent agent){
         agentService.updateAgent(agentCardId,agent);
     }
 

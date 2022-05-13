@@ -35,7 +35,7 @@ public class AgentService {
         }
     }
     @Transactional
-    public void updateAgent(String agentCardId,Agent agent){
+    public void updateAgent(Long agentCardId,Agent agent){
         Agent dbagent = agentRepository.findAgentById(agentCardId).orElseThrow(
                 ()-> new IllegalStateException("Agent don't exist!!")
         );
@@ -60,7 +60,7 @@ public class AgentService {
             dbagent.setDateOfBirth(agent.getDateOfBirth());
         }
     }
-    public void deleteAgent(String id){
+    public void deleteAgent(Long id){
         Optional<Agent> opt1 = agentRepository.findAgentById(id);
         if(opt1.isPresent()){
             agentRepository.deleteById(id);

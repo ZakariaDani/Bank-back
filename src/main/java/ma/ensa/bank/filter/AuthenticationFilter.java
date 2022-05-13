@@ -59,13 +59,13 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         Algorithm algorithm = Algorithm.HMAC256("ATLASSEBANK");
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 5 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 30L *24*60 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(ga -> ga.getAuthority()).collect(Collectors.toList()))
                 .sign(algorithm);
         String refreshToken = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 15 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 2L *30*24*60 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", new ArrayList<>())
                 .sign(algorithm);
