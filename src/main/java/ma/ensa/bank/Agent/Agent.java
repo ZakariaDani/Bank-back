@@ -14,8 +14,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Table
 public class Agent {
-    @Id
-    private String idCardNumber;
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long idCardNumber;
     private String firstName, LastName, adress, email, phone, matricule, patente, description, file;
     private LocalDate dateOfBirth;
 
@@ -27,7 +27,7 @@ public class Agent {
     public Agent(){super();}
 
 
-    public Agent(String firstName, String phone, String email, LocalDate dateOfBirth, String idCardNumber) {
+    public Agent(String firstName, String phone, String email, LocalDate dateOfBirth, Long idCardNumber) {
         this.firstName = firstName;
         this.phone = phone;
         this.email = email;
@@ -35,7 +35,7 @@ public class Agent {
         this.idCardNumber = idCardNumber;
     }
 
-    public Agent(String idCardNumber, String firstName, String password, String phone, String email, LocalDate dateOfBirth) {
+    public Agent(Long idCardNumber, String firstName, String password, String phone, String email, LocalDate dateOfBirth) {
         this.idCardNumber = idCardNumber;
         this.firstName = firstName;
         this.password = password;
