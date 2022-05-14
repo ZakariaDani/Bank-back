@@ -16,7 +16,15 @@ import java.util.UUID;
 public class Agent {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idCardNumber;
-    private String firstName, LastName, adress, email, phone, matricule, patente, description, file;
+    private String firstName;
+    private String LastName;
+    private String adress;
+    private String email;
+    private String phone;
+    private String matricule;
+    private String patente;
+    private String description;
+    private String file;
     private LocalDate dateOfBirth;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
