@@ -13,13 +13,10 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
     Client findByPhone(String phone);
 
-    @Query("SELECT s FROM Client s WHERE s.email=?1")
-    Optional<Client> findClientByEmail(String email);
+    Client findClientByEmail(String email);
 
-    @Query("SELECT s FROM Client s WHERE s.id=?1")
-    Optional<Client> findClientById(Long id);
+    Client findClientById(Long id);
 
-    @Query("SELECT s FROM Client s WHERE s.phone=?1")
-    Optional<Client> findClientByPhone(String phone);
+    Client findClientByPhone(String phone);
 
 }

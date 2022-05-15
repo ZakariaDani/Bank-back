@@ -40,6 +40,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             Map<String, String> requestMap = new ObjectMapper().readValue(request.getInputStream(), Map.class);
             username = requestMap.get("email");
             password = requestMap.get("password");
+
             if(username != null){
                 authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
             }else{
@@ -70,9 +71,18 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .withClaim("roles", new ArrayList<>())
                 .sign(algorithm);
         Map<String, String> tokens = new HashMap<>();
-        tokens.put("acces-tocken", accessToken);
+        tokens.put("access-token", accessToken);
         tokens.put("refresh-token", refreshToken);
         response.setContentType("application/json");
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed)
+            throws IOException, ServletException {
+
+        response.setContentType("application/json");
+        response.setHeader("Error","true");
+        new ObjectMapper().writeValue(response.getOutputStream(), "wrong credentials try again");
     }
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 
 @Entity
@@ -18,6 +19,7 @@ public class Client {
         private Long id;
         private String fname;
         private String lname;
+
         private String phone;
         private String email;
 
@@ -38,6 +40,7 @@ public class Client {
             this.email = email;
             this.solde=solde;
         }
+
 
 
 }

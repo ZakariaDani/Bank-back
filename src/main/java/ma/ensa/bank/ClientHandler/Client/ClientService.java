@@ -4,7 +4,12 @@ import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.Objects;
 import java.util.Optional;
@@ -18,9 +23,9 @@ public class ClientService {
     }
 
     public ClientDTO SignIn(Client client) {
-        boolean present = clientRepository.findClientByPhone(client.getPhone()).isPresent();
+        boolean present = clientRepository.findClientByPhone(client.getPhone()) != null;
         if (present) {
-            Client value = clientRepository.findClientByEmail(client.getEmail()).get();
+            Client value = clientRepository.findClientByEmail(client.getEmail());
             if(client.getPassword().equals(value.getPassword())) {
                 ClientDTO response = new ClientDTO();
                 BeanUtils.copyProperties(value, response);
@@ -37,9 +42,9 @@ public class ClientService {
     }
 
     public void addClient(Client client){
-        Optional<Client> opt1 = clientRepository.findClientByPhone(client.getPhone());
-        Optional<Client> opt2 = clientRepository.findClientById(client.getId());
-        if(opt1.isPresent() || opt2.isPresent() ){
+        Client opt1 = clientRepository.findClientByPhone(client.getPhone());
+        Client opt2 = clientRepository.findClientByEmail(client.getEmail());
+        if(opt1!=null || opt2 != null ){
             throw new IllegalStateException("Client already exist!!");
         }else{
             System.out.println(client);
@@ -48,11 +53,11 @@ public class ClientService {
         }
     }
 
-    @Transactional
-    public void updateClient(Long ClientCardId,Client client){
-        Client clientdb = clientRepository.findClientById(ClientCardId).orElseThrow(
-                ()-> new IllegalStateException("Client doesn't exist!!")
-        );
+    @PostMapping("/update")
+    public void updateClient(String email , Client client){
+
+        Client clientdb = clientRepository.findClientByEmail(email);
+
         if(client.getFname()!=null && client.getFname().length()>3 && !Objects.equals(clientdb.getFname(),client.getFname())){
             clientdb.setFname(client.getFname());
         }
@@ -60,15 +65,15 @@ public class ClientService {
             clientdb.setLname(client.getLname());
         }
         if(client.getEmail()!=null && client.getEmail().length()>7 && !Objects.equals(clientdb.getEmail(),client.getEmail())){
-            Optional<Client> opt = clientRepository.findClientByEmail(client.getEmail());
-            if(opt.isPresent()){
+            Client opt = clientRepository.findClientByEmail(client.getEmail());
+            if(opt != null){
                 throw new IllegalStateException("email you want to update already exist!!");
             }
             clientdb.setEmail(client.getEmail());
         }
         if(client.getPhone()!=null && client.getPhone().length()>9 && !Objects.equals(clientdb.getPhone(),client.getPhone())){
-            Optional<Client> opt = clientRepository.findClientByPhone(client.getPhone());
-            if(opt.isPresent()){
+            Client opt = clientRepository.findClientByPhone(client.getPhone());
+            if(opt != null ){
                 throw new IllegalStateException("phone you want to update already exist!!");
             }
             clientdb.setPhone(client.getPhone());
