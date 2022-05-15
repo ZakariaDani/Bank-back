@@ -3,6 +3,7 @@ package ma.ensa.bank;
 
 
 import ma.ensa.bank.Agent.Agent;
+import ma.ensa.bank.Agent.AgentRepository;
 import ma.ensa.bank.Agent.AgentService;
 
 import ma.ensa.bank.ClientHandler.Client.Client;
@@ -26,6 +27,7 @@ import java.util.List;
 @SpringBootApplication
 public class BankBackApplication {
 	@Autowired private BackOfficeRepository backOfficeRepository;
+	@Autowired private AgentRepository agentRepository;
 	public static void main(String[] args) {
 		SpringApplication.run(BankBackApplication.class, args);
 	}
@@ -65,6 +67,9 @@ public class BankBackApplication {
 					"123456"
 			);
 			backOfficeRepository.save(backOffice);
+
+			Agent agent = new Agent("Zakaria", "Dani", "Kaboul-afghanistan", "email@email.com", "0606060606", "E156156", "5556", "good one", "file", null, "1234");
+			agentRepository.save(agent);
 		};
 	}
 }

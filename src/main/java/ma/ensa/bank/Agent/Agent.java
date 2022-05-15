@@ -3,6 +3,7 @@ package ma.ensa.bank.Agent;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -30,7 +31,11 @@ public class Agent {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-
+    @ManyToOne(
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(name="backoffice_id")
+    private BackOffice backOffice;
 
     public Agent(){super();}
 
@@ -51,5 +56,19 @@ public class Agent {
         this.email = email;
         this.dateOfBirth = dateOfBirth;
 
+    }
+
+    public Agent(String firstName, String lastName, String adress, String email, String phone, String matricule, String patente, String description, String file, LocalDate dateOfBirth, String password) {
+        this.firstName = firstName;
+        LastName = lastName;
+        this.adress = adress;
+        this.email = email;
+        this.phone = phone;
+        this.matricule = matricule;
+        this.patente = patente;
+        this.description = description;
+        this.file = file;
+        this.dateOfBirth = dateOfBirth;
+        this.password = password;
     }
 }
