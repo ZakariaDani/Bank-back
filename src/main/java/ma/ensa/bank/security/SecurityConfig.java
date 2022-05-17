@@ -8,7 +8,6 @@ import ma.ensa.bank.ClientHandler.Client.ClientService;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOfficeService;
 import ma.ensa.bank.filter.AuthenticationFilter;
-import ma.ensa.bank.filter.AuthorisationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +23,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -86,9 +84,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/login", "/token/refresh/**").permitAll();
         //we will add it later when the front is finished
-        http.authorizeHttpRequests().anyRequest().authenticated();
-        http.addFilter(authenticationFilter );
-        http.addFilterBefore(new AuthorisationFilter(), UsernamePasswordAuthenticationFilter.class);
+        //http.authorizeHttpRequests().anyRequest().authenticated();
+        //http.addFilter(authenticationFilter );
+        //http.addFilterBefore(new AuthorisationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

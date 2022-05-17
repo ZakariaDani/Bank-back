@@ -3,7 +3,6 @@ package ma.ensa.bank.ClientHandler.Client;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -20,11 +19,13 @@ public class Client {
         private String lname;
         private String phone;
         private String email;
+        private String address;
 
         private LocalDate birth;
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 
-        private String password;
+        //pass just for test !!!!!
+        private String password="123456";
         private double solde;
 
 
@@ -39,5 +40,13 @@ public class Client {
             this.solde=solde;
         }
 
-
+        public Client(String fname, String lname, String phone, String email, String address, LocalDate birth, double solde) {
+            this.fname = fname;
+            this.lname = lname;
+            this.phone = phone;
+            this.email = email;
+            this.address = address;
+            this.birth = birth;
+            this.solde = solde;
+        }
 }
