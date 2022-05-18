@@ -41,6 +41,7 @@ public class BackOfficeController {
                 .body(newAgent);
     }
 
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateAgent(@PathVariable("id") final Long id, @RequestBody AgentDTO agentDTO) {
         if (agentDTO == null)

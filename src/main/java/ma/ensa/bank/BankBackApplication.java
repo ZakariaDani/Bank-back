@@ -3,6 +3,7 @@ package ma.ensa.bank;
 
 
 import ma.ensa.bank.Agent.Agent;
+import ma.ensa.bank.Agent.AgentDTO;
 import ma.ensa.bank.Agent.AgentRepository;
 import ma.ensa.bank.Agent.AgentService;
 
@@ -11,6 +12,7 @@ import ma.ensa.bank.ClientHandler.Client.ClientService;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOfficeRepository;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOfficeService;
+import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -28,6 +30,9 @@ import java.util.List;
 public class BankBackApplication {
 	@Autowired private BackOfficeRepository backOfficeRepository;
 	@Autowired private AgentRepository agentRepository;
+
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	public static void main(String[] args) {
 		SpringApplication.run(BankBackApplication.class, args);
 	}
@@ -68,8 +73,6 @@ public class BankBackApplication {
 			);
 			backOfficeRepository.save(backOffice);
 
-			Agent agent = new Agent("Zakaria", "Dani", "Kaboul-afghanistan", "email@email.com", "0606060606", "E156156", "5556", "good one", "file", null, "1234");
-			agentRepository.save(agent);
 		};
 	}
 }

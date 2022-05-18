@@ -66,7 +66,7 @@ public class BackOfficeService {
         agent.setDescription(agentDTO.getDescription());
         agent.setFile(agentDTO.getFile());
         agent.setPassword(bCryptPasswordEncoder.encode(agentDTO.getPassword()));
-
+        System.out.println(agentDTO.getBackofficeEmail());
         BackOffice backOffice = backOfficeRepository.findByEmail(agentDTO.getBackofficeEmail()).get();
         agent.setBackOffice(backOffice);
 //        backOffice.getAgents().add(agent);
