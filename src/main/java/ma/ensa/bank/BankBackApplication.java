@@ -1,33 +1,24 @@
 package ma.ensa.bank;
 
 
-
 import ma.ensa.bank.Agent.Agent;
 import ma.ensa.bank.Agent.AgentRepository;
 import ma.ensa.bank.Agent.AgentService;
-
-import ma.ensa.bank.ClientHandler.Client.Client;
+import ma.ensa.bank.ClientHandler.Client.ClientRepository;
 import ma.ensa.bank.ClientHandler.Client.ClientService;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOfficeRepository;
-import ma.ensa.bank.backOfficeHandler.backOffice.BackOfficeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 @SpringBootApplication
 public class BankBackApplication {
 	@Autowired private BackOfficeRepository backOfficeRepository;
 	@Autowired private AgentRepository agentRepository;
+	@Autowired private ClientRepository clientRepository;
 	public static void main(String[] args) {
 		SpringApplication.run(BankBackApplication.class, args);
 	}
@@ -59,6 +50,8 @@ public class BankBackApplication {
 //					LocalDate.of(2000, 03, 05),
 //					"15963",
 //					150.6));
+			agentService.addAgent(new Agent("Zakaria", "Dani", "Kaboul-afghanistan", "email@email.com", "0606060606", "E156156", "5556", "good one", "file", null, "123456"));
+			//clientService.addClient(new Client("Marouane","Zibout","0625252528","maoruane@email.com","Mahmid", LocalDate.of(2000, 03, 05),100.00));
 
 
 
@@ -69,7 +62,6 @@ public class BankBackApplication {
 			backOfficeRepository.save(backOffice);
 
 			Agent agent = new Agent("Zakaria", "Dani", "Kaboul-afghanistan", "email@email.com", "0606060606", "E156156", "5556", "good one", "file", null, "1234");
-			agentRepository.save(agent);
 		};
 	}
 }
