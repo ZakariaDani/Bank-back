@@ -67,7 +67,9 @@ public class BackOfficeService {
         agent.setFile(agentDTO.getFile());
         agent.setPassword(bCryptPasswordEncoder.encode(agentDTO.getPassword()));
         System.out.println(agentDTO.getBackofficeEmail());
-        BackOffice backOffice = backOfficeRepository.findByEmail(agentDTO.getBackofficeEmail()).get();
+        //fix a problem watch the response on postman
+        //BackOffice backOffice = backOfficeRepository.findByEmail(agentDTO.getBackofficeEmail()).get();
+        BackOffice backOffice = null;
         agent.setBackOffice(backOffice);
 //        backOffice.getAgents().add(agent);
 //        backOfficeRepository.save(backOffice);
