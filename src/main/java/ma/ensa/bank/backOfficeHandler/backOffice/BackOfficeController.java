@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
+@CrossOrigin
 @RequestMapping("/api/v1/backoffice/agents")
 public class BackOfficeController {
     private final BackOfficeService backOfficeService;
@@ -41,14 +42,18 @@ public class BackOfficeController {
                 .body(newAgent);
     }
 
-    @PutMapping("/{id}")
+
+    @PatchMapping ("/{id}")
     public ResponseEntity<?> updateAgent(@PathVariable("id") final Long id, @RequestBody AgentDTO agentDTO) {
+        System.out.println("here");
         if (agentDTO == null)
             return ResponseEntity.badRequest().body("The provided agent is not valid");
 
         Optional<Agent> existedAgent = backOfficeService.getAgentById(id);
         if(existedAgent.isPresent()) {
             Agent currentAgent = existedAgent.get();
+            System.out.println("**********************");
+            System.out.println(agentDTO.getFirstName());
             Agent newAgent = backOfficeService.updateAgent(currentAgent, agentDTO);
             return ResponseEntity
                     .ok()
@@ -57,6 +62,7 @@ public class BackOfficeController {
             return ResponseEntity.badRequest().body("There is no agent with that specific id");
         }
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAgent(@PathVariable("id") Long id) {

@@ -2,6 +2,7 @@ package ma.ensa.bank;
 
 
 import ma.ensa.bank.Agent.Agent;
+import ma.ensa.bank.Agent.AgentDTO;
 import ma.ensa.bank.Agent.AgentRepository;
 import ma.ensa.bank.Agent.AgentService;
 import ma.ensa.bank.ClientHandler.Client.ClientRepository;
@@ -19,6 +20,7 @@ public class BankBackApplication {
 	@Autowired private BackOfficeRepository backOfficeRepository;
 	@Autowired private AgentRepository agentRepository;
 	@Autowired private ClientRepository clientRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(BankBackApplication.class, args);
 	}
@@ -50,7 +52,8 @@ public class BankBackApplication {
 //					LocalDate.of(2000, 03, 05),
 //					"15963",
 //					150.6));
-			agentService.addAgent(new Agent("Zakaria", "Dani", "Kaboul-afghanistan", "email@email.com", "0606060606", "E156156", "5556", "good one", "file", null, "123456"));
+			//clientService.addClient(new Client("Marouane","Zibout","0625252528","maoruane@email.com","Mahmid", LocalDate.of(2000, 03, 05),100.00));
+
 			//clientService.addClient(new Client("Marouane","Zibout","0625252528","maoruane@email.com","Mahmid", LocalDate.of(2000, 03, 05),100.00));
 
 
@@ -61,7 +64,10 @@ public class BankBackApplication {
 			);
 			backOfficeRepository.save(backOffice);
 
-			Agent agent = new Agent("Zakaria", "Dani", "Kaboul-afghanistan", "email@email.com", "0606060606", "E156156", "5556", "good one", "file", null, "1234");
+
+			agentService.addAgent(new Agent("Zakaria", "Dani", "Kaboul-afghanistan", "email@email.com", "0606060606", "E156156", "5556", "good one", "file", null, "123456"));
+			agentService.addAgent(new Agent("Aymane", "Daif", "Kaboul-afghanistan", "email1@email.com", "0606060607", "E15615", "5557", "good one", "file", null, "1234"));
+
 		};
 	}
 }
