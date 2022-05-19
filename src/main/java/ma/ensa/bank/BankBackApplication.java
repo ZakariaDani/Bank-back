@@ -52,6 +52,7 @@ public class BankBackApplication {
 //					LocalDate.of(2000, 03, 05),
 //					"15963",
 //					150.6));
+			//clientService.addClient(new Client("Marouane","Zibout","0625252528","maoruane@email.com","Mahmid", LocalDate.of(2000, 03, 05),100.00));
 
 			//clientService.addClient(new Client("Marouane","Zibout","0625252528","maoruane@email.com","Mahmid", LocalDate.of(2000, 03, 05),100.00));
 
@@ -63,8 +64,10 @@ public class BankBackApplication {
 			);
 			backOfficeRepository.save(backOffice);
 
+
 			agentService.addAgent(new Agent("Zakaria", "Dani", "Kaboul-afghanistan", "email@email.com", "0606060606", "E156156", "5556", "good one", "file", null, "123456"));
 			agentService.addAgent(new Agent("Aymane", "Daif", "Kaboul-afghanistan", "email1@email.com", "0606060607", "E15615", "5557", "good one", "file", null, "1234"));
+
 		};
 	}
 }
