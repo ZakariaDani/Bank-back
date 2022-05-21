@@ -8,6 +8,7 @@ import ma.ensa.bank.Agent.AgentRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -45,6 +46,9 @@ public class BackOfficeService {
     public BackOffice getBackOfficeByEmail(String email){
         return backOfficeRepository.findByEmail(email).get();
     }
+    public Agent getAgentByEmail(String email){
+        return agentRepository.findByEmail(email);
+    }
     public List<Agent> getAllAgents(){
         return agentRepository.findAll();
     }
@@ -67,9 +71,7 @@ public class BackOfficeService {
         agent.setFile(agentDTO.getFile());
         agent.setPassword(bCryptPasswordEncoder.encode(agentDTO.getPassword()));
         System.out.println(agentDTO.getBackofficeEmail());
-        //fix a problem watch the response on postman
-        //BackOffice backOffice = backOfficeRepository.findByEmail(agentDTO.getBackofficeEmail()).get();
-        BackOffice backOffice = null;
+        BackOffice backOffice = backOfficeRepository.findByEmail(agentDTO.getBackofficeEmail()).get();
         agent.setBackOffice(backOffice);
 //        backOffice.getAgents().add(agent);
 //        backOfficeRepository.save(backOffice);
@@ -121,7 +123,9 @@ public class BackOfficeService {
         return agentRepository.save(existedAgent);
     }
 
-    public void deleteAgent(Long id){
-        agentRepository.deleteById(id);
+    @Transactional
+    public void deleteAgent(String agentEmail){
+        agentRepository.deleteByEmail(agentEmail);
+
     }
 }

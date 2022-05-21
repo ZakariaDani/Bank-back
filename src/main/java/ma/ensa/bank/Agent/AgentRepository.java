@@ -1,8 +1,10 @@
 package ma.ensa.bank.Agent;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -21,5 +23,9 @@ public interface AgentRepository extends JpaRepository<Agent, Long> {
 
     @Query("SELECT s FROM Agent s WHERE s.phone=?1")
     Optional<Agent> findAgentByPhone(String phone);
+
+    @Modifying
+    @Query("DELETE FROM Agent a WHERE a.email=:email")
+    void deleteByEmail(@Param("email") String email);
 
 }

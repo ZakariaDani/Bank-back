@@ -3,6 +3,7 @@ package ma.ensa.bank.backOfficeHandler.backOffice;
 import lombok.AllArgsConstructor;
 import ma.ensa.bank.Agent.Agent;
 import ma.ensa.bank.Agent.AgentDTO;
+import ma.ensa.bank.Agent.AgentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1/backoffice/agents")
 public class BackOfficeController {
     private final BackOfficeService backOfficeService;
+    private final AgentService agentService;
 
     @GetMapping
     public ResponseEntity<List<Agent>> getAgents() {
@@ -52,8 +54,7 @@ public class BackOfficeController {
         Optional<Agent> existedAgent = backOfficeService.getAgentById(id);
         if(existedAgent.isPresent()) {
             Agent currentAgent = existedAgent.get();
-            System.out.println("**********************");
-            System.out.println(agentDTO.getFirstName());
+
             Agent newAgent = backOfficeService.updateAgent(currentAgent, agentDTO);
             return ResponseEntity
                     .ok()
@@ -64,11 +65,13 @@ public class BackOfficeController {
     }
 
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAgent(@PathVariable("id") Long id) {
-        if (id == null)
-            return ResponseEntity.badRequest().body("The given id is not valid");
-        backOfficeService.deleteAgent(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @DeleteMapping("/{agentEmail}")
+    public ResponseEntity<?> deleteAgent(@PathVariable("agentEmail") String agentEmail) {
+        if (agentEmail == null)
+            return ResponseEntity.badRequest().body("The given agent is not valid");
+        if (agentService.getAgentByEmail(agentEmail) == null)
+            return ResponseEntity.badRequest().body("The given agent is not valid");
+        backOfficeService.deleteAgent(agentEmail);
+        return ResponseEntity.ok().body(agentService.getAgentByEmail(agentEmail));
     }
 }

@@ -32,7 +32,7 @@ public class Agent {
     private String password;
 
     @ManyToOne(
-            cascade = CascadeType.ALL
+            cascade = CascadeType.MERGE
     )
     @JoinColumn(name="backoffice_id")
     private BackOffice backOffice;

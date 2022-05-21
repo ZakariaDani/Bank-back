@@ -9,6 +9,7 @@ import ma.ensa.bank.ClientHandler.Client.ClientRepository;
 import ma.ensa.bank.ClientHandler.Client.ClientService;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOfficeRepository;
+import ma.ensa.bank.backOfficeHandler.backOffice.BackOfficeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,13 +21,14 @@ public class BankBackApplication {
 	@Autowired private BackOfficeRepository backOfficeRepository;
 	@Autowired private AgentRepository agentRepository;
 	@Autowired private ClientRepository clientRepository;
+	@Autowired private BackOfficeService backOfficeService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(BankBackApplication.class, args);
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(AgentService agentService, ClientService clientService){
+	CommandLineRunner commandLineRunner( ClientService clientService){
 		return args -> {
 //			agentService.addAgent(new Agent(
 //					null,
@@ -58,15 +60,15 @@ public class BankBackApplication {
 
 
 
-			BackOffice backOffice = new BackOffice("1",
+			BackOffice backOffice = new BackOffice(null,
 					"office@gmail.com",
 					"123456"
 			);
 			backOfficeRepository.save(backOffice);
 
 
-			agentService.addAgent(new Agent("Zakaria", "Dani", "Kaboul-afghanistan", "email@email.com", "0606060606", "E156156", "5556", "good one", "file", null, "123456"));
-			agentService.addAgent(new Agent("Aymane", "Daif", "Kaboul-afghanistan", "email1@email.com", "0606060607", "E15615", "5557", "good one", "file", null, "1234"));
+			backOfficeService.saveAgent(new AgentDTO(null,"Zakaria", "Dani", "Kaboul-afghanistan", "zakaria@email.com", "0606060606", "E156156", "5556", "good one", "file", "Dani1234", backOffice.getEmail(),null ));
+			backOfficeService.saveAgent(new AgentDTO(null,"Aymane", "Daif", "azli", "aymane@email.com", "070707070707", "E933333", "5557", "OK", "file", "Daif1234", backOffice.getEmail(),null ));
 
 		};
 	}

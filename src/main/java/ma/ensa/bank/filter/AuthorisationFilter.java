@@ -40,6 +40,11 @@ public class AuthorisationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 filterChain.doFilter(request, response);
             } catch (Exception e) {
+                System.out.println("**************************");
+                System.out.println(e.getCause());
+                System.out.println("**************************");
+                System.out.println(e.getMessage());
+                System.out.println("*****************************");
                 response.setHeader("error", e.getMessage());
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
