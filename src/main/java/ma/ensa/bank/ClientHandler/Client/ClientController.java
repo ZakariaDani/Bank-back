@@ -24,7 +24,7 @@ public class ClientController {
 
     @CrossOrigin
     @PostMapping("/addclient")
-    public void addClient(@RequestBody Client client){
+    public void addClient(@RequestBody ClientDTO client){
         if(client==null){
             throw new IllegalStateException("No client to add");
         }else{
