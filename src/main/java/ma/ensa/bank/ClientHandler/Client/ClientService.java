@@ -39,31 +39,41 @@ public class ClientService {
         }
     }
 
-    public void addClient(Client client){
-        Optional<Client> opt1 = clientRepository.findClientByPhone(client.getPhone());
-        Optional<Client> opt2 = clientRepository.findClientById(client.getId());
-        Optional<Client> opt3 = clientRepository.findClientByEmail(client.getEmail());
+    public void addClient(ClientDTO clientDTO){
+        Optional<Client> opt1 = clientRepository.findClientByPhone(clientDTO.getPhone());
+        Optional<Client> opt2 = clientRepository.findClientById(clientDTO.getId());
+        Optional<Client> opt3 = clientRepository.findClientByEmail(clientDTO.getEmail());
         Pattern phonepatt = Pattern.compile("^\\d{10}$");
         Pattern emailpatt = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
         Pattern namespatt = Pattern.compile("^[A-Za-z]{3,7}");
         if(opt1.isPresent() || opt2.isPresent() || opt3.isPresent()){
             throw new IllegalStateException("Doublicate data in the database!!");
-        }else if(client.getEmail().trim().isEmpty() || client.getPhone().trim().isEmpty() || client.getFname().trim().isEmpty() || client.getLname().trim().isEmpty() || client.getAddress().trim().isEmpty() || client.getBirth()==null){
+        }else if(clientDTO.getEmail().trim().isEmpty() || clientDTO.getPhone().trim().isEmpty() || clientDTO.getFname().trim().isEmpty() || clientDTO.getLname().trim().isEmpty() || clientDTO.getAddress().trim().isEmpty() || clientDTO.getBirth()==null){
             throw new IllegalStateException("All fields are required!");
         }else{
-            if(!phonepatt.matcher(client.getPhone()).matches()){
+            if(!phonepatt.matcher(clientDTO.getPhone()).matches()){
                 throw new IllegalStateException("Phone can containe only digits!!");
             }
-            if(!emailpatt.matcher(client.getEmail()).matches()){
+            if(!emailpatt.matcher(clientDTO.getEmail()).matches()){
                 throw new IllegalStateException("Email format is not valid!!");
             }
-            if(!namespatt.matcher(client.getFname()).matches()){
+            if(!namespatt.matcher(clientDTO.getFname()).matches()){
                 throw new IllegalStateException("First name is not valid");
             }
-            if(!namespatt.matcher(client.getLname()).matches()){
+            if(!namespatt.matcher(clientDTO.getLname()).matches()){
                 throw new IllegalStateException("Last name is not valid");
             }
-            client.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode(client.getPassword()));
+            clientDTO.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode(clientDTO.getPassword()));
+            Client client = new Client();
+            client.setId(clientDTO.getId());
+            client.setFname(clientDTO.getFname());
+            client.setLname(clientDTO.getLname());
+            client.setPhone(clientDTO.getPhone());
+            client.setBirth(clientDTO.getBirth());
+            client.setEmail(clientDTO.getEmail());
+            client.setPassword(clientDTO.getPassword());
+            client.setSolde(clientDTO.getSolde());
+            client.setAddress(clientDTO.getAddress());
             clientRepository.save(client);
         }
     }
