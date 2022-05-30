@@ -1,4 +1,4 @@
-package ma.ensa.bank.Agent;
+package ma.ensa.bank.agentHandler.agent;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

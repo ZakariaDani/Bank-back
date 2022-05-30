@@ -48,7 +48,7 @@ public class ClientController {
         if(clientid==null){
             throw new IllegalStateException("Please Enter a valid CardId");
         }else {
-            clientService.deleteAgent(clientid);
+            clientService.deleteClient(clientid);
         }
     }
 }

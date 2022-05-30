@@ -2,9 +2,9 @@ package ma.ensa.bank.backOfficeHandler.backOffice;
 
 
 import lombok.AllArgsConstructor;
-import ma.ensa.bank.Agent.Agent;
-import ma.ensa.bank.Agent.AgentDTO;
-import ma.ensa.bank.Agent.AgentRepository;
+import ma.ensa.bank.agentHandler.agent.Agent;
+import ma.ensa.bank.agentHandler.agent.AgentDTO;
+import ma.ensa.bank.agentHandler.agent.AgentRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class BackOfficeService {
         return backOfficeRepository.findByEmail(email).get();
     }
     public Agent getAgentByEmail(String email){
-        return agentRepository.findByEmail(email);
+        return agentRepository.findByEmail(email).get();
     }
     public List<Agent> getAllAgents(){
         return agentRepository.findAll();
@@ -126,6 +126,5 @@ public class BackOfficeService {
     @Transactional
     public void deleteAgent(String agentEmail){
         agentRepository.deleteByEmail(agentEmail);
-
     }
 }

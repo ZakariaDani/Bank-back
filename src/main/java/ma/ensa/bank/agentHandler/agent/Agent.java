@@ -1,4 +1,4 @@
-package ma.ensa.bank.Agent;
+package ma.ensa.bank.agentHandler.agent;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -7,8 +7,6 @@ import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Data

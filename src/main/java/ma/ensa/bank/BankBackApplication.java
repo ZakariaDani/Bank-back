@@ -2,8 +2,8 @@ package ma.ensa.bank;
 
 
 
-import ma.ensa.bank.Agent.AgentDTO;
-import ma.ensa.bank.Agent.AgentRepository;
+import ma.ensa.bank.agentHandler.agent.AgentDTO;
+import ma.ensa.bank.agentHandler.agent.AgentRepository;
 
 import ma.ensa.bank.ClientHandler.Client.ClientDTO;
 import ma.ensa.bank.ClientHandler.Client.ClientRepository;

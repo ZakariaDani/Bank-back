@@ -1,9 +1,9 @@
 package ma.ensa.bank.backOfficeHandler.backOffice;
 
 import lombok.AllArgsConstructor;
-import ma.ensa.bank.Agent.Agent;
-import ma.ensa.bank.Agent.AgentDTO;
-import ma.ensa.bank.Agent.AgentService;
+import ma.ensa.bank.agentHandler.agent.Agent;
+import ma.ensa.bank.agentHandler.agent.AgentDTO;
+import ma.ensa.bank.agentHandler.agent.AgentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
