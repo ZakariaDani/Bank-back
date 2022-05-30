@@ -76,18 +76,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable();
+        // http.cors().and().csrf().disable();
         //authentication filters:
-//        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager());
-//        http.cors();
-//
-//        http.csrf().disable();
-//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//        http.authorizeRequests().antMatchers("/login", "/token/refresh/**").permitAll();
-//        //we will add it later when the front is finished
-//        http.authorizeHttpRequests().anyRequest().authenticated();
-//        http.addFilter(authenticationFilter);
-//        http.addFilterBefore(new AuthorisationFilter(), UsernamePasswordAuthenticationFilter.class);
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager());
+        http.cors();
+
+        http.csrf().disable();
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.authorizeRequests().antMatchers("/login", "/token/refresh/**").permitAll();
+        //we will add it later when the front is finished
+        http.authorizeHttpRequests().anyRequest().authenticated();
+        http.addFilter(authenticationFilter);
+        http.addFilterBefore(new AuthorisationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
