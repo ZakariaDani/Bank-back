@@ -1,7 +1,9 @@
-package ma.ensa.bank.Agent;
+package ma.ensa.bank.agentHandler.agent;
 
+import lombok.AllArgsConstructor;
+import ma.ensa.bank.backOfficeHandler.backOffice.ResponseBackOffice;
 import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +13,28 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class AgentService {
     private final AgentRepository agentRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    public AgentService(AgentRepository agentRepository) {
-        this.agentRepository = agentRepository;
+    public Agent signin(Agent agent) {
+        boolean present = agentRepository.findByEmail(agent.getEmail()).isPresent();
+        if (present) {
+            Agent value = agentRepository.findByEmail(agent.getEmail()).get();
+            if(bCryptPasswordEncoder.matches(agent.getPassword(), value.getPassword())) {
+                ResponseBackOffice responseBackOffice = new ResponseBackOffice();
+                BeanUtils.copyProperties(value, responseBackOffice);
+                return value;
+            }
+            else {
+                System.out.println(agent.getPassword()+"   "+agent.getEmail());
+                throw new IllegalStateException("email or password invalid");
+            }
+        }
+        else {
+            throw new IllegalStateException("invalid request");
+        }
     }
 
     public List<Agent> getAgents(){
@@ -70,7 +88,7 @@ public class AgentService {
     }
 
     public Agent getAgentByEmail(String email){
-        return agentRepository.findByEmail(email);
+        return agentRepository.findByEmail(email).get();
     }
 
 }

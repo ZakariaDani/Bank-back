@@ -39,20 +39,20 @@ public class ClientService {
         }
     }
 
-    public void addClient(ClientDTO clientDTO){
+    public Client addClient(ClientDTO clientDTO){
         Optional<Client> opt1 = clientRepository.findClientByPhone(clientDTO.getPhone());
         Optional<Client> opt2 = clientRepository.findClientById(clientDTO.getId());
         Optional<Client> opt3 = clientRepository.findClientByEmail(clientDTO.getEmail());
         Pattern phonepatt = Pattern.compile("^\\d{10}$");
         Pattern emailpatt = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
-        Pattern namespatt = Pattern.compile("^[A-Za-z]{3,7}");
+        Pattern namespatt = Pattern.compile("^[A-Za-z]{3,20}");
         if(opt1.isPresent() || opt2.isPresent() || opt3.isPresent()){
             throw new IllegalStateException("Doublicate data in the database!!");
         }else if(clientDTO.getEmail().trim().isEmpty() || clientDTO.getPhone().trim().isEmpty() || clientDTO.getFname().trim().isEmpty() || clientDTO.getLname().trim().isEmpty() || clientDTO.getAddress().trim().isEmpty() || clientDTO.getBirth()==null){
             throw new IllegalStateException("All fields are required!");
         }else{
             if(!phonepatt.matcher(clientDTO.getPhone()).matches()){
-                throw new IllegalStateException("Phone can containe only digits!!");
+                throw new IllegalStateException("Phone number is not valid!!");
             }
             if(!emailpatt.matcher(clientDTO.getEmail()).matches()){
                 throw new IllegalStateException("Email format is not valid!!");
@@ -75,19 +75,18 @@ public class ClientService {
             client.setSolde(clientDTO.getSolde());
             client.setAddress(clientDTO.getAddress());
             clientRepository.save(client);
+            return client;
         }
     }
 
     @Transactional
-    public void updateClient(Long ClientId,Client client){
+    public Client updateClient(Long ClientId,Client client){
         Pattern phonepatt = Pattern.compile("^\\d{10}$");
         Pattern emailpatt = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
-        Pattern namespatt = Pattern.compile("^[A-Za-z]{3,10}$");
-        Client clientdb = clientRepository.findClientById(ClientId).orElseThrow(
-                ()-> new IllegalStateException("Client by this id doesn't exist!!")
-        );
+        Pattern namespatt = Pattern.compile("^[A-Za-z]{3,20}$");
+        Client clientdb = clientRepository.findClientById(ClientId).get();
         if(!phonepatt.matcher(client.getPhone()).matches()){
-            throw new IllegalStateException("Phone can containe only digits!!");
+            throw new IllegalStateException("Phone number is not valid");
         }
         if(!emailpatt.matcher(client.getEmail()).matches()){
             throw new IllegalStateException("Email format is not valid!!");
@@ -112,7 +111,7 @@ public class ClientService {
             clientdb.setEmail(client.getEmail());
         }
         if(client.getAddress()!=null && client.getAddress().length()>5 && !Objects.equals(clientdb.getAddress(),client.getAddress())){
-            clientdb.setEmail(client.getEmail());
+            clientdb.setAddress(client.getAddress());
         }
         if(client.getPhone()!=null && client.getPhone().length()>9 && !Objects.equals(clientdb.getPhone(),client.getPhone())){
             Optional<Client> opt = clientRepository.findClientByPhone(client.getPhone());
@@ -124,10 +123,11 @@ public class ClientService {
         if(client.getBirth()!=null){
             clientdb.setBirth(client.getBirth());
         }
-        System.out.println("mami");
+        clientdb.setSolde(client.getSolde());
+        return clientdb;
 
     }
-    public void deleteAgent(Long id){
+    public void deleteClient(Long id){
         Optional<Client> opt1 = clientRepository.findClientById(id);
         if(opt1.isPresent()){
             clientRepository.deleteById(id);
@@ -142,6 +142,8 @@ public class ClientService {
     public Client getClientByPhone(String phone){
         return clientRepository.findByPhone(phone);
     }
+
+    public Optional<Client> getClientById(Long Id){ return clientRepository.findClientById(Id);};
 }
 
 
