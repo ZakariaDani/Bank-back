@@ -48,7 +48,7 @@ public class ClientService {
         Pattern namespatt = Pattern.compile("^[A-Za-z]{3,20}");
         if(opt1.isPresent() || opt2.isPresent() || opt3.isPresent()){
             throw new IllegalStateException("Doublicate data in the database!!");
-        }else if(clientDTO.getEmail().trim().isEmpty() || clientDTO.getPhone().trim().isEmpty() || clientDTO.getFname().trim().isEmpty() || clientDTO.getLname().trim().isEmpty() || clientDTO.getAddress().trim().isEmpty() || clientDTO.getBirth()==null){
+        }else if(clientDTO.getEmail().trim().isEmpty() || clientDTO.getPhone().trim().isEmpty() || clientDTO.getFirstName().trim().isEmpty() || clientDTO.getLastName().trim().isEmpty() || clientDTO.getAddress().trim().isEmpty() || clientDTO.getBirth()==null){
             throw new IllegalStateException("All fields are required!");
         }else{
             if(!phonepatt.matcher(clientDTO.getPhone()).matches()){
@@ -57,23 +57,24 @@ public class ClientService {
             if(!emailpatt.matcher(clientDTO.getEmail()).matches()){
                 throw new IllegalStateException("Email format is not valid!!");
             }
-            if(!namespatt.matcher(clientDTO.getFname()).matches()){
+            if(!namespatt.matcher(clientDTO.getFirstName()).matches()){
                 throw new IllegalStateException("First name is not valid");
             }
-            if(!namespatt.matcher(clientDTO.getLname()).matches()){
+            if(!namespatt.matcher(clientDTO.getLastName()).matches()){
                 throw new IllegalStateException("Last name is not valid");
             }
             clientDTO.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode(clientDTO.getPassword()));
             Client client = new Client();
             client.setId(clientDTO.getId());
-            client.setFname(clientDTO.getFname());
-            client.setLname(clientDTO.getLname());
+            client.setFirstName(clientDTO.getFirstName());
+            client.setLastName(clientDTO.getLastName());
             client.setPhone(clientDTO.getPhone());
             client.setBirth(clientDTO.getBirth());
             client.setEmail(clientDTO.getEmail());
             client.setPassword(clientDTO.getPassword());
             client.setSolde(clientDTO.getSolde());
             client.setAddress(clientDTO.getAddress());
+            client.setIsFavorite((clientDTO.getIsFavorite())?false:client.getIsFavorite());
             clientRepository.save(client);
             return client;
         }
@@ -91,17 +92,17 @@ public class ClientService {
         if(!emailpatt.matcher(client.getEmail()).matches()){
             throw new IllegalStateException("Email format is not valid!!");
         }
-        if(!namespatt.matcher(client.getFname()).matches()){
+        if(!namespatt.matcher(client.getFirstName()).matches()){
             throw new IllegalStateException("First name is not valid");
         }
-        if(!namespatt.matcher(client.getLname()).matches()){
+        if(!namespatt.matcher(client.getLastName()).matches()){
             throw new IllegalStateException("Last name is not valid");
         }
-        if(client.getFname()!=null && client.getFname().length()>3 && !Objects.equals(clientdb.getFname(),client.getFname())){
-            clientdb.setFname(client.getFname());
+        if(client.getFirstName()!=null && client.getFirstName().length()>3 && !Objects.equals(clientdb.getFirstName(),client.getFirstName())){
+            clientdb.setFirstName(client.getFirstName());
         }
-        if(client.getLname()!=null && client.getLname().length()>3 && !Objects.equals(clientdb.getLname(),client.getLname())){
-            clientdb.setLname(client.getLname());
+        if(client.getLastName()!=null && client.getLastName().length()>3 && !Objects.equals(clientdb.getLastName(),client.getLastName())){
+            clientdb.setLastName(client.getLastName());
         }
         if(client.getEmail()!=null && client.getEmail().length()>7 && !Objects.equals(clientdb.getEmail(),client.getEmail())){
             Optional<Client> opt = clientRepository.findClientByEmail(client.getEmail());
@@ -123,9 +124,18 @@ public class ClientService {
         if(client.getBirth()!=null){
             clientdb.setBirth(client.getBirth());
         }
-        clientdb.setSolde(client.getSolde());
+        if(client.getIsFavorite()!=null){
+            clientdb.setIsFavorite(client.getIsFavorite());
+        }
+        if(client.getSolde()!=null){
+            clientdb.setSolde(client.getSolde());
+        }
         return clientdb;
-
+    }
+    @Transactional
+    public void toggleIsFavorite(Long id){
+        Client clientDb = clientRepository.findClientById(id).get();
+        clientDb.setIsFavorite(!clientDb.getIsFavorite());
     }
     public void deleteClient(Long id){
         Optional<Client> opt1 = clientRepository.findClientById(id);
