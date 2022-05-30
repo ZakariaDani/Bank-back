@@ -11,12 +11,25 @@ import java.time.LocalDate;
 @Data
 public class ClientDTO {
     private Long id;
-    private String fname;
-    private String lname;
+    private String firstName;
+    private String lastName;
     private String phone;
     private String email;
-    private String password;
+    private String password="123456";
     private String address;
     private LocalDate birth;
-    private double solde;
+    private Boolean isFavorite=false;
+    private Double solde;
+
+    public ClientDTO(Long id, String firstName, String lastName, String phone, String email, String password, String address, LocalDate birth, Double solde) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.birth = birth;
+        this.solde = solde;
+    }
 }
