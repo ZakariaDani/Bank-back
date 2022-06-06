@@ -1,6 +1,7 @@
 package ma.ensa.bank.backOfficeHandler.backOffice;
 
 import lombok.AllArgsConstructor;
+import ma.ensa.bank.ClientHandler.Client.Client;
 import ma.ensa.bank.agentHandler.agent.Agent;
 import ma.ensa.bank.agentHandler.agent.AgentDTO;
 import ma.ensa.bank.agentHandler.agent.AgentService;
@@ -22,6 +23,11 @@ public class BackOfficeController {
     @GetMapping
     public ResponseEntity<List<Agent>> getAgents() {
         return new ResponseEntity<>(backOfficeService.getAllAgents(), HttpStatus.OK);
+    }
+
+    @GetMapping("/favorites")
+    public ResponseEntity<List<Agent>> getFavoriteAgents(){
+        return new ResponseEntity<>(backOfficeService.getFavoriteAgents(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -56,6 +62,24 @@ public class BackOfficeController {
             Agent currentAgent = existedAgent.get();
 
             Agent newAgent = backOfficeService.updateAgent(currentAgent, agentDTO);
+            return ResponseEntity
+                    .ok()
+                    .body(newAgent);
+        } else {
+            return ResponseEntity.badRequest().body("There is no agent with that specific id");
+        }
+    }
+
+    @PutMapping ("/{id}/favorite")
+    public ResponseEntity<?> updateFavoriteAgent(@PathVariable("id") final Long id, @RequestBody AgentDTO agentDTO) {
+        if (agentDTO == null)
+            return ResponseEntity.badRequest().body("The provided agent is not valid");
+
+        Optional<Agent> existedAgent = backOfficeService.getAgentById(id);
+        if(existedAgent.isPresent()) {
+            Agent currentAgent = existedAgent.get();
+
+            Agent newAgent = backOfficeService.updateFavoriteAgent(currentAgent, agentDTO);
             return ResponseEntity
                     .ok()
                     .body(newAgent);

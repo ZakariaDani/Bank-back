@@ -123,8 +123,17 @@ public class BackOfficeService {
         return agentRepository.save(existedAgent);
     }
 
+    public Agent updateFavoriteAgent(Agent existedAgent, AgentDTO agentDTO){
+        boolean isFavorite = agentDTO.isFavorite();
+        existedAgent.setFavorite(isFavorite);
+        return agentRepository.save(existedAgent);
+    }
+
     @Transactional
     public void deleteAgent(String agentEmail){
         agentRepository.deleteByEmail(agentEmail);
     }
+
+    public List<Agent> getFavoriteAgents(){return agentRepository.findFavoriteAgents();}
+
 }

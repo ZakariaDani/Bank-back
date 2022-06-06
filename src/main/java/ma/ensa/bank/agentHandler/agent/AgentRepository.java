@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -25,5 +26,8 @@ public interface AgentRepository extends JpaRepository<Agent, Long> {
     @Modifying
     @Query("DELETE FROM Agent a WHERE a.email=:email")
     void deleteByEmail(@Param("email") String email);
+
+    @Query("SELECT a FROM Agent a WHERE a.isFavorite=true")
+    List<Agent> findFavoriteAgents();
 
 }

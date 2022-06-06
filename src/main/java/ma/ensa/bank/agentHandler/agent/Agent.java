@@ -25,6 +25,7 @@ public class Agent {
     private String description;
     private String file;
     private LocalDate dateOfBirth;
+    private boolean isFavorite;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
@@ -56,7 +57,7 @@ public class Agent {
 
     }
 
-    public Agent(String firstName, String lastName, String adress, String email, String phone, String matricule, String patente, String description, String file, LocalDate dateOfBirth, String password) {
+    public Agent(String firstName, String lastName, String adress, String email, String phone, String matricule, String patente, String description, String file, LocalDate dateOfBirth, String password,boolean isFavorite) {
         this.firstName = firstName;
         LastName = lastName;
         this.adress = adress;
@@ -68,5 +69,6 @@ public class Agent {
         this.file = file;
         this.dateOfBirth = dateOfBirth;
         this.password = password;
+        this.isFavorite = isFavorite;
     }
 }
