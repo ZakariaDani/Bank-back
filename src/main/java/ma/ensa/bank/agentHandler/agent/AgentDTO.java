@@ -15,4 +15,6 @@ public class AgentDTO {
     private String firstName, lastName, adress, email, phone, matricule, patente, description, file, password, backofficeEmail;
 
     private LocalDate dateOfBirth;
+
+    private boolean isFavorite;
 }
