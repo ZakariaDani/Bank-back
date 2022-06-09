@@ -3,6 +3,8 @@ package ma.ensa.bank.ClientHandler.Client;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import ma.ensa.bank.agentHandler.agent.Agent;
+import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -29,6 +31,11 @@ public class Client {
         private Double solde;
         private Boolean isFavorite=false;
 
+        @ManyToOne(
+                cascade = CascadeType.MERGE
+        )
+        @JoinColumn(name="agent_id")
+        private Agent agent;
 
         public Client(){super();}
 

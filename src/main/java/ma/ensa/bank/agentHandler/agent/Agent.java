@@ -1,21 +1,24 @@
 package ma.ensa.bank.agentHandler.agent;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.ToString;
+import ma.ensa.bank.ClientHandler.Client.Client;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @Table
-@ToString
 public class Agent {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "agent_id", nullable = false)
     private Long idCardNumber;
     private String firstName;
     private String LastName;
@@ -37,6 +40,15 @@ public class Agent {
     )
     @JoinColumn(name="backoffice_id")
     private BackOffice backOffice;
+
+    @JsonIgnore
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    @JoinColumn(name = "agent_id")
+    private List<Client> Clients = new ArrayList<>();
+
 
     public Agent(){super();}
 

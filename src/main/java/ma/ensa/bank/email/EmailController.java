@@ -11,8 +11,8 @@ public class EmailController {
     private final EmailService emailService;
 
     @PostMapping(path = "/email")
-    public String sendMail(@RequestBody EmailEntity emailEntity) {
-        return emailService.sendMail(emailEntity);
+    public void sendMail(@RequestBody EmailEntity emailEntity) {
+        emailService.sendMail(emailEntity);
     }
 
 }
