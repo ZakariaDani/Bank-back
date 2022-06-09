@@ -70,7 +70,7 @@ public class BackOfficeController {
         }
     }
 
-    @PutMapping ("/{id}/favorite")
+    @PatchMapping ("/{id}/favorite")
     public ResponseEntity<?> updateFavoriteAgent(@PathVariable("id") final Long id, @RequestBody AgentDTO agentDTO) {
         if (agentDTO == null)
             return ResponseEntity.badRequest().body("The provided agent is not valid");

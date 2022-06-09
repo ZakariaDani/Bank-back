@@ -57,8 +57,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     authorities.add(roleAuthority);
                     user = new User(client.getPhone(),client.getPassword(), authorities );
                 }else{
+
                     Agent agent = agentService.getAgentByEmail(username);
-                    System.out.println("agent");
+
+
                     if(agent != null){
                         System.out.println("agent Found");
                         Collection<GrantedAuthority> authorities = new ArrayList<>();
@@ -66,16 +68,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         authorities.add(roleAuthority);
                         user = new User(agent.getEmail(),agent.getPassword(), authorities );
                     }else {
+                        System.out.println("**trrrrrrrrrrrrrrrr");
+                        System.out.println(username);
                         BackOffice backOffice = backOfficeService.getBackOfficeByEmail(username);
-                        System.out.println("backOffice");
+
+                        System.out.println("*****************************");
+                        System.out.println(backOffice.getPassword());
+                        System.out.println("****************************");
                         if(backOffice != null){
-                            System.out.println("backOffice Found");
+                            System.out.println("dkhelt******************");
                             Collection<GrantedAuthority> authorities = new ArrayList<>();
                             SimpleGrantedAuthority backOfficeAuthority = new SimpleGrantedAuthority("ROLE_BACKOFFICE");
                             authorities.add(backOfficeAuthority);
                             user = new User(backOffice.getEmail(),backOffice.getPassword(), authorities );
                         }
                         else {
+                            System.out.println("madkhelt******************");
+
                             user = null;
                         }
                     }}

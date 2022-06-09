@@ -88,7 +88,10 @@ public class AgentService {
     }
 
     public Agent getAgentByEmail(String email){
-        return agentRepository.findByEmail(email).get();
+        if(agentRepository.findByEmail(email).isPresent()){
+            return agentRepository.findByEmail(email).get();
+        }
+        return null;
     }
 
 
