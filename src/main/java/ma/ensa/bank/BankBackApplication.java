@@ -71,8 +71,8 @@ public class BankBackApplication {
 			backOfficeRepository.save(backOffice);
 
 
-			backOfficeService.saveAgent(new AgentDTO(null,"Zakaria", "Dani", "Kaboul-afghanistan", "zakaria@email.com", "0606060606", "E156156", "5556", "good one", "file", "Dani1234", backOffice.getEmail(),null ));
-			backOfficeService.saveAgent(new AgentDTO(null,"Aymane", "Daif", "azli", "aymane@email.com", "070707070707", "E933333", "5557", "OK", "file", "Daif1234", backOffice.getEmail(),null ));
+			backOfficeService.saveAgent(new AgentDTO(null,"Zakaria", "Dani", "Kaboul-afghanistan", "zakaria@email.com", "0606060606", "E156156", "5556", "good one", "file", "Dani1234", backOffice.getEmail(),null,false ));
+			backOfficeService.saveAgent(new AgentDTO(null,"Aymane", "Daif", "azli", "aymane@email.com", "070707070707", "E933333", "5557", "OK", "file", "Daif1234", backOffice.getEmail(),null,false ));
 
 			clientService.addClient(new ClientDTO(null, "zakaria", "dani","0606060606", "email@email.com", "789", "ta7nawt", LocalDate.of(2000,5,12),200.0));
 
