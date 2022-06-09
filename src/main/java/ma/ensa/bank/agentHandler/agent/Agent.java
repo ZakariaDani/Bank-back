@@ -3,6 +3,7 @@ package ma.ensa.bank.agentHandler.agent;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.ToString;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @Table
+@ToString
 public class Agent {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idCardNumber;
