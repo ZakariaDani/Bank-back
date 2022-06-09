@@ -46,10 +46,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                System.out.println("hello");
                 User user ;
                 Client client = clientService.getClientByPhone(username);
-                System.out.println(client);
+                System.out.println("client");
                 if(client != null){
+                    System.out.println("client Found");
                     Collection<GrantedAuthority> authorities = new ArrayList<>();
                     SimpleGrantedAuthority roleAuthority = new SimpleGrantedAuthority("ROLE_CLIENT");
                     authorities.add(roleAuthority);
@@ -58,7 +60,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                     Agent agent = agentService.getAgentByEmail(username);
 
+
                     if(agent != null){
+                        System.out.println("agent Found");
                         Collection<GrantedAuthority> authorities = new ArrayList<>();
                         SimpleGrantedAuthority roleAuthority = new SimpleGrantedAuthority("ROLE_AGENT");
                         authorities.add(roleAuthority);
@@ -67,6 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         System.out.println("**trrrrrrrrrrrrrrrr");
                         System.out.println(username);
                         BackOffice backOffice = backOfficeService.getBackOfficeByEmail(username);
+
                         System.out.println("*****************************");
                         System.out.println(backOffice.getPassword());
                         System.out.println("****************************");

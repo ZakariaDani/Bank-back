@@ -72,8 +72,9 @@ public class AgentContorller {
             return ResponseEntity.badRequest().body("Id doesn't exist!!");
         }
     }
-    @PostMapping("/toggleFav/{clientid}")
+    @PostMapping("toggleFav/{clientid}")
     public ResponseEntity<?> toggleFav(@PathVariable("clientid") Long id){
+        System.out.println("clientid");
         if(id==null){
             return ResponseEntity.badRequest().body("This id is not valid");
         }else if(clientService.getClientById(id).isPresent()){
