@@ -1,8 +1,10 @@
 package ma.ensa.bank.agentHandler.agent;
 
 import lombok.AllArgsConstructor;
+import ma.ensa.bank.ClientHandler.Client.Client;
 import ma.ensa.bank.backOfficeHandler.backOffice.ResponseBackOffice;
 import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
+import ma.ensa.bank.email.EmailEntity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @AllArgsConstructor
@@ -93,6 +96,7 @@ public class AgentService {
         }
         return null;
     }
-
-
+    public Optional<Agent> getAgentById(Long id){
+        return agentRepository.findAgentById(id);
+    }
 }

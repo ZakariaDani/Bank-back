@@ -1,6 +1,11 @@
 package ma.ensa.bank.ClientHandler.Client;
 
+import ma.ensa.bank.agentHandler.agent.Agent;
+import ma.ensa.bank.agentHandler.agent.AgentRepository;
+import ma.ensa.bank.agentHandler.agent.AgentService;
 import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
+import ma.ensa.bank.email.EmailEntity;
+import ma.ensa.bank.email.EmailService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,15 +14,20 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 @Service
 public class ClientService {
     private final ClientRepository clientRepository;
+    private final AgentRepository agentRepository;
+    private final EmailService emailService;
 
     @Autowired
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository,AgentRepository agentRepository, EmailService emailService) {
         this.clientRepository = clientRepository;
+        this.agentRepository = agentRepository;
+        this.emailService = emailService;
     }
 
     public ClientDTO SignIn(Client client) {
@@ -75,6 +85,10 @@ public class ClientService {
             client.setSolde(clientDTO.getSolde());
             client.setAddress(clientDTO.getAddress());
             client.setIsFavorite((clientDTO.getIsFavorite())?false:client.getIsFavorite());
+            if(clientDTO.getAgentId()!=null) {
+                Agent agent = agentRepository.findAgentById(clientDTO.getAgentId()).get();
+                client.setAgent(agent);
+            }
             clientRepository.save(client);
             return client;
         }
@@ -137,6 +151,12 @@ public class ClientService {
         Client clientDb = clientRepository.findClientById(id).get();
         clientDb.setIsFavorite(!clientDb.getIsFavorite());
     }
+    @Transactional
+    public void assign_client_to_agent(Long idClient,String emailAgent){
+        Client clientDb = clientRepository.findClientById(idClient).get();
+        Agent agent = agentRepository.findAgentByEmail(emailAgent).get();
+        clientDb.setAgent(agent);
+    }
     public void deleteClient(Long id){
         Optional<Client> opt1 = clientRepository.findClientById(id);
         if(opt1.isPresent()){
@@ -148,12 +168,38 @@ public class ClientService {
     public List<Client> getClients(){
         return clientRepository.findAll();
     }
-
+    public Optional<List<Client>> getClientsWithoutAgent(){
+        return clientRepository.findClientWithoutAgent();
+    }
     public Client getClientByPhone(String phone){
         return clientRepository.findByPhone(phone);
     }
 
     public Optional<Client> getClientById(Long Id){ return clientRepository.findClientById(Id);};
+
+    public String sendCodeToClient(Long id){
+        Optional<Client> c = this.getClientById(id);
+        if(c.isPresent()){
+            Client client  = c.get();
+            String password = new Random().ints(10, 33, 122).collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                    .toString();
+            client.setPassword(password);
+            this.updateClient(id, client);
+            String message = "Hello Mr" + client.getFirstName() + client.getLastName() + "Your New Password is: " + client.getPassword();
+            EmailEntity emailEntity = new EmailEntity(client.getEmail(), "your New Password", message);
+            try {
+                emailService.sendMail(emailEntity);
+                return "Succes";
+            }catch (Exception e){
+                e.printStackTrace();
+                return "Error";
+            }
+        }
+        return "Error";
+    }
+    public List<Client> getClientsByAgentId(Long agentId){
+        return clientRepository.getClientsByAgentId(agentId).get();
+    }
 }
 
 

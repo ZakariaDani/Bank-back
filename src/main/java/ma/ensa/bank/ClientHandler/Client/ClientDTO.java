@@ -20,8 +20,9 @@ public class ClientDTO {
     private LocalDate birth;
     private Boolean isFavorite=false;
     private Double solde;
+    private Long agentId;
 
-    public ClientDTO(Long id, String firstName, String lastName, String phone, String email, String password, String address, LocalDate birth, Double solde) {
+    public ClientDTO(Long id, String firstName, String lastName, String phone, String email, String password, String address, LocalDate birth, Double solde,Long agentId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -31,5 +32,6 @@ public class ClientDTO {
         this.address = address;
         this.birth = birth;
         this.solde = solde;
+        this.agentId = agentId;
     }
 }

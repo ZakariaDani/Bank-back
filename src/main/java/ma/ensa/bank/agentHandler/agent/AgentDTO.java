@@ -17,4 +17,5 @@ public class AgentDTO {
     private LocalDate dateOfBirth;
 
     private boolean isFavorite;
+    private Long backofficeId;
 }
