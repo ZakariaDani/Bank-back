@@ -7,6 +7,8 @@ import ma.ensa.bank.agentHandler.agent.Agent;
 import ma.ensa.bank.agentHandler.agent.AgentService;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOfficeService;
+import ma.ensa.bank.filter.AuthenticationFilter;
+import ma.ensa.bank.filter.AuthorisationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,12 +17,14 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -51,21 +55,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     authorities.add(roleAuthority);
                     user = new User(client.getPhone(),client.getPassword(), authorities );
                 }else{
+
                     Agent agent = agentService.getAgentByEmail(username);
+
                     if(agent != null){
                         Collection<GrantedAuthority> authorities = new ArrayList<>();
                         SimpleGrantedAuthority roleAuthority = new SimpleGrantedAuthority("ROLE_AGENT");
                         authorities.add(roleAuthority);
                         user = new User(agent.getEmail(),agent.getPassword(), authorities );
                     }else {
+                        System.out.println("**trrrrrrrrrrrrrrrr");
+                        System.out.println(username);
                         BackOffice backOffice = backOfficeService.getBackOfficeByEmail(username);
+                        System.out.println("*****************************");
+                        System.out.println(backOffice.getPassword());
+                        System.out.println("****************************");
                         if(backOffice != null){
+                            System.out.println("dkhelt******************");
                             Collection<GrantedAuthority> authorities = new ArrayList<>();
                             SimpleGrantedAuthority backOfficeAuthority = new SimpleGrantedAuthority("ROLE_BACKOFFICE");
                             authorities.add(backOfficeAuthority);
                             user = new User(backOffice.getEmail(),backOffice.getPassword(), authorities );
                         }
                         else {
+                            System.out.println("madkhelt******************");
+
                             user = null;
                         }
                     }}

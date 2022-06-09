@@ -44,7 +44,10 @@ public class BackOfficeService {
         }
     }
     public BackOffice getBackOfficeByEmail(String email){
-        return backOfficeRepository.findByEmail(email).get();
+        if(backOfficeRepository.findByEmail(email).isPresent()){
+            return backOfficeRepository.findByEmail(email).get();
+        }
+        return null;
     }
     public Agent getAgentByEmail(String email){
         return agentRepository.findByEmail(email).get();
