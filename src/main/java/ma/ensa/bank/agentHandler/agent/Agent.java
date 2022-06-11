@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.ToString;
 import ma.ensa.bank.ClientHandler.Client.Client;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 

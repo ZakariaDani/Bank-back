@@ -78,7 +78,6 @@ public class BackOfficeService {
         agent.setBackOffice(backOffice);
 //        backOffice.getAgents().add(agent);
 //        backOfficeRepository.save(backOffice);
-
         return agentRepository.save(agent);
     }
 
