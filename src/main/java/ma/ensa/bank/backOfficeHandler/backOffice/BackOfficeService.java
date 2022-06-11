@@ -63,7 +63,7 @@ public class BackOfficeService {
         return agentRepository.findAgentById(id);
     }
 
-    public Agent saveAgent(AgentDTO agentDTO, MultipartFile file){
+    public Agent saveAgent(AgentDTO agentDTO){
         Agent agent = new Agent();
         agent.setFirstName(agentDTO.getFirstName());
         agent.setLastName(agentDTO.getLastName());
@@ -74,16 +74,23 @@ public class BackOfficeService {
         agent.setMatricule(agentDTO.getMatricule());
         agent.setAdress(agentDTO.getAdress());
         agent.setDescription(agentDTO.getDescription());
-        agent.setFile(file.getName());
         agent.setPassword(bCryptPasswordEncoder.encode(agentDTO.getPassword()));
         BackOffice backOffice = backOfficeRepository.findByEmail(agentDTO.getBackofficeEmail()).get();
         agent.setBackOffice(backOffice);
-        this.imageService.uploadImage(file);
 
         return agentRepository.save(agent);
     }
 
-    public Agent updateAgent(Agent existedAgent, AgentDTO agentDTO, MultipartFile multipartFile){
+    public void saveAgentImage(Long id, String fileName) {
+	Optional<Agent> existedAgent = getAgentById(id);
+        if(existedAgent.isPresent()) {
+            Agent currentAgent = existedAgent.get();
+	    currentAgent.setFileName(fileName);
+	    agentRepository.save(currentAgent);
+	}
+    }
+
+    public Agent updateAgent(Agent existedAgent, AgentDTO agentDTO){
         String firstName = agentDTO.getFirstName();
         if(firstName != null) {
             existedAgent.setFirstName(firstName);
@@ -116,11 +123,7 @@ public class BackOfficeService {
         if(matricule != null) {
             existedAgent.setMatricule(matricule);
         }
-        String file = agentDTO.getFile();
-        if(file != null) {
-            existedAgent.setFile(multipartFile.getName());
-            this.imageService.uploadImage(multipartFile);
-        }
+        
         LocalDate dateOfBirth = agentDTO.getDateOfBirth();
         if(dateOfBirth != null) {
             existedAgent.setDateOfBirth(dateOfBirth);
