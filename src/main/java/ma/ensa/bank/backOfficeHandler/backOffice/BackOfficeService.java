@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import ma.ensa.bank.agentHandler.agent.Agent;
 import ma.ensa.bank.agentHandler.agent.AgentDTO;
 import ma.ensa.bank.agentHandler.agent.AgentRepository;
+import ma.ensa.bank.image.ImageService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,6 +23,7 @@ public class BackOfficeService {
     private final BackOfficeRepository backOfficeRepository;
     private final AgentRepository agentRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ImageService imageService;
 
 
 
@@ -60,7 +63,7 @@ public class BackOfficeService {
         return agentRepository.findAgentById(id);
     }
 
-    public Agent saveAgent(AgentDTO agentDTO){
+    public Agent saveAgent(AgentDTO agentDTO, MultipartFile file){
         Agent agent = new Agent();
         agent.setFirstName(agentDTO.getFirstName());
         agent.setLastName(agentDTO.getLastName());
@@ -71,17 +74,17 @@ public class BackOfficeService {
         agent.setMatricule(agentDTO.getMatricule());
         agent.setAdress(agentDTO.getAdress());
         agent.setDescription(agentDTO.getDescription());
-        agent.setFile(agentDTO.getFile());
+        agent.setFile(file.getName());
         agent.setPassword(bCryptPasswordEncoder.encode(agentDTO.getPassword()));
-        System.out.println(agentDTO.getBackofficeEmail());
         BackOffice backOffice = backOfficeRepository.findByEmail(agentDTO.getBackofficeEmail()).get();
         agent.setBackOffice(backOffice);
 //        backOffice.getAgents().add(agent);
 //        backOfficeRepository.save(backOffice);
+        this.imageService.uploadImage(file);
         return agentRepository.save(agent);
     }
 
-    public Agent updateAgent(Agent existedAgent, AgentDTO agentDTO){
+    public Agent updateAgent(Agent existedAgent, AgentDTO agentDTO, MultipartFile multipartFile){
         String firstName = agentDTO.getFirstName();
         if(firstName != null) {
             existedAgent.setFirstName(firstName);
@@ -116,7 +119,8 @@ public class BackOfficeService {
         }
         String file = agentDTO.getFile();
         if(file != null) {
-            existedAgent.setFile(file);
+            existedAgent.setFile(multipartFile.getName());
+            this.imageService.uploadImage(multipartFile);
         }
         LocalDate dateOfBirth = agentDTO.getDateOfBirth();
         if(dateOfBirth != null) {
