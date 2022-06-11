@@ -6,12 +6,16 @@ import ma.ensa.bank.agentHandler.agent.Agent;
 import ma.ensa.bank.agentHandler.agent.AgentDTO;
 import ma.ensa.bank.agentHandler.agent.AgentService;
 import ma.ensa.bank.image.ImageService;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import javax.servlet.MultipartConfigElement;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -46,18 +50,33 @@ public class BackOfficeController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createAgent(@RequestBody AgentDTO agentDTO, @RequestParam MultipartFile file) {
+    public ResponseEntity<?> createAgent(@RequestBody AgentDTO agentDTO) {
         if (agentDTO == null)
             return ResponseEntity.badRequest().body("The provided agent is not valid");
-        Agent newAgent = backOfficeService.saveAgent(agentDTO, file);
+        Agent newAgent = backOfficeService.saveAgent(agentDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(newAgent);
     }
 
+     
+    
+    @PostMapping("/{id}/image")
+    public ResponseEntity<?> createAgentImage(@RequestParam MultipartFile file, @PathVariable("id") final Long id) {
+       try {
+            String imagePath = this.imageService.uploadImage(file);
+	    this.backOfficeService.saveAgentImage(id, file.getName());
+            return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(imagePath);
+        } catch (Exception e) {
+		    return null;
+        }
+    }
+
 
     @PatchMapping ("/{id}")
-    public ResponseEntity<?> updateAgent(@PathVariable("id") final Long id, @RequestBody AgentDTO agentDTO, @RequestParam MultipartFile file) {
+    public ResponseEntity<?> updateAgent(@PathVariable("id") final Long id, @RequestBody AgentDTO agentDTO) {
         System.out.println("here");
         if (agentDTO == null)
             return ResponseEntity.badRequest().body("The provided agent is not valid");
@@ -66,7 +85,7 @@ public class BackOfficeController {
         if(existedAgent.isPresent()) {
             Agent currentAgent = existedAgent.get();
 
-            Agent newAgent = backOfficeService.updateAgent(currentAgent, agentDTO, file);
+            Agent newAgent = backOfficeService.updateAgent(currentAgent, agentDTO);
             return ResponseEntity
                     .ok()
                     .body(newAgent);
