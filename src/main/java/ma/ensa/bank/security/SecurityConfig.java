@@ -31,6 +31,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Configuration
 @EnableWebSecurity
@@ -46,14 +48,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
                 User user ;
-                Client client = clientService.getClientByPhone(username);
-                System.out.println(client);
-                if(client != null){
-                    Collection<GrantedAuthority> authorities = new ArrayList<>();
-                    SimpleGrantedAuthority roleAuthority = new SimpleGrantedAuthority("ROLE_CLIENT");
-                    authorities.add(roleAuthority);
-                    user = new User(client.getPhone(),client.getPassword(), authorities );
-                }else{
+
+                Pattern pattern_of_a_phone_number = Pattern.compile("^[0-9]+");//. represents single character
+                Matcher m = pattern_of_a_phone_number.matcher(username);
+                boolean is_a_phone_number = m.matches();
+
+                if(is_a_phone_number){
+                    Client client = clientService.getClientByPhone(username);
+                    if(client != null){
+
+                        Collection<GrantedAuthority> authorities = new ArrayList<>();
+                        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_CLIENT") ;
+                        authorities.add(authority);
+                        user = new User(username,client.getPassword(),authorities);
+                    }
+                    else{
+                        user = null;
+                    }
+                }
+               else{
+                   System.out.println("agent");
                     Agent agent = agentService.getAgentByEmail(username);
                     if(agent != null){
                         Collection<GrantedAuthority> authorities = new ArrayList<>();
@@ -84,9 +98,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors();
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/login","register", "/token/refresh/**").permitAll();
+        http.authorizeRequests().antMatchers("/login","/api/v1/client/register", "/token/refresh/**").permitAll();
         //we will add it later when the front is finished
-        http.authorizeHttpRequests().anyRequest().authenticated();
+        /*http.authorizeHttpRequests().anyRequest().authenticated();*/
+        http.authorizeHttpRequests().anyRequest().permitAll();
         http.addFilter(authenticationFilter );
         http.addFilterBefore(new AuthorisationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

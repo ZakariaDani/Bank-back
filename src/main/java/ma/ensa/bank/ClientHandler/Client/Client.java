@@ -24,9 +24,10 @@ public class Client {
         private String email;
 
         private LocalDate birth;
-        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         private String password;
+
         private double solde;
 
 

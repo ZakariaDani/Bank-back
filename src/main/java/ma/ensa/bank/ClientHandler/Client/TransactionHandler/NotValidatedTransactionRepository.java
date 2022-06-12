@@ -1,2 +1,9 @@
-package ma.ensa.bank.ClientHandler.Client.TransactionHandler;public interface NotValidatedTransactionRepository {
+package ma.ensa.bank.ClientHandler.Client.TransactionHandler;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RestController;
+
+@Repository
+public interface NotValidatedTransactionRepository extends JpaRepository<NotValidatedTransaction,Long> {
 }

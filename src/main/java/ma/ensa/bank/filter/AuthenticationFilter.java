@@ -38,15 +38,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String phone;
         try {
             Map<String, String> requestMap = new ObjectMapper().readValue(request.getInputStream(), Map.class);
-            username = requestMap.get("email");
-            password = requestMap.get("password");
 
-            if(username != null){
-                authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-            }else{
-                phone = requestMap.get("phone");
-                authenticationToken = new UsernamePasswordAuthenticationToken(phone, password);
-            }
+            username = requestMap.get("identifiant");
+            password = requestMap.get("password");
+            System.out.println(username + " " + password);
+            authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
 
         } catch (IOException e) {
             throw new AuthenticationServiceException(e.getMessage(), e);

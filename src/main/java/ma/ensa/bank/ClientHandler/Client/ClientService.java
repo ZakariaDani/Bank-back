@@ -1,5 +1,12 @@
 package ma.ensa.bank.ClientHandler.Client;
 
+import ma.ensa.bank.ClientHandler.Client.TransactionHandler.NotValidatedTransaction;
+import  ma.ensa.bank.ClientHandler.Client.TransactionHandler.NotValidatedTransactionService;
+import ma.ensa.bank.ClientHandler.Client.TransactionHandler.Transaction;
+import ma.ensa.bank.ClientHandler.Client.TransactionHandler.TransactionService;
+import ma.ensa.bank.ClientHandler.Client.VerificationHandler.VerificationCode;
+import ma.ensa.bank.ClientHandler.Client.VerificationHandler.VerificationCodeService;
+import ma.ensa.bank.Helpers.CurrentUserInfo;
 import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +18,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.util.Objects;
-import java.util.Optional;
+import javax.xml.crypto.Data;
+import java.lang.reflect.Array;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Service
 public class ClientService {
     private final ClientRepository clientRepository;
+
+    @Autowired
+    private NotValidatedTransactionService notValidatedTransactionService;
+
+    @Autowired
+    private TransactionService transactionService;
+    @Autowired
+    private VerificationCodeService verificationCodeService;
 
     @Autowired
     public ClientService(ClientRepository clientRepository) {
@@ -44,19 +69,29 @@ public class ClientService {
     public void addClient(Client client){
         Client opt1 = clientRepository.findClientByPhone(client.getPhone());
         Client opt2 = clientRepository.findClientByEmail(client.getEmail());
+        boolean there_is_a_null_attribute = client.getPhone()==null|| client.getLname()==null||
+                    client.getFname()==null|| client.getEmail()==null;
+
         if(opt1!=null || opt2 != null ){
             throw new IllegalStateException("Client already exist!!");
-        }else{
+        }
+
+        else if(there_is_a_null_attribute == true){
+            throw new IllegalStateException("All the fields should be filled in");
+        }
+        else{
             System.out.println(client);
-            client.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode(client.getPassword()));
+            client.setSolde(0);
+            client.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode("123456"));
+            client.setBirth(LocalDate.now());
             clientRepository.save(client);
         }
     }
 
-    @PostMapping("/update")
-    public void updateClient(String email , Client client){
+    public void updateClient(@RequestBody Client client,String email){
 
         Client clientdb = clientRepository.findClientByEmail(email);
+        boolean there_is_a_problem = false;
 
         if(client.getFname()!=null && client.getFname().length()>3 && !Objects.equals(clientdb.getFname(),client.getFname())){
             clientdb.setFname(client.getFname());
@@ -79,13 +114,160 @@ public class ClientService {
             clientdb.setPhone(client.getPhone());
         }
 
+        if(there_is_a_problem != false){
+
+        }
     }
 
+    public Client getClient(String phone){
+        try{
+            Client client = clientRepository.findClientByPhone(phone);
+
+            return client;
+        }
+        catch(RuntimeException exception){
+            throw exception;
+        }
+    }
     public Client getClientByPhone(String phone){
         return clientRepository.findByPhone(phone);
     }
+
+    @Transactional
+    public Long makeTransaction(String emitterPhone, String receiverPhone, double amount){
+
+        Pattern p = Pattern.compile("^0[5-7][0-9]+");//. represents single character
+        Matcher m = p.matcher(receiverPhone);
+        boolean validPhoneNumber = m.matches();
+
+        if( validPhoneNumber == true && amount>0 ){
+            try{
+                Client emitter  = clientRepository.findClientByPhone(emitterPhone);
+                Client receiver  = clientRepository.findClientByPhone(receiverPhone);
+                if(receiver == null){
+                    throw new RuntimeException("There is no Client with that phone number");
+                }
+                else if(emitter.getSolde() < amount){
+                    throw new RuntimeException("You don't have enough money to do this transaction");
+                }
+                else{
+                    NotValidatedTransaction transaction = notValidatedTransactionService.
+                            saveTransaction(emitterPhone,receiverPhone,amount);
+
+                    verificationCodeService.sendVerificationCode(emitterPhone, amount, transaction);
+
+                    return transaction.getId();
+                }
+            }
+            catch(Exception exception){
+                throw exception;
+            }
+        }
+
+        else{
+            throw new RuntimeException("The phone number must start with 0{5,6,7}" +
+                    " and the amount must be a positive number");
+        }
+    }
+
+    @Transactional
+    public Long makeTelecomRecharge(String emitterPhone, String telecomEntreprise, double amount){
+
+        List<String> telecomEntreprises = Arrays.asList("orange","maroc_telecom","inwi");
+        List<String> rechargeTypes = Arrays.asList("5","10","20","50","100","200");
+
+        if(telecomEntreprises.contains(telecomEntreprise) == false){
+            throw new RuntimeException("We provide only Orange,Maroc Telecom,Inwi for telecom recharging");
+        }
+        else if(rechargeTypes.contains(""+(int)amount) == false){
+            throw new RuntimeException("The amount must be a in {5,10,20,50,100,200}");
+        }
+        else{
+            Client emitter = clientRepository.findClientByPhone(emitterPhone);
+            if(emitter.getSolde()< amount){
+                throw new RuntimeException("You don't have enough money to do this transaction");
+            }
+            else{
+                NotValidatedTransaction transaction = notValidatedTransactionService.
+                        saveTransaction(emitterPhone,telecomEntreprise,amount);
+
+                verificationCodeService.sendVerificationCode(emitterPhone, amount, transaction);
+
+                return transaction.getId();
+            }
+
+        }
+
+    }
+
+    @Transactional
+    public void receive_verification_code(Long transactionID,String code,String phoneNumber){
+
+        VerificationCode verificationCodeDB = verificationCodeService.getVerificationCode(transactionID,phoneNumber);
+
+       if(verificationCodeDB != null) {
+           if (verificationCodeDB.getCode().equals(code) == false) {
+               throw new RuntimeException("Incorrect verification code");
+           } else {
+               DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+               LocalDateTime now = LocalDateTime.now();
+               LocalDateTime verificationDate = LocalDateTime.parse(verificationCodeDB.getDate(), dtf);
+               long time_diff = ChronoUnit.SECONDS.between(verificationDate, now);
+
+            /* We check if this verification code has expired by
+            comparing the time difference with 300second = 5min
+             */
+               if (time_diff > 300) {
+                   throw new RuntimeException("This verification code has been expired");
+               } else {
+                   NotValidatedTransaction notValidatedTransaction = verificationCodeDB.getTransaction();
+
+                   if (notValidatedTransaction != null) {
+                       Client emitter = clientRepository.findClientByPhone(notValidatedTransaction.getEmitter());
+                       double amount = notValidatedTransaction.getAmount();
+
+                       if (emitter.getSolde() > amount) {
+                           String receiverPhone = notValidatedTransaction.getReceiver();
+                           boolean receiver_is_a_client;
+                           if(receiverPhone.charAt(0) == '0'){
+                               receiver_is_a_client = true;
+                           }
+                           else{
+                               receiver_is_a_client = false;
+                           }
+
+                           transactionService.saveTransaction(
+                                   notValidatedTransaction.getEmitter(),
+                                   notValidatedTransaction.getReceiver(),
+                                   notValidatedTransaction.getAmount()
+                           );
+
+                           notValidatedTransactionService.deleteTransaction(notValidatedTransaction.getId());
+
+                           emitter.setSolde(emitter.getSolde() - amount);
+                           if(receiver_is_a_client == true){
+                              Client receiver = clientRepository.findClientByPhone(receiverPhone);
+                              receiver.setSolde(receiver.getSolde() + amount);
+                           }
+
+                       } else {
+                           throw new RuntimeException("You don't have enough money to do that transaction");
+                       }
+                   } else {
+                       throw new RuntimeException("This transaction is already done");
+                   }
+               }
+           }
+       }
+
+       else{
+           throw new RuntimeException("There is no transaction with that id");
+       }
+
+    }
+
+    public List<Transaction> getTransactions(String currentUserPhoneNumber){
+        return transactionService.getTransactions(currentUserPhoneNumber);
+    }
 }
-
-
-
 

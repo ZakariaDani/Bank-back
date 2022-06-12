@@ -49,16 +49,14 @@ public class BankBackApplication {
 //					"agen2@gmail.com",
 //					LocalDate.of(1999, 05, 04))
 //			);
-			//	clientService.addClient(new Client(null,
-			//		"ahmed",
-			//			"zibout",
-			//	"0685412369",
-						//			"ahmed@gmail.com",
-			//	//		LocalDate.of(2000, 03, 05),
-			//		"15963",
-			//		150.6));
 
-
+			/*clientService.addClient(
+					new Client(
+							"abdo",
+							"elhammadi",
+							"0666",
+							"a@gmail.com",
+					200));*/
 
 			BackOffice backOffice = new BackOffice("1",
 					"office@gmail.com",
