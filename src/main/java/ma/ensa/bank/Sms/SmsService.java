@@ -18,7 +18,7 @@ public class SmsService {
 
         com.vonage.client.sms.messages.TextMessage message = new com.vonage.client.sms.messages.TextMessage("Vonage APIs",
                 "212684038130",
-                "Your Verification Code for the Payment is : "+Math.random()*10000
+                "Your Verification Code for the Payment is : "+ (int) (Math.random() * 10000)
         );
 
         com.vonage.client.sms.SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
