@@ -24,7 +24,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 @RequestMapping("/api/v1/backoffice/agents")
-public class BackOfficeController {
+public class  BackOfficeController {
     private final BackOfficeService backOfficeService;
     private final AgentService agentService;
     private final ImageService imageService;

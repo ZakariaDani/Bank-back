@@ -78,7 +78,20 @@
             <version>2.11.0</version>
         </dependency>
 
-    </dependencies>
+
+		<!-- https://mvnrepository.com/artifact/com.vonage/client -->
+		<dependency>
+				<groupId>com.vonage</groupId>
+			<artifactId>client</artifactId>
+			<version>6.4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.nexmo</groupId>
+			<artifactId>client</artifactId>
+			<version>4.0.1</version>
+		</dependency>
+
+	</dependencies>
 
 	<build>
 		<plugins>

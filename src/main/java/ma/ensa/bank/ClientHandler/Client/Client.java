@@ -7,6 +7,7 @@ import ma.ensa.bank.agentHandler.agent.Agent;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 
 import javax.persistence.*;
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 
 @Entity
@@ -24,11 +25,11 @@ public class Client {
         private String address;
 
         private LocalDate birth;
-        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 
-        //pass just for test !!!!!
-        private String password="123456";
-        private Double solde;
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        private String password;
+
+        private double solde;
         private Boolean isFavorite=false;
 
         @ManyToOne(
