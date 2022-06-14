@@ -1,12 +1,10 @@
 package ma.ensa.bank.backOfficeHandler.backOffice;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import ma.ensa.bank.Agent.Agent;
+import ma.ensa.bank.agentHandler.agent.Agent;
 import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 
 
 import javax.persistence.*;
@@ -23,14 +21,18 @@ import java.util.List;
 @Getter
 public class BackOffice implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "back_id", nullable = false)
-    private String backId;
+    private Long backId;
 
     @Column(name = "email",unique = true)
     private String email;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "password")
     private String password;
 
+    @JsonIgnore
     @OneToMany(
             cascade = CascadeType.ALL,
             orphanRemoval = true,
@@ -44,7 +46,7 @@ public class BackOffice implements Serializable {
         this.email = email;
         this.password = PasswordEncoder.bCryptPasswordEncoder().encode(password);
     }
-    public BackOffice(String backId, String email, String password) {
+    public BackOffice(Long backId, String email, String password) {
         this.backId = backId;
         this.email = email;
         this.password = PasswordEncoder.bCryptPasswordEncoder().encode(password);

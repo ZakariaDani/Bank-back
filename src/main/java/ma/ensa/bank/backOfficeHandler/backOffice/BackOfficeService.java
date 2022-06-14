@@ -2,12 +2,15 @@ package ma.ensa.bank.backOfficeHandler.backOffice;
 
 
 import lombok.AllArgsConstructor;
-import ma.ensa.bank.Agent.Agent;
-import ma.ensa.bank.Agent.AgentDTO;
-import ma.ensa.bank.Agent.AgentRepository;
+import ma.ensa.bank.agentHandler.agent.Agent;
+import ma.ensa.bank.agentHandler.agent.AgentDTO;
+import ma.ensa.bank.agentHandler.agent.AgentRepository;
+import ma.ensa.bank.image.ImageService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,6 +23,7 @@ public class BackOfficeService {
     private final BackOfficeRepository backOfficeRepository;
     private final AgentRepository agentRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ImageService imageService;
 
 
 
@@ -43,7 +47,13 @@ public class BackOfficeService {
         }
     }
     public BackOffice getBackOfficeByEmail(String email){
-        return backOfficeRepository.findByEmail(email).get();
+        if(backOfficeRepository.findByEmail(email).isPresent()){
+            return backOfficeRepository.findByEmail(email).get();
+        }
+        return null;
+    }
+    public Agent getAgentByEmail(String email){
+        return agentRepository.findByEmail(email).get();
     }
     public List<Agent> getAllAgents(){
         return agentRepository.findAll();
@@ -64,15 +74,20 @@ public class BackOfficeService {
         agent.setMatricule(agentDTO.getMatricule());
         agent.setAdress(agentDTO.getAdress());
         agent.setDescription(agentDTO.getDescription());
-        agent.setFile(agentDTO.getFile());
         agent.setPassword(bCryptPasswordEncoder.encode(agentDTO.getPassword()));
-
         BackOffice backOffice = backOfficeRepository.findByEmail(agentDTO.getBackofficeEmail()).get();
         agent.setBackOffice(backOffice);
-//        backOffice.getAgents().add(agent);
-//        backOfficeRepository.save(backOffice);
 
         return agentRepository.save(agent);
+    }
+
+    public void saveAgentImage(Long id, String fileName) {
+	Optional<Agent> existedAgent = getAgentById(id);
+        if(existedAgent.isPresent()) {
+            Agent currentAgent = existedAgent.get();
+	    currentAgent.setFileName(fileName);
+	    agentRepository.save(currentAgent);
+	}
     }
 
     public Agent updateAgent(Agent existedAgent, AgentDTO agentDTO){
@@ -108,10 +123,7 @@ public class BackOfficeService {
         if(matricule != null) {
             existedAgent.setMatricule(matricule);
         }
-        String file = agentDTO.getFile();
-        if(file != null) {
-            existedAgent.setFile(file);
-        }
+        
         LocalDate dateOfBirth = agentDTO.getDateOfBirth();
         if(dateOfBirth != null) {
             existedAgent.setDateOfBirth(dateOfBirth);
@@ -119,7 +131,17 @@ public class BackOfficeService {
         return agentRepository.save(existedAgent);
     }
 
-    public void deleteAgent(Long id){
-        agentRepository.deleteById(id);
+    public Agent updateFavoriteAgent(Agent existedAgent, AgentDTO agentDTO){
+        boolean isFavorite = agentDTO.isFavorite();
+        existedAgent.setFavorite(isFavorite);
+        return agentRepository.save(existedAgent);
     }
+
+    @Transactional
+    public void deleteAgent(String agentEmail){
+        agentRepository.deleteByEmail(agentEmail);
+    }
+
+    public List<Agent> getFavoriteAgents(){return agentRepository.findFavoriteAgents();}
+
 }

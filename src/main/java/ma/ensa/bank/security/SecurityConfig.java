@@ -1,10 +1,10 @@
 package ma.ensa.bank.security;
 
 
-import ma.ensa.bank.Agent.Agent;
-import ma.ensa.bank.Agent.AgentService;
 import ma.ensa.bank.ClientHandler.Client.Client;
 import ma.ensa.bank.ClientHandler.Client.ClientService;
+import ma.ensa.bank.agentHandler.agent.Agent;
+import ma.ensa.bank.agentHandler.agent.AgentService;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOfficeService;
 import ma.ensa.bank.filter.AuthenticationFilter;
@@ -30,6 +30,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                System.out.println("hello");
                 User user ;
 
                 Pattern pattern_of_a_phone_number = Pattern.compile("^[0-9]+");//. represents single character
@@ -69,20 +71,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                else{
                    System.out.println("agent");
                     Agent agent = agentService.getAgentByEmail(username);
+
+
                     if(agent != null){
+                        System.out.println("agent Found");
                         Collection<GrantedAuthority> authorities = new ArrayList<>();
                         SimpleGrantedAuthority roleAuthority = new SimpleGrantedAuthority("ROLE_AGENT");
                         authorities.add(roleAuthority);
                         user = new User(agent.getEmail(),agent.getPassword(), authorities );
                     }else {
+                        System.out.println("**trrrrrrrrrrrrrrrr");
+                        System.out.println(username);
                         BackOffice backOffice = backOfficeService.getBackOfficeByEmail(username);
+
+                        System.out.println("*****************************");
+                        System.out.println(backOffice.getPassword());
+                        System.out.println("****************************");
                         if(backOffice != null){
+                            System.out.println("dkhelt******************");
                             Collection<GrantedAuthority> authorities = new ArrayList<>();
                             SimpleGrantedAuthority backOfficeAuthority = new SimpleGrantedAuthority("ROLE_BACKOFFICE");
                             authorities.add(backOfficeAuthority);
                             user = new User(backOffice.getEmail(),backOffice.getPassword(), authorities );
                         }
                         else {
+                            System.out.println("madkhelt******************");
+
                             user = null;
                         }
                     }}
@@ -93,26 +107,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // http.cors().and().csrf().disable();
         //authentication filters:
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager());
         http.cors();
+
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/login","/api/v1/client/register", "/token/refresh/**").permitAll();
         //we will add it later when the front is finished
+
         /*http.authorizeHttpRequests().anyRequest().authenticated();*/
         http.authorizeHttpRequests().anyRequest().permitAll();
         http.addFilter(authenticationFilter );
+
         http.addFilterBefore(new AuthorisationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-        UrlBasedCorsConfigurationSource source = new
-                UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(false);
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 
     @Override
     protected AuthenticationManager authenticationManager() throws Exception {

@@ -36,11 +36,7 @@ public class ClientController {
     @Autowired
     private SmsService smsService;
 
-    @CrossOrigin
-    @PostMapping("/register")
-    public void addClient(@RequestBody Client client){
-        clientService.addClient(client);
-    }
+    
 
     @CrossOrigin
     @GetMapping("/getInfo")
@@ -63,7 +59,41 @@ public class ClientController {
         Long transactionId = clientService.makeTransaction(currentUserPhone, receiverPhone, amount);
 
         return transactionId;
+}
+    @CrossOrigin
+    @GetMapping("/clients")
+    public List<Client> getClients(){
+        return clientService.getClients();
+    }
 
+    @CrossOrigin
+    @PostMapping("/addclient")
+    public void addClient(@RequestBody ClientDTO client){
+        if(client==null){
+            throw new IllegalStateException("No client to add");
+        }else{
+            clientService.addClient(client);
+        }
+    }
+
+    @CrossOrigin
+    @PutMapping(value="/updateclient/{ClientId}")
+    public void updateClient(@PathVariable("ClientId") Long ClientId,@RequestBody Client client){
+        if(client==null){
+            throw new IllegalStateException("No client to update");
+        }else{
+            clientService.updateClient(ClientId,client);
+        }
+    }
+
+    @CrossOrigin
+    @DeleteMapping(value="/deleteclient/{clientid}")
+    public void deleteagent(@PathVariable("clientid") Long clientid){
+        if(clientid==null){
+            throw new IllegalStateException("Please Enter a valid CardId");
+        }else {
+            clientService.deleteClient(clientid);
+        }
     }
 
     @CrossOrigin
