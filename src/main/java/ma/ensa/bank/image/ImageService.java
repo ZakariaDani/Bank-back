@@ -16,7 +16,7 @@ public class ImageService {
     /*
     * path where we will store the image
     * */
-    public final String directoryPath = "C:\\images";
+    public final String directoryPath = "/home/dani/Desktop/Work";
 
     public String uploadImage(MultipartFile file) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());

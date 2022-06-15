@@ -29,7 +29,7 @@ public class Agent {
     private String matricule;
     private String patente;
     private String description;
-    private String file;
+    private String fileName;
     private LocalDate dateOfBirth;
     private boolean isFavorite;
 
@@ -72,7 +72,7 @@ public class Agent {
 
     }
 
-    public Agent(String firstName, String lastName, String adress, String email, String phone, String matricule, String patente, String description, String file, LocalDate dateOfBirth, String password,boolean isFavorite) {
+    public Agent(String firstName, String lastName, String adress, String email, String phone, String matricule, String patente, String description, String fileName, LocalDate dateOfBirth, String password,boolean isFavorite) {
         this.firstName = firstName;
         LastName = lastName;
         this.adress = adress;
@@ -81,7 +81,7 @@ public class Agent {
         this.matricule = matricule;
         this.patente = patente;
         this.description = description;
-        this.file = file;
+        this.fileName = fileName;
         this.dateOfBirth = dateOfBirth;
         this.password = password;
         this.isFavorite = isFavorite;
