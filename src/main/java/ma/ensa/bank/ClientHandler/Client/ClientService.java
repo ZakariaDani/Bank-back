@@ -58,9 +58,9 @@ public class ClientService {
     }
 
     public ClientDTO SignIn(Client client) {
-        boolean present = clientRepository.findClientByPhone(client.getPhone()) != null;
+        boolean present = clientRepository.findClientByPhone(client.getPhone()).isPresent();
         if (present) {
-            Client value = clientRepository.findClientByEmail(client.getEmail());
+            Client value = clientRepository.findClientByEmail(client.getEmail()).get();
             if(client.getPassword().equals(value.getPassword())) {
                 ClientDTO response = new ClientDTO();
                 BeanUtils.copyProperties(value, response);
@@ -147,8 +147,8 @@ public class ClientService {
             clientdb.setLastName(client.getLastName());
         }
         if(client.getEmail()!=null && client.getEmail().length()>7 && !Objects.equals(clientdb.getEmail(),client.getEmail())){
-            Client opt = clientRepository.findClientByEmail(client.getEmail());
-            if(opt != null){
+            boolean opt = clientRepository.findClientByEmail(client.getEmail()).isPresent();
+            if(opt){
                 throw new IllegalStateException("email you want to update already exist!!");
             }
             clientdb.setEmail(client.getEmail());
@@ -157,8 +157,8 @@ public class ClientService {
             clientdb.setAddress(client.getAddress());
         }
         if(client.getPhone()!=null && client.getPhone().length()>9 && !Objects.equals(clientdb.getPhone(),client.getPhone())){
-            Client opt = clientRepository.findClientByPhone(client.getPhone());
-            if(opt != null ){
+            boolean opt = clientRepository.findClientByPhone(client.getPhone()).isPresent();
+            if(opt){
                 throw new IllegalStateException("phone you want to update already exist!!");
             }
             clientdb.setPhone(client.getPhone());
@@ -200,7 +200,7 @@ public class ClientService {
         return clientRepository.findClientWithoutAgent();
     }
     public Client getClientByPhone(String phone){
-        return clientRepository.findByPhone(phone);
+        return clientRepository.findClientByPhone(phone).get();
     }
 
     public Optional<Client> getClientById(Long Id){ return clientRepository.findClientById(Id);};
@@ -228,7 +228,6 @@ public class ClientService {
     public List<Client> getClientsByAgentId(Long agentId){
         return clientRepository.getClientsByAgentId(agentId).get();
     }
-}
 
     @Transactional
     public Long makeTransaction(String emitterPhone, String receiverPhone, double amount){
@@ -239,8 +238,8 @@ public class ClientService {
 
         if( validPhoneNumber == true && amount>0 ){
             try{
-                Client emitter  = clientRepository.findClientByPhone(emitterPhone);
-                Client receiver  = clientRepository.findClientByPhone(receiverPhone);
+                Client emitter  = clientRepository.findClientByPhone(emitterPhone).get();
+                Client receiver  = clientRepository.findClientByPhone(receiverPhone).get();
                 if(receiver == null){
                     throw new RuntimeException("There is no Client with that phone number");
                 }
@@ -280,7 +279,7 @@ public class ClientService {
             throw new RuntimeException("The amount must be a in {5,10,20,50,100,200}");
         }
         else{
-            Client emitter = clientRepository.findClientByPhone(emitterPhone);
+            Client emitter = clientRepository.findClientByPhone(emitterPhone).get();
             if(emitter.getSolde()< amount){
                 throw new RuntimeException("You don't have enough money to do this transaction");
             }
@@ -320,7 +319,7 @@ public class ClientService {
                    NotValidatedTransaction notValidatedTransaction = verificationCodeDB.getTransaction();
 
                    if (notValidatedTransaction != null) {
-                       Client emitter = clientRepository.findClientByPhone(notValidatedTransaction.getEmitter());
+                       Client emitter = clientRepository.findClientByPhone(notValidatedTransaction.getEmitter()).get();
                        double amount = notValidatedTransaction.getAmount();
 
                        if (emitter.getSolde() > amount) {
@@ -343,7 +342,7 @@ public class ClientService {
 
                            emitter.setSolde(emitter.getSolde() - amount);
                            if(receiver_is_a_client == true){
-                              Client receiver = clientRepository.findClientByPhone(receiverPhone);
+                              Client receiver = clientRepository.findClientByPhone(receiverPhone).get();
                               receiver.setSolde(receiver.getSolde() + amount);
                            }
 

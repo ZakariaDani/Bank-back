@@ -29,7 +29,7 @@ public class Client {
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         private String password;
 
-        private double solde;
+        private Double solde;
         private Boolean isFavorite=false;
 
         @ManyToOne(

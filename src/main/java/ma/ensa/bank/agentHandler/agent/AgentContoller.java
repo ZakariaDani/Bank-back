@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import ma.ensa.bank.ClientHandler.Client.Client;
 import ma.ensa.bank.ClientHandler.Client.ClientDTO;
+import ma.ensa.bank.ClientHandler.Client.ClientDTO;
 import ma.ensa.bank.ClientHandler.Client.ClientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class AgentContoller {
     @GetMapping("/clients")
     public ResponseEntity<List<Client>> getClients(HttpServletRequest request){
         Agent agent = this.getCurrentAgent(request);
-        return new ResponseEntity<>(clientService.getClientsByAgentId(agent.getIdCardNumber()), HttpStatus.OK);
+        return new ResponseEntity<>(agent.getClients(), HttpStatus.OK);
     }
     @GetMapping("/clientswithoutagent")
     public ResponseEntity<List<Client>> getClients_without_agent(){
