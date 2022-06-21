@@ -43,7 +43,7 @@ public class ClientController {
     public Client getClient(HttpServletRequest request){
 
         String phone = CurrentUserInfo.getEmail(request);
-        return clientService.getClient(phone);
+        return clientService.getClientByPhone(phone);
     }
 
     @CrossOrigin
