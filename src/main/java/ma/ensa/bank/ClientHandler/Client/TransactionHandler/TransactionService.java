@@ -2,6 +2,9 @@ package ma.ensa.bank.ClientHandler.Client.TransactionHandler;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -33,7 +36,8 @@ public class TransactionService {
         }
     }
 
-    public List<Transaction> getTransactions(String currentUserPhoneNumber){
-        return transactionRepository.findByEmitterOrReceiver(currentUserPhoneNumber,currentUserPhoneNumber);
+    public Page<Transaction> getTransactions(String currentUserPhoneNumber, int page, int pageSize){
+        return transactionRepository.findByEmitterOrReceiver(currentUserPhoneNumber,
+                currentUserPhoneNumber, PageRequest.of(page,pageSize, Sort.by("id").descending()));
     }
 }

@@ -1,34 +1,29 @@
 package ma.ensa.bank.ClientHandler.Client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import ma.ensa.bank.ClientHandler.Client.TransactionHandler.Transaction;
 import ma.ensa.bank.ClientHandler.Client.TransactionHandler.TransactionDTO;
+import ma.ensa.bank.ClientHandler.Client.TransactionHandler.TransactionService;
 import ma.ensa.bank.ClientHandler.Client.VerificationHandler.VerificationCode;
 import ma.ensa.bank.Helpers.CurrentUserInfo;
 import ma.ensa.bank.SMS.SmsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.security.Principal;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
-import static javax.security.auth.callback.ConfirmationCallback.OK;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1/client")
 public class ClientController {
+
+    Logger log = LoggerFactory.getLogger(ClientController.class);
 
     @Autowired
     private ClientService clientService;
@@ -36,6 +31,8 @@ public class ClientController {
     @Autowired
     private SmsService smsService;
 
+    @Autowired
+    private TransactionService transactionService;
     @CrossOrigin
     @PostMapping("/register")
     public void addClient(@RequestBody Client client){
@@ -96,11 +93,26 @@ public class ClientController {
     @CrossOrigin
     @GetMapping("/getTransactions")
     @ResponseBody
-    public List<Transaction> getTranactions(HttpServletRequest request){
+    public Page<Transaction> getTranactions(@RequestParam(value="page",required = false) int page,
+                                            @RequestParam(value = "pageSize",required = false) int pageSize
+                                            , HttpServletRequest request){
 
+        page = page > 0? page-1 : page;
+        pageSize = pageSize==0? 5 :pageSize;
+        System.out.println(page);
+        System.out.println(pageSize);
         String phoneNumber = CurrentUserInfo.getEmail(request);
-        return clientService.getTransactions(phoneNumber);
+        return transactionService.getTransactions(phoneNumber,page,pageSize);
 
+    }
+
+    @CrossOrigin
+    @GetMapping("/a")
+    public String hola(){
+        System.out.println("a");
+        log.trace("hoola abdelali sended"+28+"dh");
+        log.info("infoooooo");
+        return "hola";
     }
 
 }

@@ -10,6 +10,7 @@ import ma.ensa.bank.Helpers.CurrentUserInfo;
 import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -266,8 +267,5 @@ public class ClientService {
 
     }
 
-    public List<Transaction> getTransactions(String currentUserPhoneNumber){
-        return transactionService.getTransactions(currentUserPhoneNumber);
-    }
 }
 
