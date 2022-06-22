@@ -51,6 +51,7 @@ public class BankBackApplication {
 //					"agen2@gmail.com",
 //					LocalDate.of(1999, 05, 04))
 //			);
+
 //			clientService.addClient(new Client(null,
 //					"ahmed",
 //					"zibout",
@@ -63,6 +64,13 @@ public class BankBackApplication {
 
 			//clientService.addClient(new Client("Marouane","Zibout","0625252528","maoruane@email.com","Mahmid", LocalDate.of(2000, 03, 05),100.00));
 
+			/*clientService.addClient(
+					new Client(
+							"abdo",
+							"elhammadi",
+							"0666",
+							"a@gmail.com",
+					200));*/
 
 
 			BackOffice backOffice = new BackOffice(null,
