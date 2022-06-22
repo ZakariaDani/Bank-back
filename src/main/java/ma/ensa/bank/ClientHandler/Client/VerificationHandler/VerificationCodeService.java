@@ -4,7 +4,9 @@ package ma.ensa.bank.ClientHandler.Client.VerificationHandler;
 import ma.ensa.bank.ClientHandler.Client.TransactionHandler.NotValidatedTransaction;
 import ma.ensa.bank.SMS.SmsEntity;
 import ma.ensa.bank.SMS.SmsService;
+import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -17,6 +19,8 @@ import java.util.List;
 @Service
 public class VerificationCodeService {
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private VerificationCodeRepository verificationCodeRepository;
 
@@ -39,7 +43,9 @@ public class VerificationCodeService {
                     " DH, Here it is the verification code: "+code;
 
             verificationCode.setReceiver(receiver);
-            verificationCode.setCode(code);
+            String encrypted_code = PasswordEncoder.myEncryptionAlgorithm(code);
+
+            verificationCode.setCode(encrypted_code);
             verificationCode.setDate(
                 dtf.format(now)
             );

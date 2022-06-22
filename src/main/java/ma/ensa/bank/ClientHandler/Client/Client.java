@@ -30,7 +30,6 @@ public class Client {
 
         private double solde;
 
-
         public Client(){super();}
 
 

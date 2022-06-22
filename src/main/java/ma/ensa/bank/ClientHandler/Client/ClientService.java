@@ -11,6 +11,7 @@ import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -141,7 +142,16 @@ public class ClientService {
         Matcher m = p.matcher(receiverPhone);
         boolean validPhoneNumber = m.matches();
 
-        if( validPhoneNumber == true && amount>0 ){
+        if(validPhoneNumber == false){
+            throw new RuntimeException("The phone number must start with 05 | 06 | 07");
+        }
+        else if( amount <=0){
+            throw new RuntimeException("The amount must be a positive number different from zero");
+        }
+        else if(emitterPhone.equals(receiverPhone)){
+            throw new RuntimeException("You can't send money to your self");
+        }
+        else{
             try{
                 Client emitter  = clientRepository.findClientByPhone(emitterPhone);
                 Client receiver  = clientRepository.findClientByPhone(receiverPhone);
@@ -165,12 +175,14 @@ public class ClientService {
             }
         }
 
-        else{
-            throw new RuntimeException("The phone number must start with 0{5,6,7}" +
-                    " and the amount must be a positive number");
-        }
     }
 
+    /* this function is called when the user wants to make a telecomRecharge
+        So in order to confirm that service we need firstly verify if:
+            + we provide this telecom entreprise
+            + we provide the amount requested
+            + the user has enough money to make that transaction
+     */
     @Transactional
     public Long makeTelecomRecharge(String emitterPhone, String telecomEntreprise, double amount){
 
@@ -201,26 +213,39 @@ public class ClientService {
 
     }
 
+    /* this function is called when the user sends a verification code in
+        order to confirm his transaction
+        So in this function we need to verify:
+            + The transaction actually exist and still not confirmed
+            + The verification code sent by the user is correct
+            + The verification code still not expired;
+     */
     @Transactional
     public void receive_verification_code(Long transactionID,String code,String phoneNumber){
 
         VerificationCode verificationCodeDB = verificationCodeService.getVerificationCode(transactionID,phoneNumber);
 
        if(verificationCodeDB != null) {
-           if (verificationCodeDB.getCode().equals(code) == false) {
+           String decrypted_code = PasswordEncoder.myDecreptionAlgorithm(
+                   verificationCodeDB.getCode());
+
+           if (decrypted_code.equals(code) == false) {
                throw new RuntimeException("Incorrect verification code");
-           } else {
+           }
+           else {
                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                LocalDateTime now = LocalDateTime.now();
                LocalDateTime verificationDate = LocalDateTime.parse(verificationCodeDB.getDate(), dtf);
                long time_diff = ChronoUnit.SECONDS.between(verificationDate, now);
 
-            /* We check if this verification code has expired by
+            /*
+            We check if this verification code has expired by
             comparing the time difference with 300second = 5min
              */
                if (time_diff > 300) {
                    throw new RuntimeException("This verification code has been expired");
-               } else {
+               }
+               else {
                    NotValidatedTransaction notValidatedTransaction = verificationCodeDB.getTransaction();
 
                    if (notValidatedTransaction != null) {
@@ -229,13 +254,10 @@ public class ClientService {
 
                        if (emitter.getSolde() > amount) {
                            String receiverPhone = notValidatedTransaction.getReceiver();
-                           boolean receiver_is_a_client;
-                           if(receiverPhone.charAt(0) == '0'){
-                               receiver_is_a_client = true;
-                           }
-                           else{
-                               receiver_is_a_client = false;
-                           }
+
+                           //this variable will help us to distinguish if that transaction
+                           //is a telecom recharge or transaction for a client
+                           boolean receiver_is_a_client = receiverPhone.charAt(0) == '0';
 
                            transactionService.saveTransaction(
                                    notValidatedTransaction.getEmitter(),
@@ -246,6 +268,7 @@ public class ClientService {
                            notValidatedTransactionService.deleteTransaction(notValidatedTransaction.getId());
 
                            emitter.setSolde(emitter.getSolde() - amount);
+
                            if(receiver_is_a_client == true){
                               Client receiver = clientRepository.findClientByPhone(receiverPhone);
                               receiver.setSolde(receiver.getSolde() + amount);

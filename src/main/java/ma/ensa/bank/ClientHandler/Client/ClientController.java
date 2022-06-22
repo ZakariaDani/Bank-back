@@ -7,6 +7,7 @@ import ma.ensa.bank.ClientHandler.Client.TransactionHandler.TransactionService;
 import ma.ensa.bank.ClientHandler.Client.VerificationHandler.VerificationCode;
 import ma.ensa.bank.Helpers.CurrentUserInfo;
 import ma.ensa.bank.SMS.SmsService;
+import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +17,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/v1/client")
 public class ClientController {
-
-    Logger log = LoggerFactory.getLogger(ClientController.class);
 
     @Autowired
     private ClientService clientService;
@@ -93,7 +90,7 @@ public class ClientController {
     @CrossOrigin
     @GetMapping("/getTransactions")
     @ResponseBody
-    public Page<Transaction> getTranactions(@RequestParam(value="page",required = false) int page,
+    public Page<Transaction> getTransactions(@RequestParam(value="page",required = false) int page,
                                             @RequestParam(value = "pageSize",required = false) int pageSize
                                             , HttpServletRequest request){
 
@@ -106,13 +103,11 @@ public class ClientController {
 
     }
 
-    @CrossOrigin
     @GetMapping("/a")
-    public String hola(){
-        System.out.println("a");
-        log.trace("hoola abdelali sended"+28+"dh");
-        log.info("infoooooo");
-        return "hola";
+    public String a(){
+            String  result = PasswordEncoder.myDecreptionAlgorithm("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmRlbGFsaSIsImV4cCI6MTY1ODUzMjYwOX0.g6oGz9RIPeBG4tu4gqjXNPeRTt3ILfBUdQgV6LBkG9U");
+            return result;
     }
+
 
 }

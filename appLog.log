@@ -1,56 +1,135 @@
-2022-06-22 02:06:45,170 [INFO] ma.ensa.bank.BankBackApplication [main] Starting BankBackApplication using Java 11.0.15 on LAPTOP-E27A5OD3 with PID 17812 (C:\Users\lenovo\Desktop\projet_atlass\Back\target\classes started by lenovo in C:\Users\lenovo\Desktop\projet_atlass\Back)
-2022-06-22 02:06:45,172 [INFO] ma.ensa.bank.BankBackApplication [main] No active profile set, falling back to default profiles: default
-2022-06-22 02:06:45,967 [INFO] org.springframework.data.repository.config.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-06-22 02:06:46,048 [INFO] org.springframework.data.repository.config.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 68 ms. Found 6 JPA repository interfaces.
-2022-06-22 02:06:46,996 [INFO] org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat initialized with port(s): 8081 (http)
-2022-06-22 02:06:47,021 [INFO] org.apache.catalina.core.StandardService [main] Starting service [Tomcat]
-2022-06-22 02:06:47,023 [INFO] org.apache.catalina.core.StandardEngine [main] Starting Servlet engine: [Apache Tomcat/9.0.56]
-2022-06-22 02:06:47,308 [INFO] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [main] Initializing Spring embedded WebApplicationContext
-2022-06-22 02:06:47,309 [INFO] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 2063 ms
-2022-06-22 02:06:47,630 [INFO] org.hibernate.jpa.internal.util.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-06-22 02:06:47,784 [INFO] org.hibernate.Version [main] HHH000412: Hibernate ORM core version 5.6.3.Final
-2022-06-22 02:06:48,088 [INFO] org.hibernate.annotations.common.Version [main] HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-06-22 02:06:48,238 [INFO] com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Starting...
-2022-06-22 02:06:48,437 [INFO] com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Start completed.
-2022-06-22 02:06:48,459 [INFO] org.hibernate.dialect.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
-2022-06-22 02:06:49,654 [INFO] org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator [main] HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-06-22 02:06:49,664 [INFO] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-06-22 02:06:50,816 [WARN] org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-06-22 02:06:51,112 [INFO] org.springframework.security.web.DefaultSecurityFilterChain [main] Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@16602333, org.springframework.security.web.context.SecurityContextPersistenceFilter@712c9bcf, org.springframework.security.web.header.HeaderWriterFilter@47224d5d, org.springframework.web.filter.CorsFilter@67376bae, org.springframework.security.web.authentication.logout.LogoutFilter@3cd6d147, ma.ensa.bank.filter.AuthorisationFilter@6d6d81c, ma.ensa.bank.filter.AuthenticationFilter@7c59cf66, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@509e4902, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1a06b95, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6bb71265, org.springframework.security.web.session.SessionManagementFilter@68e094c9, org.springframework.security.web.access.ExceptionTranslationFilter@463a1f47, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@384b3fe7, org.springframework.security.web.access.intercept.AuthorizationFilter@69a3944]
-2022-06-22 02:06:51,545 [INFO] org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat started on port(s): 8081 (http) with context path ''
-2022-06-22 02:06:51,556 [INFO] ma.ensa.bank.BankBackApplication [main] Started BankBackApplication in 6.856 seconds (JVM running for 7.334)
-2022-06-22 02:06:54,593 [INFO] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [http-nio-8081-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-06-22 02:06:54,595 [INFO] org.springframework.web.servlet.DispatcherServlet [http-nio-8081-exec-1] Initializing Servlet 'dispatcherServlet'
-2022-06-22 02:06:54,596 [INFO] org.springframework.web.servlet.DispatcherServlet [http-nio-8081-exec-1] Completed initialization in 1 ms
-2022-06-22 02:06:54,840 [INFO] ma.ensa.bank.ClientHandler.Client.ClientController [http-nio-8081-exec-1] infoooooo
-2022-06-22 02:07:02,739 [INFO] ma.ensa.bank.ClientHandler.Client.ClientController [http-nio-8081-exec-3] infoooooo
-2022-06-22 02:07:45,188 [INFO] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
-2022-06-22 02:07:45,190 [INFO] com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
-2022-06-22 02:07:45,202 [INFO] com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
-2022-06-22 02:07:48,890 [INFO] Starting BankBackApplication using Java 11.0.15 on LAPTOP-E27A5OD3 with PID 31324 (C:\Users\lenovo\Desktop\projet_atlass\Back\target\classes started by lenovo in C:\Users\lenovo\Desktop\projet_atlass\Back)
-2022-06-22 02:07:48,894 [INFO] No active profile set, falling back to default profiles: default
-2022-06-22 02:07:49,696 [INFO] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-06-22 02:07:49,777 [INFO] Finished Spring Data repository scanning in 70 ms. Found 6 JPA repository interfaces.
-2022-06-22 02:07:50,752 [INFO] Tomcat initialized with port(s): 8081 (http)
-2022-06-22 02:07:50,766 [INFO] Starting service [Tomcat]
-2022-06-22 02:07:50,766 [INFO] Starting Servlet engine: [Apache Tomcat/9.0.56]
-2022-06-22 02:07:50,892 [INFO] Initializing Spring embedded WebApplicationContext
-2022-06-22 02:07:50,893 [INFO] Root WebApplicationContext: initialization completed in 1928 ms
-2022-06-22 02:07:51,165 [INFO] HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-06-22 02:07:51,232 [INFO] HHH000412: Hibernate ORM core version 5.6.3.Final
-2022-06-22 02:07:51,485 [INFO] HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-06-22 02:07:51,610 [INFO] HikariPool-1 - Starting...
-2022-06-22 02:07:51,771 [INFO] HikariPool-1 - Start completed.
-2022-06-22 02:07:51,794 [INFO] HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
-2022-06-22 02:07:52,878 [INFO] HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-06-22 02:07:52,884 [INFO] Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-06-22 02:07:53,724 [WARN] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-06-22 02:07:53,924 [INFO] Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@102f3f05, org.springframework.security.web.context.SecurityContextPersistenceFilter@7d4135c9, org.springframework.security.web.header.HeaderWriterFilter@4027edeb, org.springframework.web.filter.CorsFilter@16e84d93, org.springframework.security.web.authentication.logout.LogoutFilter@5c8d631, ma.ensa.bank.filter.AuthorisationFilter@2a7b5925, ma.ensa.bank.filter.AuthenticationFilter@5a5b394, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7bb86ac, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@537a8915, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6c9b6332, org.springframework.security.web.session.SessionManagementFilter@43b3b1b0, org.springframework.security.web.access.ExceptionTranslationFilter@632d1b1b, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@3810806c, org.springframework.security.web.access.intercept.AuthorizationFilter@1ae23815]
-2022-06-22 02:07:54,294 [INFO] Tomcat started on port(s): 8081 (http) with context path ''
-2022-06-22 02:07:54,301 [INFO] Started BankBackApplication in 5.915 seconds (JVM running for 6.58)
-2022-06-22 02:07:57,936 [INFO] Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-06-22 02:07:57,938 [INFO] Initializing Servlet 'dispatcherServlet'
-2022-06-22 02:07:57,940 [INFO] Completed initialization in 1 ms
-2022-06-22 02:07:58,089 [INFO] infoooooo
-2022-06-22 02:09:01,826 [INFO] infoooooo
-2022-06-22 04:03:49,326 [WARN] HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=7m25s5ms455µs200ns).
+2022-06-23 00:51:23,220 [INFO] Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-06-23 00:51:23,276 [INFO] HikariPool-1 - Shutdown initiated...
+2022-06-23 00:51:23,300 [INFO] HikariPool-1 - Shutdown completed.
+2022-06-23 00:51:32,449 [INFO] Starting BankBackApplication using Java 11.0.15 on LAPTOP-E27A5OD3 with PID 47616 (C:\Users\lenovo\Desktop\projet_atlass\Back\target\classes started by lenovo in C:\Users\lenovo\Desktop\projet_atlass\Back)
+2022-06-23 00:51:32,452 [INFO] No active profile set, falling back to default profiles: default
+2022-06-23 00:51:33,660 [INFO] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-06-23 00:51:33,817 [INFO] Finished Spring Data repository scanning in 141 ms. Found 6 JPA repository interfaces.
+2022-06-23 00:51:34,888 [INFO] Tomcat initialized with port(s): 8081 (http)
+2022-06-23 00:51:34,906 [INFO] Starting service [Tomcat]
+2022-06-23 00:51:34,907 [INFO] Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-06-23 00:51:35,040 [INFO] Initializing Spring embedded WebApplicationContext
+2022-06-23 00:51:35,041 [INFO] Root WebApplicationContext: initialization completed in 2519 ms
+2022-06-23 00:51:35,371 [INFO] HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-06-23 00:51:35,461 [INFO] HHH000412: Hibernate ORM core version 5.6.3.Final
+2022-06-23 00:51:35,723 [INFO] HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-06-23 00:51:36,127 [INFO] HikariPool-1 - Starting...
+2022-06-23 00:51:36,362 [INFO] HikariPool-1 - Start completed.
+2022-06-23 00:51:36,382 [INFO] HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-06-23 00:51:37,465 [INFO] HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-06-23 00:51:37,475 [INFO] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-06-23 00:51:38,283 [WARN] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-06-23 00:51:38,504 [INFO] Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5b8599c7, org.springframework.security.web.context.SecurityContextPersistenceFilter@47224d5d, org.springframework.security.web.header.HeaderWriterFilter@2148b47e, org.springframework.web.filter.CorsFilter@31e9d94f, org.springframework.security.web.authentication.logout.LogoutFilter@78c23ade, ma.ensa.bank.filter.AuthorisationFilter@69a3944, ma.ensa.bank.filter.AuthenticationFilter@4987142d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@68e094c9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7f958d4a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3e3bf77b, org.springframework.security.web.session.SessionManagementFilter@463a1f47, org.springframework.security.web.access.ExceptionTranslationFilter@537a8915, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1b868ef0, org.springframework.security.web.access.intercept.AuthorizationFilter@36f80ceb]
+2022-06-23 00:51:38,894 [INFO] Tomcat started on port(s): 8081 (http) with context path ''
+2022-06-23 00:51:38,903 [INFO] Started BankBackApplication in 7.029 seconds (JVM running for 7.805)
+2022-06-23 00:57:44,113 [INFO] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-06-23 00:57:44,119 [INFO] Initializing Servlet 'dispatcherServlet'
+2022-06-23 00:57:44,187 [INFO] Completed initialization in 67 ms
+2022-06-23 01:26:41,706 [INFO] Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-06-23 01:26:41,774 [INFO] HikariPool-1 - Shutdown initiated...
+2022-06-23 01:26:41,864 [INFO] HikariPool-1 - Shutdown completed.
+2022-06-23 01:26:49,662 [INFO] Starting BankBackApplication using Java 11.0.15 on LAPTOP-E27A5OD3 with PID 49836 (C:\Users\lenovo\Desktop\projet_atlass\Back\target\classes started by lenovo in C:\Users\lenovo\Desktop\projet_atlass\Back)
+2022-06-23 01:26:49,665 [INFO] No active profile set, falling back to default profiles: default
+2022-06-23 01:26:50,517 [INFO] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-06-23 01:26:50,618 [INFO] Finished Spring Data repository scanning in 85 ms. Found 6 JPA repository interfaces.
+2022-06-23 01:26:51,359 [INFO] Tomcat initialized with port(s): 8081 (http)
+2022-06-23 01:26:51,374 [INFO] Starting service [Tomcat]
+2022-06-23 01:26:51,375 [INFO] Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-06-23 01:26:51,495 [INFO] Initializing Spring embedded WebApplicationContext
+2022-06-23 01:26:51,495 [INFO] Root WebApplicationContext: initialization completed in 1760 ms
+2022-06-23 01:26:51,723 [INFO] HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-06-23 01:26:51,804 [INFO] HHH000412: Hibernate ORM core version 5.6.3.Final
+2022-06-23 01:26:52,019 [INFO] HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-06-23 01:26:52,123 [INFO] HikariPool-1 - Starting...
+2022-06-23 01:26:52,313 [INFO] HikariPool-1 - Start completed.
+2022-06-23 01:26:52,332 [INFO] HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-06-23 01:26:53,220 [INFO] HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-06-23 01:26:53,227 [INFO] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-06-23 01:26:54,470 [WARN] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-06-23 01:26:54,724 [INFO] Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4987142d, org.springframework.security.web.context.SecurityContextPersistenceFilter@7e366c6f, org.springframework.security.web.header.HeaderWriterFilter@410f1452, org.springframework.web.filter.CorsFilter@3e3bf77b, org.springframework.security.web.authentication.logout.LogoutFilter@7ac1161f, ma.ensa.bank.filter.AuthorisationFilter@41e76252, ma.ensa.bank.filter.AuthenticationFilter@16602333, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@243162b1, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6af29394, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@67376bae, org.springframework.security.web.session.SessionManagementFilter@23ade612, org.springframework.security.web.access.ExceptionTranslationFilter@31aa9b01, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2a7b5925, org.springframework.security.web.access.intercept.AuthorizationFilter@2dec57c5]
+2022-06-23 01:26:55,144 [INFO] Tomcat started on port(s): 8081 (http) with context path ''
+2022-06-23 01:26:55,157 [INFO] Started BankBackApplication in 6.039 seconds (JVM running for 6.558)
+2022-06-23 01:27:00,536 [INFO] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-06-23 01:27:00,537 [INFO] Initializing Servlet 'dispatcherServlet'
+2022-06-23 01:27:00,538 [INFO] Completed initialization in 1 ms
+2022-06-23 01:29:49,461 [INFO] Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-06-23 01:29:49,473 [INFO] HikariPool-1 - Shutdown initiated...
+2022-06-23 01:29:49,496 [INFO] HikariPool-1 - Shutdown completed.
+2022-06-23 01:29:57,217 [INFO] Starting BankBackApplication using Java 11.0.15 on LAPTOP-E27A5OD3 with PID 49880 (C:\Users\lenovo\Desktop\projet_atlass\Back\target\classes started by lenovo in C:\Users\lenovo\Desktop\projet_atlass\Back)
+2022-06-23 01:29:57,219 [INFO] No active profile set, falling back to default profiles: default
+2022-06-23 01:29:57,979 [INFO] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-06-23 01:29:58,052 [INFO] Finished Spring Data repository scanning in 63 ms. Found 6 JPA repository interfaces.
+2022-06-23 01:29:58,829 [INFO] Tomcat initialized with port(s): 8081 (http)
+2022-06-23 01:29:58,842 [INFO] Starting service [Tomcat]
+2022-06-23 01:29:58,843 [INFO] Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-06-23 01:29:58,971 [INFO] Initializing Spring embedded WebApplicationContext
+2022-06-23 01:29:58,972 [INFO] Root WebApplicationContext: initialization completed in 1688 ms
+2022-06-23 01:29:59,207 [INFO] HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-06-23 01:29:59,273 [INFO] HHH000412: Hibernate ORM core version 5.6.3.Final
+2022-06-23 01:29:59,497 [INFO] HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-06-23 01:29:59,638 [INFO] HikariPool-1 - Starting...
+2022-06-23 01:29:59,847 [INFO] HikariPool-1 - Start completed.
+2022-06-23 01:29:59,900 [INFO] HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-06-23 01:30:00,796 [INFO] HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-06-23 01:30:00,804 [INFO] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-06-23 01:30:01,613 [WARN] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-06-23 01:30:01,830 [INFO] Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4987142d, org.springframework.security.web.context.SecurityContextPersistenceFilter@7e366c6f, org.springframework.security.web.header.HeaderWriterFilter@410f1452, org.springframework.web.filter.CorsFilter@3e3bf77b, org.springframework.security.web.authentication.logout.LogoutFilter@7ac1161f, ma.ensa.bank.filter.AuthorisationFilter@41e76252, ma.ensa.bank.filter.AuthenticationFilter@16602333, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@243162b1, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6af29394, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@67376bae, org.springframework.security.web.session.SessionManagementFilter@23ade612, org.springframework.security.web.access.ExceptionTranslationFilter@31aa9b01, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2a7b5925, org.springframework.security.web.access.intercept.AuthorizationFilter@2dec57c5]
+2022-06-23 01:30:02,196 [INFO] Tomcat started on port(s): 8081 (http) with context path ''
+2022-06-23 01:30:02,203 [INFO] Started BankBackApplication in 5.444 seconds (JVM running for 5.924)
+2022-06-23 01:30:09,300 [INFO] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-06-23 01:30:09,301 [INFO] Initializing Servlet 'dispatcherServlet'
+2022-06-23 01:30:09,302 [INFO] Completed initialization in 1 ms
+2022-06-23 01:32:57,533 [INFO] Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-06-23 01:32:57,564 [INFO] HikariPool-1 - Shutdown initiated...
+2022-06-23 01:32:57,612 [INFO] HikariPool-1 - Shutdown completed.
+2022-06-23 01:33:05,000 [INFO] Starting BankBackApplication using Java 11.0.15 on LAPTOP-E27A5OD3 with PID 50588 (C:\Users\lenovo\Desktop\projet_atlass\Back\target\classes started by lenovo in C:\Users\lenovo\Desktop\projet_atlass\Back)
+2022-06-23 01:33:05,003 [INFO] No active profile set, falling back to default profiles: default
+2022-06-23 01:33:05,877 [INFO] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-06-23 01:33:05,975 [INFO] Finished Spring Data repository scanning in 85 ms. Found 6 JPA repository interfaces.
+2022-06-23 01:33:06,761 [INFO] Tomcat initialized with port(s): 8081 (http)
+2022-06-23 01:33:06,772 [INFO] Starting service [Tomcat]
+2022-06-23 01:33:06,773 [INFO] Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-06-23 01:33:06,881 [INFO] Initializing Spring embedded WebApplicationContext
+2022-06-23 01:33:06,882 [INFO] Root WebApplicationContext: initialization completed in 1809 ms
+2022-06-23 01:33:07,115 [INFO] HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-06-23 01:33:07,184 [INFO] HHH000412: Hibernate ORM core version 5.6.3.Final
+2022-06-23 01:33:07,415 [INFO] HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-06-23 01:33:07,559 [INFO] HikariPool-1 - Starting...
+2022-06-23 01:33:07,787 [INFO] HikariPool-1 - Start completed.
+2022-06-23 01:33:07,808 [INFO] HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-06-23 01:33:08,679 [INFO] HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-06-23 01:33:08,687 [INFO] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-06-23 01:33:09,613 [WARN] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-06-23 01:33:09,935 [INFO] Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1165a952, org.springframework.security.web.context.SecurityContextPersistenceFilter@43b3b1b0, org.springframework.security.web.header.HeaderWriterFilter@632d1b1b, org.springframework.web.filter.CorsFilter@1b868ef0, org.springframework.security.web.authentication.logout.LogoutFilter@79486f38, ma.ensa.bank.filter.AuthorisationFilter@102f3f05, ma.ensa.bank.filter.AuthenticationFilter@16e84d93, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7d4135c9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@426a4301, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2a7b5925, org.springframework.security.web.session.SessionManagementFilter@4027edeb, org.springframework.security.web.access.ExceptionTranslationFilter@32e9c3af, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@70940cb8, org.springframework.security.web.access.intercept.AuthorizationFilter@7da1ef46]
+2022-06-23 01:33:10,576 [INFO] Tomcat started on port(s): 8081 (http) with context path ''
+2022-06-23 01:33:10,586 [INFO] Started BankBackApplication in 6.092 seconds (JVM running for 6.613)
+2022-06-23 01:33:19,669 [INFO] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-06-23 01:33:19,671 [INFO] Initializing Servlet 'dispatcherServlet'
+2022-06-23 01:33:19,673 [INFO] Completed initialization in 2 ms
+2022-06-23 01:35:48,773 [INFO] Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-06-23 01:35:48,790 [INFO] HikariPool-1 - Shutdown initiated...
+2022-06-23 01:35:48,822 [INFO] HikariPool-1 - Shutdown completed.
+2022-06-23 01:35:55,573 [INFO] Starting BankBackApplication using Java 11.0.15 on LAPTOP-E27A5OD3 with PID 43516 (C:\Users\lenovo\Desktop\projet_atlass\Back\target\classes started by lenovo in C:\Users\lenovo\Desktop\projet_atlass\Back)
+2022-06-23 01:35:55,576 [INFO] No active profile set, falling back to default profiles: default
+2022-06-23 01:35:56,384 [INFO] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-06-23 01:35:56,480 [INFO] Finished Spring Data repository scanning in 84 ms. Found 6 JPA repository interfaces.
+2022-06-23 01:35:57,221 [INFO] Tomcat initialized with port(s): 8081 (http)
+2022-06-23 01:35:57,233 [INFO] Starting service [Tomcat]
+2022-06-23 01:35:57,233 [INFO] Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-06-23 01:35:57,351 [INFO] Initializing Spring embedded WebApplicationContext
+2022-06-23 01:35:57,351 [INFO] Root WebApplicationContext: initialization completed in 1700 ms
+2022-06-23 01:35:57,579 [INFO] HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-06-23 01:35:57,636 [INFO] HHH000412: Hibernate ORM core version 5.6.3.Final
+2022-06-23 01:35:57,839 [INFO] HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-06-23 01:35:57,955 [INFO] HikariPool-1 - Starting...
+2022-06-23 01:35:58,149 [INFO] HikariPool-1 - Start completed.
+2022-06-23 01:35:58,168 [INFO] HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-06-23 01:35:58,981 [INFO] HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-06-23 01:35:58,988 [INFO] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-06-23 01:35:59,738 [WARN] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-06-23 01:35:59,912 [INFO] Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6c9b6332, org.springframework.security.web.context.SecurityContextPersistenceFilter@7bb86ac, org.springframework.security.web.header.HeaderWriterFilter@43b3b1b0, org.springframework.web.filter.CorsFilter@384b3fe7, org.springframework.security.web.authentication.logout.LogoutFilter@7c93e69, ma.ensa.bank.filter.AuthorisationFilter@4889fbba, ma.ensa.bank.filter.AuthenticationFilter@6018d82c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4724b2c1, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2148b47e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@572db5ee, org.springframework.security.web.session.SessionManagementFilter@7d4135c9, org.springframework.security.web.access.ExceptionTranslationFilter@4027edeb, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@67b20b4c, org.springframework.security.web.access.intercept.AuthorizationFilter@102f3f05]
+2022-06-23 01:36:00,278 [INFO] Tomcat started on port(s): 8081 (http) with context path ''
+2022-06-23 01:36:00,286 [INFO] Started BankBackApplication in 5.21 seconds (JVM running for 5.832)
+2022-06-23 01:36:11,778 [INFO] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-06-23 01:36:11,779 [INFO] Initializing Servlet 'dispatcherServlet'
+2022-06-23 01:36:11,782 [INFO] Completed initialization in 3 ms
