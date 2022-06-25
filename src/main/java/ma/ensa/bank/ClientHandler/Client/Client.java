@@ -28,6 +28,7 @@ public class Client {
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         private String password;
 
+
         private double solde;
 
         public Client(){super();}

@@ -1,15 +1,13 @@
 package ma.ensa.bank.ClientHandler.Client;
 
-import lombok.extern.slf4j.Slf4j;
+
 import ma.ensa.bank.ClientHandler.Client.TransactionHandler.Transaction;
 import ma.ensa.bank.ClientHandler.Client.TransactionHandler.TransactionDTO;
 import ma.ensa.bank.ClientHandler.Client.TransactionHandler.TransactionService;
 import ma.ensa.bank.ClientHandler.Client.VerificationHandler.VerificationCode;
 import ma.ensa.bank.Helpers.CurrentUserInfo;
 import ma.ensa.bank.SMS.SmsService;
-import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
@@ -104,9 +102,8 @@ public class ClientController {
     }
 
     @GetMapping("/a")
-    public String a(){
-            String  result = PasswordEncoder.myDecreptionAlgorithm("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmRlbGFsaSIsImV4cCI6MTY1ODUzMjYwOX0.g6oGz9RIPeBG4tu4gqjXNPeRTt3ILfBUdQgV6LBkG9U");
-            return result;
+    public void a(){
+
     }
 
 

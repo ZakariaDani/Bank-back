@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 public class ClientDTO {
+
     private String id;
     private String fname;
     private String lname;
@@ -17,4 +18,5 @@ public class ClientDTO {
     private String email;
     private String password;
     private String solde;
+
 }

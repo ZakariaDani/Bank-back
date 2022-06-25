@@ -8,6 +8,8 @@ import ma.ensa.bank.ClientHandler.Client.VerificationHandler.VerificationCode;
 import ma.ensa.bank.ClientHandler.Client.VerificationHandler.VerificationCodeService;
 import ma.ensa.bank.Helpers.CurrentUserInfo;
 import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,6 +36,8 @@ import java.util.regex.Pattern;
 
 @Service
 public class ClientService {
+
+    Logger log = LoggerFactory.getLogger(ClientController.class);
     private final ClientRepository clientRepository;
 
     @Autowired
@@ -204,6 +208,7 @@ public class ClientService {
                 NotValidatedTransaction transaction = notValidatedTransactionService.
                         saveTransaction(emitterPhone,telecomEntreprise,amount);
 
+                System.out.println("Sendig the SMS to the user ....");
                 verificationCodeService.sendVerificationCode(emitterPhone, amount, transaction);
 
                 return transaction.getId();
@@ -214,11 +219,14 @@ public class ClientService {
     }
 
     /* this function is called when the user sends a verification code in
-        order to confirm his transaction
-        So in this function we need to verify:
-            + The transaction actually exist and still not confirmed
+        order to confirm his transaction */
+    /*So in this function we need to verify:
+            + The transaction actually exists and still not confirmed
             + The verification code sent by the user is correct
             + The verification code still not expired;
+            + Verify for the second time that :
+                + The client has enough money
+                + The receiver actually exists
      */
     @Transactional
     public void receive_verification_code(Long transactionID,String code,String phoneNumber){
@@ -233,6 +241,7 @@ public class ClientService {
                throw new RuntimeException("Incorrect verification code");
            }
            else {
+
                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                LocalDateTime now = LocalDateTime.now();
                LocalDateTime verificationDate = LocalDateTime.parse(verificationCodeDB.getDate(), dtf);
@@ -265,6 +274,9 @@ public class ClientService {
                                    notValidatedTransaction.getAmount()
                            );
 
+                           //making logs for that transaction
+                           log.warn(emitter.getPhone()+" has sent "+amount+"DH to "+receiverPhone);
+
                            notValidatedTransactionService.deleteTransaction(notValidatedTransaction.getId());
 
                            emitter.setSolde(emitter.getSolde() - amount);
@@ -277,13 +289,14 @@ public class ClientService {
                        } else {
                            throw new RuntimeException("You don't have enough money to do that transaction");
                        }
-                   } else {
+                   }
+
+                   else {
                        throw new RuntimeException("This transaction is already done");
                    }
                }
            }
        }
-
        else{
            throw new RuntimeException("There is no transaction with that id");
        }

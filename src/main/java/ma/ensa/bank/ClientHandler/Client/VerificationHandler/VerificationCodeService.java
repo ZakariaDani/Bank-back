@@ -30,7 +30,6 @@ public class VerificationCodeService {
     @Transactional
     public void sendVerificationCode(String receiver, Double amount, NotValidatedTransaction transaction){
 
-
         try{
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
@@ -52,13 +51,13 @@ public class VerificationCodeService {
             verificationCode.setTransaction(transaction);
             verificationCodeRepository.save(verificationCode);
 
-            SmsEntity smsEntity = new SmsEntity(smsReceiver,message,code);
+            /*SmsEntity smsEntity = new SmsEntity(smsReceiver,message,code);
 
-            boolean theMessageWasSent = smsService.sendSms(smsEntity);
+            boolean theMessageWasSent = smsService.sendSmsUsingTwilioAPI(smsEntity);
 
             if(theMessageWasSent == false){
                 throw new RuntimeException("There is something wrong with the sending message service");
-            }
+            }*/
         }
         catch(Exception exception){
             throw exception;
