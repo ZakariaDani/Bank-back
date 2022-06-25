@@ -112,7 +112,7 @@ public class AgentContoller {
             return ResponseEntity.badRequest().body("Id doesn't exist");
         }
     }
-    @PatchMapping ("/update")
+    @PutMapping ("/update")
     public ResponseEntity<?> updateAgent(@RequestBody AgentDTO agentDTO) {
         if (agentDTO == null)
             return ResponseEntity.badRequest().body("The provided agent is not valid");
