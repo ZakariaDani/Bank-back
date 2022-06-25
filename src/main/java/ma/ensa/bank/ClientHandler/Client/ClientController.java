@@ -1,30 +1,20 @@
 package ma.ensa.bank.ClientHandler.Client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ma.ensa.bank.ClientHandler.Client.TransactionHandler.Transaction;
 import ma.ensa.bank.ClientHandler.Client.TransactionHandler.TransactionDTO;
+import ma.ensa.bank.ClientHandler.Client.TransactionHandler.TransactionService;
 import ma.ensa.bank.ClientHandler.Client.VerificationHandler.VerificationCode;
 import ma.ensa.bank.Helpers.CurrentUserInfo;
 import ma.ensa.bank.SMS.SmsService;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.security.Principal;
-import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
-import static javax.security.auth.callback.ConfirmationCallback.OK;
 
 @RestController
 @RequestMapping("/api/v1/client")
@@ -36,7 +26,13 @@ public class ClientController {
     @Autowired
     private SmsService smsService;
 
-    
+    @Autowired
+    private TransactionService transactionService;
+    @CrossOrigin
+    @PostMapping("/register")
+    public void registerClient(@RequestBody Client client){
+        clientService.addClient(client);
+    }
 
     @CrossOrigin
     @GetMapping("/getInfo")
@@ -68,7 +64,7 @@ public class ClientController {
 
     @CrossOrigin
     @PostMapping("/addclient")
-    public void addClient(@RequestBody ClientDTO client){
+    public void addClient(@RequestBody Client client){
         if(client==null){
             throw new IllegalStateException("No client to add");
         }else{
@@ -90,7 +86,7 @@ public class ClientController {
     @DeleteMapping(value="/deleteclient/{clientid}")
     public void deleteagent(@PathVariable("clientid") Long clientid){
         if(clientid==null){
-            throw new IllegalStateException("Please Enter a valid CardId");
+            throw new IllegalStateException("Please Enter a valid ClientId");
         }else {
             clientService.deleteClient(clientid);
         }
@@ -126,11 +122,23 @@ public class ClientController {
     @CrossOrigin
     @GetMapping("/getTransactions")
     @ResponseBody
-    public List<Transaction> getTranactions(HttpServletRequest request){
+    public Page<Transaction> getTransactions(@RequestParam(value="page",required = false) int page,
+                                            @RequestParam(value = "pageSize",required = false) int pageSize
+                                            , HttpServletRequest request){
 
+        page = page > 0? page-1 : page;
+        pageSize = pageSize==0? 5 :pageSize;
+        System.out.println(page);
+        System.out.println(pageSize);
         String phoneNumber = CurrentUserInfo.getEmail(request);
-        return clientService.getTransactions(phoneNumber);
+        return transactionService.getTransactions(phoneNumber,page,pageSize);
 
     }
+
+    @GetMapping("/a")
+    public void a(){
+
+    }
+
 
 }
