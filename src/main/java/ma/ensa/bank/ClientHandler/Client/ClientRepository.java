@@ -11,13 +11,16 @@ import java.util.Optional;
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
 
-    Client findByPhone(String phone);
+    @Query("SELECT s FROM Client s WHERE s.phone=?1")
+    Optional<Client> findByPhone(String phone);
 
-    Client findClientByEmail(String email);
+    @Query("SELECT s FROM Client s WHERE s.email=?1")
+    Optional<Client> findClientByEmail(String email);
 
-    Client findClientById(Long id);
+    Optional<Client> findClientById(Long id);
 
-    Client findClientByPhone(String phone);
+    @Query("SELECT s FROM Client s WHERE s.phone=?1")
+    Optional<Client> findClientByPhone(String phone);
 
     @Query("SELECT s FROM Client s WHERE s.agent IS NULL")
     Optional<List<Client>> findClientWithoutAgent();
