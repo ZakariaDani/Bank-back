@@ -33,7 +33,7 @@ public class Client {
         private Boolean isFavorite=false;
 
         @ManyToOne(
-                cascade = CascadeType.MERGE
+                cascade = CascadeType.PERSIST
         )
         @JoinColumn(name="agent_id")
         private Agent agent;
