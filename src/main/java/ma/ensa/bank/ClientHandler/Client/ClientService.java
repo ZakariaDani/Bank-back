@@ -6,6 +6,7 @@ import ma.ensa.bank.ClientHandler.Client.TransactionHandler.TransactionService;
 import ma.ensa.bank.ClientHandler.Client.VerificationHandler.VerificationCode;
 import ma.ensa.bank.ClientHandler.Client.VerificationHandler.VerificationCodeService;
 import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
+import ma.ensa.bank.email.EmailEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ma.ensa.bank.agentHandler.agent.Agent;
@@ -167,7 +168,7 @@ public class ClientService {
             String EncodePass = PasswordEncoder.bCryptPasswordEncoder().encode(password);
             client.setPassword(EncodePass);
             this.updateClient(id, client);
-            String message = "Hello Mr" + client.getFirstName() + client.getLastName() + "Your New Password is: " + password;
+            String message = "Hello Mr" + client.getFname() + client.getLname() + "Your New Password is: " + password;
             EmailEntity emailEntity = new EmailEntity(client.getEmail(), "your New Password", message);
 
             try {
