@@ -181,24 +181,20 @@ public class ClientService {
     }
     @Transactional
     public void assign_client_to_agent(Long idClient,String emailAgent){
-        System.out.println("work");
         Client clientDb = clientRepository.findClientById(idClient).get();
         Agent agent = agentRepository.findAgentByEmail(emailAgent).get();
         this.sendCodeToClient(clientDb.getId());
         clientDb.setAgent(agent);
     }
     public String sendCodeToClient(Long id){
-        System.out.println("email is sending...");
         Optional<Client> c = this.getClientById(id);
         if(c.isPresent()){
-            System.out.println("client found...");
             Client client  = c.get();
             String password = new Random().ints(10, 33, 122).collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                     .toString();
             String EncodePass = PasswordEncoder.bCryptPasswordEncoder().encode(password);
             client.setPassword(EncodePass);
             this.updateClient(id, client);
-            System.out.println("client updated");
             String message = "Hello Mr" + client.getFirstName() + client.getLastName() + "Your New Password is: " + password;
             EmailEntity emailEntity = new EmailEntity(client.getEmail(), "your New Password", message);
 
