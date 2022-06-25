@@ -27,19 +27,21 @@ public class Client {
 
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         private String password;
-
-
         private double solde;
+        private double plafon;
+
+        private String agentEmail;
 
         public Client(){super();}
 
-
-        public Client(String fname, String lname, String phone, String email, double solde) {
+        public Client(String fname, String lname, String phone, String email, double solde,double plafon
+        ) {
             this.fname = fname;
             this.lname = lname;
             this.phone = phone;
             this.email = email;
-            this.solde=solde;
+            this.solde = solde;
+            this.plafon = plafon;
         }
 
 

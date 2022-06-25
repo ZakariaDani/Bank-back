@@ -2,30 +2,20 @@ package ma.ensa.bank.ClientHandler.Client;
 
 import ma.ensa.bank.ClientHandler.Client.TransactionHandler.NotValidatedTransaction;
 import  ma.ensa.bank.ClientHandler.Client.TransactionHandler.NotValidatedTransactionService;
-import ma.ensa.bank.ClientHandler.Client.TransactionHandler.Transaction;
 import ma.ensa.bank.ClientHandler.Client.TransactionHandler.TransactionService;
 import ma.ensa.bank.ClientHandler.Client.VerificationHandler.VerificationCode;
 import ma.ensa.bank.ClientHandler.Client.VerificationHandler.VerificationCodeService;
-import ma.ensa.bank.Helpers.CurrentUserInfo;
 import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import javax.xml.crypto.Data;
-import java.lang.reflect.Array;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -73,24 +63,29 @@ public class ClientService {
     }
 
     public void addClient(Client client){
-        Client opt1 = clientRepository.findClientByPhone(client.getPhone());
-        Client opt2 = clientRepository.findClientByEmail(client.getEmail());
+
         boolean there_is_a_null_attribute = client.getPhone()==null|| client.getLname()==null||
-                    client.getFname()==null|| client.getEmail()==null;
+                    client.getFname()==null|| client.getEmail()==null ||client.getPlafon()==0;
 
-        if(opt1!=null || opt2 != null ){
-            throw new IllegalStateException("Client already exist!!");
-        }
-
-        else if(there_is_a_null_attribute == true){
+        if(there_is_a_null_attribute){
             throw new IllegalStateException("All the fields should be filled in");
         }
         else{
-            System.out.println(client);
-            client.setSolde(0);
-            client.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode("123456"));
-            client.setBirth(LocalDate.now());
-            clientRepository.save(client);
+            Client opt1 = clientRepository.findClientByPhone(client.getPhone());
+            Client opt2 = clientRepository.findClientByEmail(client.getEmail());
+            if(opt1!=null ){
+                throw new IllegalStateException("This phone number is already used");
+            }
+            else if(opt2!=null){
+                throw new IllegalStateException("This email is already used");
+            }
+            else{
+                client.setSolde(0);
+                client.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode("123456"));
+                client.setBirth(LocalDate.now());
+
+                clientRepository.save(client);
+            }
         }
     }
 
