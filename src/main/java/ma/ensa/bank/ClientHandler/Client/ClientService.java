@@ -49,42 +49,72 @@ public class ClientService {
         this.agentRepository = agentRepository;
         this.emailService = emailService;
     }
-
-    public void addClient(Client client) {
-
-        Pattern emailPattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
-        Pattern namesPattern = Pattern.compile("^[A-Za-z]{3,20}");
-
-        boolean there_is_a_null_attribute = client.getPhone() == null || client.getLname() == null ||
-                client.getFname() == null || client.getEmail() == null || client.getPlafon() == 0;
-
-        if (there_is_a_null_attribute) {
-            throw new IllegalStateException("All the fields should be filled in");
-        } else {
-             boolean opt1 = clientRepository.findClientByPhone(client.getPhone()).isPresent();
-             boolean opt2 = clientRepository.findClientByEmail(client.getEmail()).isPresent();
-            if(!emailPattern.matcher(client.getEmail()).matches()){
-                throw new IllegalStateException("Invalid email addresse");
+    public ClientDTO SignIn(Client client) {
+        boolean present = clientRepository.findClientByPhone(client.getPhone()).isPresent();
+        if (present) {
+            Client value = clientRepository.findClientByEmail(client.getEmail()).get();
+            if(client.getPassword().equals(value.getPassword())) {
+                ClientDTO response = new ClientDTO();
+                BeanUtils.copyProperties(value, response);
+                clientRepository.save(value);
+                return response;
             }
-            else if (!namesPattern.matcher(client.getFname()).matches()){
-                throw new IllegalStateException("Invalid first name address");
-            }
-            else if (!namesPattern.matcher(client.getLname()).matches()){
-                throw new IllegalStateException("Invalid last name  address");
-            }
-            else if (opt1 == true) {
-                throw new IllegalStateException("This phone number is already used");
-            } else if (opt2 == true) {
-                throw new IllegalStateException("This email is already used");
-            } else {
-
-                client.setSolde(0);
-                client.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode("123456"));
-                client.setBirth(LocalDate.now());
-
-                clientRepository.save(client);
+            else {
+                throw new IllegalStateException("Phone or Password invalid");
             }
         }
+        else {
+            throw new IllegalStateException("invalid request");
+        }
+    }
+    public void verify_client_info(ClientDTO clientDTO) {
+        Optional<Client> opt1 = clientRepository.findClientByPhone(clientDTO.getPhone());
+        Optional<Client> opt2 = clientRepository.findClientById(clientDTO.getId());
+        Optional<Client> opt3 = clientRepository.findClientByEmail(clientDTO.getEmail());
+        Pattern phonepatt = Pattern.compile("^\\d{10}$");
+        Pattern emailpatt = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+        Pattern namespatt = Pattern.compile("^[A-Za-z]{3,20}");
+        if (opt1.isPresent() || opt2.isPresent() || opt3.isPresent()) {
+            throw new IllegalStateException("duplicate data in the database!!");
+        } else if (clientDTO.getEmail().trim().isEmpty() || clientDTO.getPhone().trim().isEmpty() || clientDTO.getFirstName().trim().isEmpty() || clientDTO.getLastName().trim().isEmpty() || clientDTO.getAddress().trim().isEmpty() || clientDTO.getBirth() == null) {
+            throw new IllegalStateException("All fields are required!");
+        } else {
+            if (!phonepatt.matcher(clientDTO.getPhone()).matches()) {
+                throw new IllegalStateException("Phone number is not valid!!");
+            }
+            if (!emailpatt.matcher(clientDTO.getEmail()).matches()) {
+                throw new IllegalStateException("Email format is not valid!!");
+            }
+            if (!namespatt.matcher(clientDTO.getFirstName()).matches()) {
+                throw new IllegalStateException("First name is not valid");
+            }
+            if (!namespatt.matcher(clientDTO.getLastName()).matches()) {
+                throw new IllegalStateException("Last name is not valid");
+            }
+        }
+    }
+    public Client addClient(ClientDTO clientDTO){
+            this.verify_client_info(clientDTO);
+            clientDTO.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode(clientDTO.getPassword()));
+            Client client = new Client();
+            client.setId(clientDTO.getId());
+            client.setFirstName(clientDTO.getFirstName());
+            client.setLastName(clientDTO.getLastName());
+            client.setPhone(clientDTO.getPhone());
+            client.setBirth(clientDTO.getBirth());
+            client.setEmail(clientDTO.getEmail());
+            client.setPassword(clientDTO.getPassword());
+            client.setSolde(clientDTO.getSolde());
+            client.setAddress(clientDTO.getAddress());
+            client.setIsFavorite((clientDTO.getIsFavorite())?false:client.getIsFavorite());
+            Agent agent = agentRepository.findAgentById(clientDTO.getAgentId()).get();
+            client.setAgent(agent);
+            List<Client> newlist = agent.getClients();
+            newlist.add(client);
+            agent.setClients(newlist);
+            agent.setNumber_of_client(agent.getClients().toArray().length);
+            agentRepository.save(agent);
+            return client;
     }
 
     @Transactional
@@ -156,9 +186,15 @@ public class ClientService {
     public void assign_client_to_agent(Long idClient,String emailAgent){
         Client clientDb = clientRepository.findClientById(idClient).get();
         Agent agent = agentRepository.findAgentByEmail(emailAgent).get();
+        int old = agent.getClients().toArray().length;
+        agent.setNumber_of_client(++old);
         this.sendCodeToClient(clientDb.getId());
         clientDb.setAgent(agent);
+        List<Client> newlist = agent.getClients();
+        newlist.add(clientDb);
+        agent.setClients(newlist);
     }
+    @Transactional
     public String sendCodeToClient(Long id){
         Optional<Client> c = this.getClientById(id);
         if(c.isPresent()){
@@ -185,7 +221,15 @@ public class ClientService {
     public void deleteClient(Long id){
         Optional<Client> opt1 = clientRepository.findClientById(id);
         if(opt1.isPresent()){
-            clientRepository.deleteById(id);
+            Client client = opt1.get();
+            Optional<Agent> opt2 = agentRepository.findAgentById(client.getAgent().getIdCardNumber());
+            if(opt1.get().getAgent()!=null) {
+                List<Client> newlist = opt2.get().getClients();
+                newlist.remove(client);
+                opt2.get().setNumber_of_client(newlist.toArray().length);
+                opt2.get().setClients(newlist);
+                clientRepository.deleteById(id);
+            }
         }else {
             throw new IllegalStateException("This Id doesn't exist!");
         }
