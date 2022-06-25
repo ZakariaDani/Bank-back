@@ -11,15 +11,15 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 
 @Entity
-@Data
 @Table
+@Data
 @AllArgsConstructor
 public class Client {
 
         @Id @GeneratedValue(strategy=GenerationType.AUTO)
         private Long id;
-        private String firstName;
-        private String lastName;
+        private String fname;
+        private String lname;
         private String phone;
         private String email;
         private String address;
@@ -28,8 +28,8 @@ public class Client {
 
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         private String password;
-
-        private Double solde;
+        private double solde;
+        private double plafon;
         private Boolean isFavorite=false;
 
         @ManyToOne(
@@ -40,23 +40,18 @@ public class Client {
 
         public Client(){super();}
 
-
-        public Client(String fname, String lname, String phone, String email, double solde) {
-            this.firstName = fname;
-            this.lastName = lname;
+        public Client(String fname, String lname, String phone,
+                      String email, double solde,double plafon, String address, boolean isFavorite
+        ) {
+            this.fname = fname;
+            this.lname = lname;
             this.phone = phone;
             this.email = email;
-            this.solde=solde;
-            this.isFavorite=false;
-        }
-
-        public Client(String fname, String lname, String phone, String email, String address, LocalDate birth, double solde) {
-            this.firstName = fname;
-            this.lastName = lname;
-            this.phone = phone;
-            this.email = email;
-            this.address = address;
-            this.birth = birth;
             this.solde = solde;
+            this.plafon = plafon;
+            this.address = address;
+            this.isFavorite = isFavorite;
+
         }
+
 }

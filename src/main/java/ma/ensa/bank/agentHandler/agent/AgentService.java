@@ -18,6 +18,7 @@ import java.util.Random;
 @Service
 @AllArgsConstructor
 public class AgentService {
+
     private final AgentRepository agentRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 

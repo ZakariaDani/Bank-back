@@ -2,11 +2,9 @@ package ma.ensa.bank;
 
 
 
-import ma.ensa.bank.agentHandler.agent.Agent;
 import ma.ensa.bank.agentHandler.agent.AgentDTO;
 import ma.ensa.bank.agentHandler.agent.AgentRepository;
 
-import ma.ensa.bank.ClientHandler.Client.ClientDTO;
 import ma.ensa.bank.ClientHandler.Client.ClientRepository;
 import ma.ensa.bank.ClientHandler.Client.ClientService;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
@@ -19,6 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @SpringBootApplication
 public class BankBackApplication {
@@ -75,7 +74,11 @@ public class BankBackApplication {
 
 			BackOffice backOffice = new BackOffice(null,
 					"office@gmail.com",
-					"123456"
+					"123456",
+					"John",
+					"Doe",
+					"2126888888888",
+					LocalDate.now(),null
 			);
 			backOfficeRepository.save(backOffice);
 
@@ -85,6 +88,7 @@ public class BankBackApplication {
 
 			clientService.addClient(new ClientDTO(null, "zakaria", "dani","0606060606", "email@email.com", "789", "ta7nawt", LocalDate.of(2000,5,12),200.0,2L));
 			clientService.addClient(new ClientDTO(null, "marouane", "zibout","0606780606", "client@email.com", "789", "ta7nawt", LocalDate.of(2000,5,12),200.0,2L));
+
 
 		};
 	}

@@ -19,27 +19,55 @@ import javax.servlet.MultipartConfigElement;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.util.StringUtils;
 
 @AllArgsConstructor
 @RestController
 @CrossOrigin
-@RequestMapping("/api/v1/backoffice/agents")
+@RequestMapping("/api/v1/backoffice")
 public class  BackOfficeController {
     private final BackOfficeService backOfficeService;
     private final AgentService agentService;
     private final ImageService imageService;
 
-    @GetMapping
+    @GetMapping("/{email}")
+    public ResponseEntity<?> getBackOffice(@PathVariable("email") String email) {
+        BackOffice backOffice = backOfficeService.getBackOfficeByEmail(email);
+        if(backOffice != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(backOffice);
+        } else {
+            return ResponseEntity.badRequest().body("There is no backoffice with that specific email");
+        }
+    }
+
+    @PatchMapping("/{email}")
+    public ResponseEntity<?> updateBackOffice(@PathVariable("email") String email, @RequestBody BackOfficeDTO backOfficeDTO) {
+        if (backOfficeDTO == null)
+            return ResponseEntity.badRequest().body("The provided backoffice is not valid");
+
+        BackOffice existedBackOffice = backOfficeService.getBackOfficeByEmail(email);
+        if(existedBackOffice != null) {
+            BackOffice newBackOffice = backOfficeService.updateBackOffice(existedBackOffice, backOfficeDTO);
+            return ResponseEntity
+                    .ok()
+                    .body(newBackOffice);
+        } else {
+            return ResponseEntity.badRequest().body("There is no backoffice with that specific email");
+        }
+    }
+
+
+    @GetMapping("/agents")
     public ResponseEntity<List<Agent>> getAgents() {
         return new ResponseEntity<>(backOfficeService.getAllAgents(), HttpStatus.OK);
     }
 
-    @GetMapping("/favorites")
+    @GetMapping("/agents/favorites")
     public ResponseEntity<List<Agent>> getFavoriteAgents(){
         return new ResponseEntity<>(backOfficeService.getFavoriteAgents(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/agents/{id}")
     public ResponseEntity<?> getAgent(@PathVariable("id") final Long id) {
         Optional<Agent> agent = backOfficeService.getAgentById(id);
         if(agent.isPresent()) {
@@ -49,7 +77,7 @@ public class  BackOfficeController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/agents")
     public ResponseEntity<?> createAgent(@RequestBody AgentDTO agentDTO) {
         if (agentDTO == null)
             return ResponseEntity.badRequest().body("The provided agent is not valid");
@@ -61,11 +89,11 @@ public class  BackOfficeController {
 
      
     
-    @PostMapping("/{id}/image")
+    @PostMapping("/agents/{id}/image")
     public ResponseEntity<?> createAgentImage(@RequestParam MultipartFile file, @PathVariable("id") final Long id) {
        try {
             String imagePath = this.imageService.uploadImage(file);
-	    this.backOfficeService.saveAgentImage(id, file.getName());
+	    this.backOfficeService.saveAgentImage(id, StringUtils.cleanPath(file.getOriginalFilename()));
             return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(imagePath);
@@ -75,7 +103,7 @@ public class  BackOfficeController {
     }
 
 
-    @PatchMapping ("/{id}")
+    @PatchMapping ("/agents/{id}")
     public ResponseEntity<?> updateAgent(@PathVariable("id") final Long id, @RequestBody AgentDTO agentDTO) {
         System.out.println("here");
         if (agentDTO == null)
@@ -94,7 +122,7 @@ public class  BackOfficeController {
         }
     }
 
-    @PatchMapping ("/{id}/favorite")
+    @PatchMapping ("/agents/{id}/favorite")
     public ResponseEntity<?> updateFavoriteAgent(@PathVariable("id") final Long id, @RequestBody AgentDTO agentDTO) {
         if (agentDTO == null)
             return ResponseEntity.badRequest().body("The provided agent is not valid");
@@ -113,7 +141,7 @@ public class  BackOfficeController {
     }
 
 
-    @DeleteMapping("/{agentEmail}")
+    @DeleteMapping("/agents/{agentEmail}")
     public ResponseEntity<?> deleteAgent(@PathVariable("agentEmail") String agentEmail) {
         if (agentEmail == null)
             return ResponseEntity.badRequest().body("The given agent is not valid");
@@ -125,7 +153,7 @@ public class  BackOfficeController {
 
 
     @GetMapping(
-            value = "image/{imageName}",
+            value = "/agents/image/{imageName}",
             produces = {MediaType.IMAGE_JPEG_VALUE,MediaType.IMAGE_GIF_VALUE,MediaType.IMAGE_PNG_VALUE}
     )
     public @ResponseBody byte[] getImageWithMediaType(@PathVariable("imageName") String fileName) throws IOException {

@@ -25,7 +25,31 @@ public class BackOfficeService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ImageService imageService;
 
+    public BackOffice updateBackOffice(BackOffice existedBackOffice, BackOfficeDTO backOfficeDTO){
+        String firstName = backOfficeDTO.getFirstName();
+        if(firstName != null) {
+            existedBackOffice.setFirstName(firstName);
+        }
+        String lastName = backOfficeDTO.getLastName();
+        if(lastName != null) {
+            existedBackOffice.setLastName(lastName);
+        }
+        String phone = backOfficeDTO.getPhone();
+        if(phone != null) {
+            existedBackOffice.setPhone(phone);
+        }
+        String email = backOfficeDTO.getEmail();
+        if(email != null) {
+            existedBackOffice.setEmail(email);
+        }
 
+
+        LocalDate dateOfBirth = backOfficeDTO.getDateOfBirth();
+        if(dateOfBirth != null) {
+            existedBackOffice.setDateOfBirth(dateOfBirth);
+        }
+        return backOfficeRepository.save(existedBackOffice);
+    }
 
     public ResponseBackOffice signin(BackOffice backOffice) {
         boolean present = backOfficeRepository.findByEmail(backOffice.getEmail()).isPresent();
