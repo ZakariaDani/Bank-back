@@ -32,18 +32,6 @@ public class AgentContoller {
         return new ResponseEntity(clientService.getClientsWithoutAgent(), HttpStatus.OK);
     }
 
-    @PostMapping("/addclient")
-    public ResponseEntity<?> addClient(@RequestBody ClientDTO client,HttpServletRequest request){
-        if(client==null){
-            return ResponseEntity.badRequest().body("This client is not valid");
-        }
-        client.setAgentId(this.getCurrentAgent(request).getIdCardNumber());
-        Client newClient = clientService.addClient(client);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(newClient);
-    }
-
     @PostMapping("/assigneagent")
     public ResponseEntity<String> assign_client_to_agent(@RequestBody Assignids obj){
         if(obj==null){
