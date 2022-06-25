@@ -115,6 +115,7 @@ public class ClientService {
             client.setSolde(clientDTO.getSolde());
             client.setAddress(clientDTO.getAddress());
             client.setIsFavorite((clientDTO.getIsFavorite())?false:client.getIsFavorite());
+            if(clientDTO.getAgentId()==null) {clientRepository.save(client); return client;}
             Agent agent = agentRepository.findAgentById(clientDTO.getAgentId()).get();
             client.setAgent(agent);
             List<Client> newlist = agent.getClients();
@@ -193,6 +194,7 @@ public class ClientService {
         List<Client> newlist = agent.getClients();
         newlist.add(clientDb);
         agent.setClients(newlist);
+        System.out.println("hello");
     }
 
     @Transactional
