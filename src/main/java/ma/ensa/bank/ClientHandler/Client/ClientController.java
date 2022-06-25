@@ -30,7 +30,7 @@ public class ClientController {
     private TransactionService transactionService;
     @CrossOrigin
     @PostMapping("/register")
-    public void registerClient(@RequestBody Client client){
+    public void registerClient(@RequestBody ClientDTO client){
         clientService.addClient(client);
     }
 
@@ -64,7 +64,7 @@ public class ClientController {
 
     @CrossOrigin
     @PostMapping("/addclient")
-    public void addClient(@RequestBody Client client){
+    public void addClient(@RequestBody ClientDTO client){
         if(client==null){
             throw new IllegalStateException("No client to add");
         }else{

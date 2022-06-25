@@ -13,6 +13,7 @@ import ma.ensa.bank.agentHandler.agent.Agent;
 import ma.ensa.bank.agentHandler.agent.AgentRepository;
 
 import ma.ensa.bank.email.EmailService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -98,8 +99,8 @@ public class ClientService {
             clientDTO.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode(clientDTO.getPassword()));
             Client client = new Client();
             client.setId(clientDTO.getId());
-            client.setFirstName(clientDTO.getFirstName());
-            client.setLastName(clientDTO.getLastName());
+            client.setFname(clientDTO.getFirstName());
+            client.setLname(clientDTO.getLastName());
             client.setPhone(clientDTO.getPhone());
             client.setBirth(clientDTO.getBirth());
             client.setEmail(clientDTO.getEmail());

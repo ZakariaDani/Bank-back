@@ -16,7 +16,6 @@ import java.util.List;
 
 @Entity(name = "back_office")
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode
 @ToString
 @Getter
@@ -47,7 +46,7 @@ public class BackOffice implements Serializable {
             fetch = FetchType.EAGER)
     @JoinColumn(name = "backoffice_id")
     private List<Agent> agents = new ArrayList<>();
-    
+
 
 
     public BackOffice(String email, String password) {
@@ -60,5 +59,14 @@ public class BackOffice implements Serializable {
         this.password = PasswordEncoder.bCryptPasswordEncoder().encode(password);
     }
 
-
+    public BackOffice(Long backId, String email, String password, String firstName, String lastName, String phone, LocalDate dateOfBirth, List<Agent> agents) {
+        this.backId = backId;
+        this.email = email;
+        this.password = PasswordEncoder.bCryptPasswordEncoder().encode(password);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.dateOfBirth = dateOfBirth;
+        this.agents = agents;
+    }
 }
