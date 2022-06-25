@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -54,6 +55,46 @@ public class AgentService {
             agent.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode(agent.getPassword()));
             agentRepository.save(agent);
         }
+    }
+    public Agent updateAgent(Agent existedAgent, AgentDTO agentDTO){
+        String firstName = agentDTO.getFirstName();
+        if(firstName != null) {
+            existedAgent.setFirstName(firstName);
+        }
+        String lastName = agentDTO.getLastName();
+        if(lastName != null) {
+            existedAgent.setLastName(lastName);
+        }
+        String phone = agentDTO.getPhone();
+        if(phone != null) {
+            existedAgent.setPhone(phone);
+        }
+        String email = agentDTO.getEmail();
+        if(email != null) {
+            existedAgent.setEmail(email);
+        }
+        String description = agentDTO.getDescription();
+        if(description != null) {
+            existedAgent.setDescription(description);
+        }
+        String patente = agentDTO.getPatente();
+        if(patente != null) {
+            existedAgent.setPatente(patente);
+        }
+        String adress = agentDTO.getAdress();
+        if(adress != null) {
+            existedAgent.setAdress(adress);
+        }
+        String matricule = agentDTO.getMatricule();
+        if(matricule != null) {
+            existedAgent.setMatricule(matricule);
+        }
+
+        LocalDate dateOfBirth = agentDTO.getDateOfBirth();
+        if(dateOfBirth != null) {
+            existedAgent.setDateOfBirth(dateOfBirth);
+        }
+        return agentRepository.save(existedAgent);
     }
     @Transactional
     public void updateAgent(Long agentCardId,Agent agent){

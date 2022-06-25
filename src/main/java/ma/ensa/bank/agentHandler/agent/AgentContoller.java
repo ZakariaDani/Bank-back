@@ -112,9 +112,22 @@ public class AgentContoller {
             return ResponseEntity.badRequest().body("Id doesn't exist");
         }
     }
-    @GetMapping("/updatecurrentagent")
-    public void update(){
+    @PatchMapping ("/update")
+    public ResponseEntity<?> updateAgent(@RequestBody AgentDTO agentDTO) {
+        if (agentDTO == null)
+            return ResponseEntity.badRequest().body("The provided agent is not valid");
 
+        Optional<Agent> existedAgent = agentService.getAgentById(agentDTO.getIdCardNumber());
+        if(existedAgent.isPresent()) {
+            Agent currentAgent = existedAgent.get();
+
+            Agent newAgent = agentService.updateAgent(currentAgent, agentDTO);
+            return ResponseEntity
+                    .ok()
+                    .body(newAgent);
+        } else {
+            return ResponseEntity.badRequest().body("There is no agent with that specific id");
+        }
     }
     @GetMapping("/getcurrentinfo")
     public Agent getCurrentAgent(HttpServletRequest request){
