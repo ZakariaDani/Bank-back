@@ -9,6 +9,7 @@ import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 @Getter
+@Setter
 public class BackOffice implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +33,12 @@ public class BackOffice implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "password")
     private String password;
+
+    private String firstName;
+    private String lastName;
+    private String phone;
+
+    private LocalDate dateOfBirth;
 
     @JsonIgnore
     @OneToMany(
