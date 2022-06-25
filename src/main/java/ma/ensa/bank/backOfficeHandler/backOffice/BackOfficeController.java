@@ -19,6 +19,7 @@ import javax.servlet.MultipartConfigElement;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.util.StringUtils;
 
 @AllArgsConstructor
 @RestController
@@ -65,7 +66,7 @@ public class  BackOfficeController {
     public ResponseEntity<?> createAgentImage(@RequestParam MultipartFile file, @PathVariable("id") final Long id) {
        try {
             String imagePath = this.imageService.uploadImage(file);
-	    this.backOfficeService.saveAgentImage(id, file.getName());
+	    this.backOfficeService.saveAgentImage(id, StringUtils.cleanPath(file.getOriginalFilename()));
             return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(imagePath);
