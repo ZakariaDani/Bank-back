@@ -1,6 +1,5 @@
 package ma.ensa.bank.ClientHandler.Client;
 
-
 import ma.ensa.bank.ClientHandler.Client.TransactionHandler.Transaction;
 import ma.ensa.bank.ClientHandler.Client.TransactionHandler.TransactionDTO;
 import ma.ensa.bank.ClientHandler.Client.TransactionHandler.TransactionService;
@@ -14,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @RestController
@@ -30,7 +30,7 @@ public class ClientController {
     private TransactionService transactionService;
     @CrossOrigin
     @PostMapping("/register")
-    public void addClient(@RequestBody Client client){
+    public void registerClient(@RequestBody Client client){
         clientService.addClient(client);
     }
 
@@ -39,7 +39,7 @@ public class ClientController {
     public Client getClient(HttpServletRequest request){
 
         String phone = CurrentUserInfo.getEmail(request);
-        return clientService.getClient(phone);
+        return clientService.getClientByPhone(phone);
     }
 
     @CrossOrigin
@@ -55,7 +55,41 @@ public class ClientController {
         Long transactionId = clientService.makeTransaction(currentUserPhone, receiverPhone, amount);
 
         return transactionId;
+}
+    @CrossOrigin
+    @GetMapping("/clients")
+    public List<Client> getClients(){
+        return clientService.getClients();
+    }
 
+    @CrossOrigin
+    @PostMapping("/addclient")
+    public void addClient(@RequestBody Client client){
+        if(client==null){
+            throw new IllegalStateException("No client to add");
+        }else{
+            clientService.addClient(client);
+        }
+    }
+
+    @CrossOrigin
+    @PutMapping(value="/updateclient/{ClientId}")
+    public void updateClient(@PathVariable("ClientId") Long ClientId,@RequestBody Client client){
+        if(client==null){
+            throw new IllegalStateException("No client to update");
+        }else{
+            clientService.updateClient(ClientId,client);
+        }
+    }
+
+    @CrossOrigin
+    @DeleteMapping(value="/deleteclient/{clientid}")
+    public void deleteagent(@PathVariable("clientid") Long clientid){
+        if(clientid==null){
+            throw new IllegalStateException("Please Enter a valid ClientId");
+        }else {
+            clientService.deleteClient(clientid);
+        }
     }
 
     @CrossOrigin

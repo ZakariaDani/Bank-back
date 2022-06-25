@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 @Configuration
 public class PasswordEncoder {
-
     @Bean
     public static BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();

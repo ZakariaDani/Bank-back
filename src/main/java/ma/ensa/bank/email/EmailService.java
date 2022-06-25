@@ -1,23 +1,31 @@
 package ma.ensa.bank.email;
 
+import ma.ensa.bank.ClientHandler.Client.Client;
+import ma.ensa.bank.ClientHandler.Client.ClientService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+import java.util.Random;
 
 
 @Service
 public class EmailService {
-    private final JavaMailSender javaMailSender;
+    @Autowired
+    private JavaMailSender javaMailSender;
 
-    public EmailService(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
+
+    public EmailService() {
     }
 
     @Value("${spring.mail.username}")
     private String sender;
 
-    public String sendMail(EmailEntity emailEntity) {
+    public void sendMail(EmailEntity emailEntity) {
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 
@@ -27,11 +35,15 @@ public class EmailService {
             simpleMailMessage.setSubject(emailEntity.getSubject());
 
             javaMailSender.send(simpleMailMessage);
-            return "Success";
+            System.out.println("Success");
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return "Error";
+            System.out.println("Error");
         }
     }
+
+
+
+
 
 }

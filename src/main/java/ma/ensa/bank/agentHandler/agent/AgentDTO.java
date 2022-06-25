@@ -1,4 +1,4 @@
-package ma.ensa.bank.Agent;
+package ma.ensa.bank.agentHandler.agent;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +11,11 @@ import java.time.LocalDate;
 @Data
 public class AgentDTO {
     private Long idCardNumber;
-    private String firstName, lastName, adress, email, phone, matricule, patente, description, file, password, backofficeEmail;
+
+    private String firstName, lastName, adress, email, phone, matricule, patente, description, fileName, password, backofficeEmail;
+
     private LocalDate dateOfBirth;
+
+    private boolean isFavorite;
+    private Long backofficeId;
 }

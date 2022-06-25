@@ -8,10 +8,12 @@ import ma.ensa.bank.ClientHandler.Client.VerificationHandler.VerificationCodeSer
 import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
+import ma.ensa.bank.agentHandler.agent.Agent;
+import ma.ensa.bank.agentHandler.agent.AgentRepository;
+
+import ma.ensa.bank.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
 
@@ -29,6 +31,8 @@ public class ClientService {
 
     Logger log = LoggerFactory.getLogger(ClientController.class);
     private final ClientRepository clientRepository;
+    private final AgentRepository agentRepository;
+    private final EmailService emailService;
 
     @Autowired
     private NotValidatedTransactionService notValidatedTransactionService;
@@ -39,47 +43,40 @@ public class ClientService {
     private VerificationCodeService verificationCodeService;
 
     @Autowired
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository,AgentRepository agentRepository, EmailService emailService) {
         this.clientRepository = clientRepository;
+        this.agentRepository = agentRepository;
+        this.emailService = emailService;
     }
 
-    public ClientDTO SignIn(Client client) {
-        boolean present = clientRepository.findClientByPhone(client.getPhone()) != null;
-        if (present) {
-            Client value = clientRepository.findClientByEmail(client.getEmail());
-            if(client.getPassword().equals(value.getPassword())) {
-                ClientDTO response = new ClientDTO();
-                BeanUtils.copyProperties(value, response);
-                clientRepository.save(value);
-                return response;
-            }
-            else {
-                throw new IllegalStateException("Phone or Password invalid");
-            }
-        }
-        else {
-            throw new IllegalStateException("invalid request");
-        }
-    }
+    public void addClient(Client client) {
 
-    public void addClient(Client client){
+        Pattern emailPattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+        Pattern namesPattern = Pattern.compile("^[A-Za-z]{3,20}");
 
-        boolean there_is_a_null_attribute = client.getPhone()==null|| client.getLname()==null||
-                    client.getFname()==null|| client.getEmail()==null ||client.getPlafon()==0;
+        boolean there_is_a_null_attribute = client.getPhone() == null || client.getLname() == null ||
+                client.getFname() == null || client.getEmail() == null || client.getPlafon() == 0;
 
-        if(there_is_a_null_attribute){
+        if (there_is_a_null_attribute) {
             throw new IllegalStateException("All the fields should be filled in");
-        }
-        else{
-            Client opt1 = clientRepository.findClientByPhone(client.getPhone());
-            Client opt2 = clientRepository.findClientByEmail(client.getEmail());
-            if(opt1!=null ){
+        } else {
+             boolean opt1 = clientRepository.findClientByPhone(client.getPhone()).isPresent();
+             boolean opt2 = clientRepository.findClientByEmail(client.getEmail()).isPresent();
+            if(!emailPattern.matcher(client.getEmail()).matches()){
+                throw new IllegalStateException("Invalid email addresse");
+            }
+            else if (!namesPattern.matcher(client.getFname()).matches()){
+                throw new IllegalStateException("Invalid first name address");
+            }
+            else if (!namesPattern.matcher(client.getLname()).matches()){
+                throw new IllegalStateException("Invalid last name  address");
+            }
+            else if (opt1 == true) {
                 throw new IllegalStateException("This phone number is already used");
-            }
-            else if(opt2!=null){
+            } else if (opt2 == true) {
                 throw new IllegalStateException("This email is already used");
-            }
-            else{
+            } else {
+
                 client.setSolde(0);
                 client.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode("123456"));
                 client.setBirth(LocalDate.now());
@@ -89,49 +86,98 @@ public class ClientService {
         }
     }
 
-    public void updateClient(@RequestBody Client client,String email){
+    @Transactional
+    public Client updateClient(Long ClientId,Client client){
 
-        Client clientdb = clientRepository.findClientByEmail(email);
-        boolean there_is_a_problem = false;
+        Pattern phonePattern = Pattern.compile("^\\d{10}$");
+        Pattern emailPattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+        Pattern namesPattern = Pattern.compile("^[A-Za-z]{3,20}$");
+        Client clientDB = clientRepository.findClientById(ClientId).get();
+        if(!phonePattern.matcher(client.getPhone()).matches()){
+            throw new IllegalStateException("Phone number is not valid");
+        }
+        if(!emailPattern.matcher(client.getEmail()).matches()){
+            throw new IllegalStateException("Email format is not valid!!");
+        }
+        if(!namesPattern.matcher(client.getFname()).matches()){
+            throw new IllegalStateException("First name is not valid");
 
-        if(client.getFname()!=null && client.getFname().length()>3 && !Objects.equals(clientdb.getFname(),client.getFname())){
-            clientdb.setFname(client.getFname());
         }
-        if(client.getLname()!=null && client.getLname().length()>3 && !Objects.equals(clientdb.getLname(),client.getLname())){
-            clientdb.setLname(client.getLname());
+        if(!namesPattern.matcher(client.getLname()).matches()){
+            throw new IllegalStateException("Last name is not valid");
         }
-        if(client.getEmail()!=null && client.getEmail().length()>7 && !Objects.equals(clientdb.getEmail(),client.getEmail())){
-            Client opt = clientRepository.findClientByEmail(client.getEmail());
-            if(opt != null){
+        if(client.getFname()!=null && client.getLname().length()>3 &&
+                !Objects.equals(clientDB.getFname(),client.getFname())){
+
+            clientDB.setFname(client.getFname());
+        }
+        if(client.getLname()!=null && client.getLname().length()>3 &&
+                !Objects.equals(clientDB.getLname(),client.getLname())){
+            clientDB.setLname(client.getLname());
+        }
+        if(client.getEmail()!=null && client.getEmail().length()>7 &&
+                !Objects.equals(clientDB.getEmail(),client.getEmail())){
+            boolean opt = clientRepository.findClientByEmail(client.getEmail()).isPresent();
+            if(opt == true){
                 throw new IllegalStateException("email you want to update already exist!!");
             }
-            clientdb.setEmail(client.getEmail());
+            clientDB.setEmail(client.getEmail());
         }
-        if(client.getPhone()!=null && client.getPhone().length()>9 && !Objects.equals(clientdb.getPhone(),client.getPhone())){
-            Client opt = clientRepository.findClientByPhone(client.getPhone());
-            if(opt != null ){
+        if(client.getAddress()!=null && client.getAddress().length()>5 &&
+                !Objects.equals(clientDB.getAddress(),client.getAddress())){
+            clientDB.setAddress(client.getAddress());
+        }
+        if(client.getPhone()!=null && client.getPhone().length()>9 &&
+                !Objects.equals(clientDB.getPhone(),client.getPhone())){
+            boolean opt = clientRepository.findClientByPhone(client.getPhone()).isPresent();
+            if(opt){
                 throw new IllegalStateException("phone you want to update already exist!!");
             }
-            clientdb.setPhone(client.getPhone());
+            clientDB.setPhone(client.getPhone());
         }
-
-        if(there_is_a_problem != false){
-
+        if(client.getBirth()!=null){
+            clientDB.setBirth(client.getBirth());
+        }
+        if(client.getIsFavorite()!=null){
+            clientDB.setIsFavorite(client.getIsFavorite());
+        }
+        if(client.getSolde()!=0){
+            clientDB.setSolde(client.getSolde());
+        }
+        return clientDB;
+    }
+    @Transactional
+    public void toggleIsFavorite(Long id){
+        Client clientDb = clientRepository.findClientById(id).get();
+        clientDb.setIsFavorite(!clientDb.getIsFavorite());
+    }
+    @Transactional
+    public void assign_client_to_agent(Long idClient,String emailAgent){
+        Client clientDb = clientRepository.findClientById(idClient).get();
+        Agent agent = agentRepository.findAgentByEmail(emailAgent).get();
+        clientDb.setAgent(agent);
+    }
+    public void deleteClient(Long id){
+        Optional<Client> opt1 = clientRepository.findClientById(id);
+        if(opt1.isPresent()){
+            clientRepository.deleteById(id);
+        }else {
+            throw new IllegalStateException("This Id doesn't exist!");
         }
     }
-
-    public Client getClient(String phone){
-        try{
-            Client client = clientRepository.findClientByPhone(phone);
-
-            return client;
-        }
-        catch(RuntimeException exception){
-            throw exception;
-        }
+    public List<Client> getClients(){
+        return clientRepository.findAll();
+    }
+    public Optional<List<Client>> getClientsWithoutAgent(){
+        return clientRepository.findClientWithoutAgent();
     }
     public Client getClientByPhone(String phone){
-        return clientRepository.findByPhone(phone);
+        return clientRepository.findClientByPhone(phone).get();
+    }
+
+    public Optional<Client> getClientById(Long Id){ return clientRepository.findClientById(Id);};
+    public List<Client> getClientsByAgentId(Long agentId){
+        return clientRepository.getClientsByAgentId(agentId).get();
     }
 
     @Transactional
@@ -152,8 +198,8 @@ public class ClientService {
         }
         else{
             try{
-                Client emitter  = clientRepository.findClientByPhone(emitterPhone);
-                Client receiver  = clientRepository.findClientByPhone(receiverPhone);
+                Client emitter  = clientRepository.findClientByPhone(emitterPhone).get();
+                Client receiver  = clientRepository.findClientByPhone(receiverPhone).get();
                 if(receiver == null){
                     throw new RuntimeException("There is no Client with that phone number");
                 }
@@ -195,7 +241,7 @@ public class ClientService {
             throw new RuntimeException("The amount must be a in {5,10,20,50,100,200}");
         }
         else{
-            Client emitter = clientRepository.findClientByPhone(emitterPhone);
+            Client emitter = clientRepository.findClientByPhone(emitterPhone).get();
             if(emitter.getSolde()< amount){
                 throw new RuntimeException("You don't have enough money to do this transaction");
             }
@@ -253,7 +299,7 @@ public class ClientService {
                    NotValidatedTransaction notValidatedTransaction = verificationCodeDB.getTransaction();
 
                    if (notValidatedTransaction != null) {
-                       Client emitter = clientRepository.findClientByPhone(notValidatedTransaction.getEmitter());
+                       Client emitter = clientRepository.findClientByPhone(notValidatedTransaction.getEmitter()).get();
                        double amount = notValidatedTransaction.getAmount();
 
                        if (emitter.getSolde() > amount) {
@@ -277,7 +323,7 @@ public class ClientService {
                            emitter.setSolde(emitter.getSolde() - amount);
 
                            if(receiver_is_a_client == true){
-                              Client receiver = clientRepository.findClientByPhone(receiverPhone);
+                              Client receiver = clientRepository.findClientByPhone(receiverPhone).get();
                               receiver.setSolde(receiver.getSolde() + amount);
                            }
 

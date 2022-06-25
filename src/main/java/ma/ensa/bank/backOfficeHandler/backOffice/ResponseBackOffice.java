@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResponseBackOffice {
-    private String backId;
+    private Long backId;
     private String email;
     private String password;
 }
