@@ -17,6 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @SpringBootApplication
 public class BankBackApplication {
@@ -73,7 +74,11 @@ public class BankBackApplication {
 
 			BackOffice backOffice = new BackOffice(null,
 					"office@gmail.com",
-					"123456"
+					"123456",
+					"John",
+					"Doe",
+					"2126888888888",
+					LocalDate.now(),null
 			);
 			backOfficeRepository.save(backOffice);
 
