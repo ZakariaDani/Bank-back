@@ -112,6 +112,10 @@ public class AgentContoller {
             return ResponseEntity.badRequest().body("Id doesn't exist");
         }
     }
+    @GetMapping("/updatecurrentagent")
+    public void update(){
+
+    }
     @GetMapping("/getcurrentinfo")
     public Agent getCurrentAgent(HttpServletRequest request){
         String token = request.getHeader("Authorization");

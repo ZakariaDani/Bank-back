@@ -31,6 +31,7 @@ public class Agent {
     private String fileName;
     private LocalDate dateOfBirth;
     private boolean isFavorite;
+    private int number_of_client=0;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
