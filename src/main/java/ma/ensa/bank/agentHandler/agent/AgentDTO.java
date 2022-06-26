@@ -18,4 +18,5 @@ public class AgentDTO {
 
     private boolean isFavorite;
     private Long backofficeId;
+    private int number_of_client;
 }
