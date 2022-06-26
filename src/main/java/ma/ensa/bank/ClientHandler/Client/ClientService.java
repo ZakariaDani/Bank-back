@@ -134,7 +134,6 @@ public class ClientService {
         Pattern namesPattern = Pattern.compile("^[A-Za-z]{3,20}$");
 
         Client clientdb = clientRepository.findClientById(clientId);
-        System.out.println(clientdb.getEmail());
         if(!phonePattern.matcher(clientDTO.getPhone()).matches()){
             throw new IllegalStateException("Phone number is not valid");
         }

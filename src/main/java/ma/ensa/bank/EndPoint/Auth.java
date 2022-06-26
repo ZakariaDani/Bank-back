@@ -34,7 +34,6 @@ public class Auth {
     @GetMapping("/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws Exception{
         String authorisationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        System.out.println("authorisationHeader"+ authorisationHeader);
         if (authorisationHeader != null && authorisationHeader.startsWith("Bearer")) {
             String jwt = authorisationHeader.substring(7);
             try {

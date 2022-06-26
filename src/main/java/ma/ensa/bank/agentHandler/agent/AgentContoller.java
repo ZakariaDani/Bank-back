@@ -141,7 +141,6 @@ public class AgentContoller {
     }
     @GetMapping("/getTClientTransactions/{id}")
     public List<Transaction> getTClientTransactions(@PathVariable("id") Long id){
-        System.out.println("id::::"+id);
         List<Transaction> clientTransactions = this.clientService.getTClientTransactions(id);
 
         return clientTransactions;

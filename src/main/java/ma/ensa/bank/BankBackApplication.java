@@ -36,43 +36,6 @@ public class BankBackApplication {
 	@Bean
 	CommandLineRunner commandLineRunner( ClientService clientService){
 		return args -> {
-//			agentService.addAgent(new Agent(
-//					null,
-//					"agent1",
-//					"1234",
-//					"0696785179",
-//					"agen1@gmail.com",
-//					LocalDate.of(2000, 02, 04))
-//			);
-//			agentService.addAgent(new Agent(
-//					null,
-//					"agent2",
-//					"1234",
-//					"0696785579",
-//					"agen2@gmail.com",
-//					LocalDate.of(1999, 05, 04))
-//			);
-
-//			clientService.addClient(new Client(null,
-//					"ahmed",
-//					"zibout",
-//					"0685412369",
-//					"ahmed@gmail.com",
-//					LocalDate.of(2000, 03, 05),
-//					"15963",
-//					150.6));
-			//clientService.addClient(new Client("Marouane","Zibout","0625252528","maoruane@email.com","Mahmid", LocalDate.of(2000, 03, 05),100.00));
-
-			//clientService.addClient(new Client("Marouane","Zibout","0625252528","maoruane@email.com","Mahmid", LocalDate.of(2000, 03, 05),100.00));
-
-			/*clientService.addClient(
-					new Client(
-							"abdo",
-							"elhammadi",
-							"0666",
-							"a@gmail.com",
-					200));*/
-
 
 			BackOffice backOffice = new BackOffice(null,
 					"office@gmail.com",
@@ -100,9 +63,6 @@ public class BankBackApplication {
 					"file", "Daif1234", backOffice.getEmail(),null,
 					false,1L ,
 					3));
-
-		//	clientService.addClient(new ClientDTO(null, "zakaria", "dani","0606060606", "email@email.com", "789", "ta7nawt", LocalDate.of(2000,5,12),200.0,2L));
-		//	clientService.addClient(new ClientDTO(null, "marouane", "zibout","0606780606", "client@email.com", "789", "ta7nawt", LocalDate.of(2000,5,12),200.0,null));
 
 		};
 	}

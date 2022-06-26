@@ -62,7 +62,6 @@ public class BackOfficeService {
                 return responseBackOffice;
             }
             else {
-                System.out.println(backOffice.getPassword()+"   "+backOffice.getEmail());
                 throw new IllegalStateException("email or password invalid");
             }
         }
