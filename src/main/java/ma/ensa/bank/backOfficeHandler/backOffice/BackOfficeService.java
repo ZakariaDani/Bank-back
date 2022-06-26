@@ -2,11 +2,17 @@ package ma.ensa.bank.backOfficeHandler.backOffice;
 
 
 import lombok.AllArgsConstructor;
+import ma.ensa.bank.ClientHandler.Client.Client;
+import ma.ensa.bank.ClientHandler.Client.ClientDTO;
 import ma.ensa.bank.agentHandler.agent.Agent;
 import ma.ensa.bank.agentHandler.agent.AgentDTO;
 import ma.ensa.bank.agentHandler.agent.AgentRepository;
+import ma.ensa.bank.backOfficeHandler.backOfficeSecurity.PasswordEncoder;
 import ma.ensa.bank.image.ImageService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @AllArgsConstructor
@@ -24,6 +31,8 @@ public class BackOfficeService {
     private final AgentRepository agentRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ImageService imageService;
+
+    private final JavaMailSender javaMailSender;
 
     public BackOffice updateBackOffice(BackOffice existedBackOffice, BackOfficeDTO backOfficeDTO){
         String firstName = backOfficeDTO.getFirstName();
@@ -101,7 +110,7 @@ public class BackOfficeService {
         agent.setPassword(bCryptPasswordEncoder.encode(agentDTO.getPassword()));
         BackOffice backOffice = backOfficeRepository.findByEmail(agentDTO.getBackofficeEmail()).get();
         agent.setBackOffice(backOffice);
-
+        sendCodeToAgent(agent);
         return agentRepository.save(agent);
     }
 
@@ -167,5 +176,32 @@ public class BackOfficeService {
     }
 
     public List<Agent> getFavoriteAgents(){return agentRepository.findFavoriteAgents();}
+
+    public void sendCodeToAgent(Agent agent){
+        String newPassword = new Random().ints(10,
+                        33,
+                        122).collect(StringBuilder::new,
+                        StringBuilder::appendCodePoint,
+                        StringBuilder::append)
+                .toString();
+
+        agent.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode(newPassword));
+        this.updateAgent(agent, new AgentDTO(agent));
+
+        try{
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("ebanking159@gmail.com");
+            message.setTo(agent.getEmail());
+            message.setText("Hello Ms, Mr " + agent.getFirstName() +" "+ agent.getLastName()+
+                    " Your New Password is: " + newPassword);
+            message.setSubject("E banking: Your new code");
+
+            javaMailSender.send(message);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("there is something wrong with sending email service");
+        }
+    }
 
 }
