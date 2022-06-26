@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 
 public class CurrentUserInfo {
 
-    private String email;
+    private String phone;
 
-    public static String getEmail(HttpServletRequest request){
+    public static String getPhoneNumber(HttpServletRequest request){
 
         String token = request.getHeader("Authorization");
         String jwt = token.substring(7);

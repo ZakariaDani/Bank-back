@@ -1,7 +1,7 @@
 package ma.ensa.bank.email;
 
 import ma.ensa.bank.ClientHandler.Client.Client;
-//import ma.ensa.bank.ClientHandler.Client.ClientService;
+import ma.ensa.bank.ClientHandler.Client.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -41,4 +41,9 @@ public class EmailService {
             System.out.println("Error");
         }
     }
+
+
+
+
+
 }

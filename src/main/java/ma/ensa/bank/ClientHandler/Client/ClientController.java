@@ -1,20 +1,33 @@
 package ma.ensa.bank.ClientHandler.Client;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ma.ensa.bank.ClientHandler.Client.TransactionHandler.Transaction;
 import ma.ensa.bank.ClientHandler.Client.TransactionHandler.TransactionDTO;
-import ma.ensa.bank.ClientHandler.Client.TransactionHandler.TransactionService;
 import ma.ensa.bank.ClientHandler.Client.VerificationHandler.VerificationCode;
 import ma.ensa.bank.Helpers.CurrentUserInfo;
+import ma.ensa.bank.Helpers.NewPassword;
 import ma.ensa.bank.SMS.SmsService;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.security.Principal;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
+import static javax.security.auth.callback.ConfirmationCallback.OK;
 
 @RestController
 @RequestMapping("/api/v1/client")
@@ -26,20 +39,15 @@ public class ClientController {
     @Autowired
     private SmsService smsService;
 
-    @Autowired
-    private TransactionService transactionService;
-    @CrossOrigin
-    @PostMapping("/register")
-    public void registerClient(@RequestBody ClientDTO client){
-        clientService.addClient(client);
-    }
+
 
     @CrossOrigin
     @GetMapping("/getInfo")
     public Client getClient(HttpServletRequest request){
 
-        String phone = CurrentUserInfo.getEmail(request);
+        String phone = CurrentUserInfo.getPhoneNumber(request);
         return clientService.getClientByPhone(phone);
+
     }
 
     @CrossOrigin
@@ -50,12 +58,12 @@ public class ClientController {
         String receiverPhone = transactionDTO.getReceiverPhone();
         double amount = transactionDTO.getAmount();
 
-        String currentUserPhone = CurrentUserInfo.getEmail(request);
+        String currentUserPhone = CurrentUserInfo.getPhoneNumber(request);
 
         Long transactionId = clientService.makeTransaction(currentUserPhone, receiverPhone, amount);
 
         return transactionId;
-}
+    }
     @CrossOrigin
     @GetMapping("/clients")
     public List<Client> getClients(){
@@ -63,22 +71,25 @@ public class ClientController {
     }
 
     @CrossOrigin
-    @PostMapping("/addclient")
-    public void addClient(@RequestBody ClientDTO client){
+    @PostMapping("/register")
+    public void registerClient(@RequestBody ClientDTO client){
         if(client==null){
             throw new IllegalStateException("No client to add");
         }else{
-            clientService.addClient(client);
+            System.out.println(client.getFirstName());
+            System.out.println(client.getLastName());
+            System.out.println(client.getPlafon());
+            clientService.registerClient(client);
         }
     }
 
     @CrossOrigin
     @PutMapping(value="/updateclient/{ClientId}")
-    public void updateClient(@PathVariable("ClientId") Long ClientId,@RequestBody Client client){
-        if(client==null){
+    public void updateClient(@PathVariable("ClientId") Long clientId,@RequestBody ClientDTO clientDTO){
+        if(clientDTO==null){
             throw new IllegalStateException("No client to update");
         }else{
-            clientService.updateClient(ClientId,client);
+            clientService.updateClient(clientId , clientDTO);
         }
     }
 
@@ -86,7 +97,7 @@ public class ClientController {
     @DeleteMapping(value="/deleteclient/{clientid}")
     public void deleteagent(@PathVariable("clientid") Long clientid){
         if(clientid==null){
-            throw new IllegalStateException("Please Enter a valid ClientId");
+            throw new IllegalStateException("Please Enter a valid CardId");
         }else {
             clientService.deleteClient(clientid);
         }
@@ -99,7 +110,7 @@ public class ClientController {
 
         String entreprise = transactionDTO.getTelecomEntreprise();
         double amount = transactionDTO.getAmount();
-        String currentUserPhone = CurrentUserInfo.getEmail(request);
+        String currentUserPhone = CurrentUserInfo.getPhoneNumber(request);
 
         Long transactionId = clientService.makeTelecomRecharge(currentUserPhone, entreprise, amount);
 
@@ -112,7 +123,7 @@ public class ClientController {
     public void receive_verification_code(@RequestBody VerificationCode verificationCode,
                                           HttpServletRequest request){
 
-        String phoneNumber = CurrentUserInfo.getEmail(request);
+        String phoneNumber = CurrentUserInfo.getPhoneNumber(request);
         String id = request.getHeader("transactionId");
         Long transactionId = Long.valueOf(id);
 
@@ -122,21 +133,43 @@ public class ClientController {
     @CrossOrigin
     @GetMapping("/getTransactions")
     @ResponseBody
-    public Page<Transaction> getTransactions(@RequestParam(value="page",required = false) int page,
-                                            @RequestParam(value = "pageSize",required = false) int pageSize
-                                            , HttpServletRequest request){
+    public List<Transaction> getTransactions(HttpServletRequest request){
 
-        page = page > 0? page-1 : page;
-        pageSize = pageSize==0? 5 :pageSize;
-        System.out.println(page);
-        System.out.println(pageSize);
-        String phoneNumber = CurrentUserInfo.getEmail(request);
-        return transactionService.getTransactions(phoneNumber,page,pageSize);
+        String phoneNumber = CurrentUserInfo.getPhoneNumber(request);
+        return clientService.getTransactions(phoneNumber);
 
     }
 
-    @GetMapping("/a")
-    public void a(){
+    @CrossOrigin
+    @GetMapping("/getStatusOfTheClient")
+    @ResponseBody
+    public boolean getStatusOfTheClient(HttpServletRequest request){
+        String phoneNumber = CurrentUserInfo.getPhoneNumber(request);
+        boolean clientStatus = this.clientService.getClientStatus(phoneNumber);
+        System.out.println(phoneNumber);
+        System.out.println(clientStatus);
+        return clientStatus;
+    }
+
+    @CrossOrigin
+    @PostMapping("/clientNewPassword")
+    @ResponseBody
+    public void changeClientPassword(@RequestBody NewPassword newPassword,
+                                     HttpServletRequest request){
+
+        String phoneNumber = CurrentUserInfo.getPhoneNumber(request);
+        String password = newPassword.getPassword();
+        this.clientService.changeClientPassword(phoneNumber, password);
+    }
+
+    @CrossOrigin
+    @GetMapping("/clientInfo")
+    @ResponseBody
+    public Client getClientInfo(HttpServletRequest request){
+
+        String phoneNumber = CurrentUserInfo.getPhoneNumber(request);
+
+        return clientService.getClientInfo(phoneNumber);
 
     }
 

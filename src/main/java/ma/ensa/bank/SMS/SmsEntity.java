@@ -8,9 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class SmsEntity {
-
     private String smsReceiver;
     private String message;
     private String code;
-
 }

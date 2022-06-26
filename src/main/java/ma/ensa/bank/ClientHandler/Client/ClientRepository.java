@@ -1,5 +1,6 @@
 package ma.ensa.bank.ClientHandler.Client;
 
+import ma.ensa.bank.agentHandler.agent.Agent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -10,16 +11,16 @@ import java.util.Optional;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
-    Optional<Client> findByPhone(String phone);
-    Optional<Client> findClientByPhone(String phone);
+    Client findClientByPhone(String phone);
 
-    Optional<Client> findClientByEmail(String email);
-    Optional<Client> findClientById(Long id);
+    Client findClientByEmail(String email);
 
-    @Query("SELECT s FROM Client s WHERE s.agent IS NULL")
-    Optional<List<Client>> findClientWithoutAgent();
+    Client findClientById(Long id);
 
-    @Query("SELECT s FROM Client s WHERE s.agent.idCardNumber=?1")
-    Optional<List<Client>> getClientsByAgentId(Long agentId);
+    List<Client> findByAgent(Agent agent);
+
+    List<Client> findByAgentIdCardNumber(Long agentId);
+
+
 
 }

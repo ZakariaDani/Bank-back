@@ -27,4 +27,3 @@ public class VerificationCode {
     @JoinColumn(name="transaction",referencedColumnName = "id")
     private NotValidatedTransaction transaction;
 }
-
