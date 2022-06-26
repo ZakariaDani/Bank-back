@@ -19,4 +19,23 @@ public class AgentDTO {
     private boolean isFavorite;
     private Long backofficeId;
     private int number_of_client;
+
+    public AgentDTO(Agent agent) {
+        this.idCardNumber = agent.getIdCardNumber();
+        this.firstName = agent.getFirstName();
+        this.lastName =agent.getLastName();
+        this.adress = agent.getAdress();
+        this.email = agent.getEmail();
+        this.phone = agent.getPhone();
+        this.matricule = agent.getMatricule();
+        this.patente = agent.getPatente();
+        this.description =agent.getDescription();
+        this.fileName = agent.getFileName();
+        this.password = agent.getPassword();
+        this.backofficeEmail = agent.getBackOffice().getEmail();
+        this.dateOfBirth = agent.getDateOfBirth();
+        this.isFavorite = agent.isFavorite();
+        this.backofficeId = agent.getBackOffice().getBackId();
+        this.number_of_client = agent.getNumber_of_client();
+    }
 }
