@@ -37,32 +37,41 @@ public class BankBackApplication {
 	CommandLineRunner commandLineRunner( ClientService clientService){
 		return args -> {
 
+
+//			clientService.addClient(new Client(null,
+//					"ahmed",
+//					"zibout",
+//					"0685412369",
+//					"ahmed@gmail.com",
+//					LocalDate.of(2000, 03, 05),
+//					"15963",
+//					150.6));
+			//clientService.addClient(new Client("Marouane","Zibout","0625252528","maoruane@email.com","Mahmid", LocalDate.of(2000, 03, 05),100.00));
+
+			//clientService.addClient(new Client("Marouane","Zibout","0625252528","maoruane@email.com","Mahmid", LocalDate.of(2000, 03, 05),100.00));
+
+			/*clientService.addClient(
+					new Client(
+							"abdo",
+							"elhammadi",
+							"0666",
+							"a@gmail.com",
+					200));*/
+
+
 			BackOffice backOffice = new BackOffice(null,
 					"office@gmail.com",
 					"123456",
 					"John",
 					"Doe",
-					"06888888888",
+					"2126888888888",
 					LocalDate.now(),null
 			);
 			backOfficeRepository.save(backOffice);
 
 
-			backOfficeService.saveAgent(new AgentDTO(null,"Zakaria", "Dani", "Kaboul-afghanistan", "zakaria@email.com",
-					"0606060606", "E156156", "5556", "good one", "file",
-					"Dani1234", backOffice.getEmail(),null ,false,1L, 15));
-			backOfficeService.saveAgent(new AgentDTO(null,"Aymane",
-					"Daif", "azli", "aymane@email.com", "070707070707", "E933333", "5557",
-					"OK", "file", "Daif1234", backOffice.getEmail(),null,false,
-					1L ,11));
-			backOfficeService.saveAgent(new AgentDTO(null,"moha", "Daif", "azli",
-					"moha@email.com", "070707070707", "E933333", "5557", "OK", "file",
-					"Daif1234", backOffice.getEmail(),null,false,1L ,20));
-			backOfficeService.saveAgent(new AgentDTO(null,"samir", "Daif", "azli",
-					"samir@email.com", "070707070707", "E933333", "5557", "OK",
-					"file", "Daif1234", backOffice.getEmail(),null,
-					false,1L ,
-					3));
+		//	clientService.addClient(new ClientDTO(null, "zakaria", "dani","0606060606", "email@email.com", "789", "ta7nawt", LocalDate.of(2000,5,12),200.0,2L));
+		//	clientService.addClient(new ClientDTO(null, "marouane", "zibout","0606780606", "client@email.com", "789", "ta7nawt", LocalDate.of(2000,5,12),200.0,null));
 
 		};
 	}
