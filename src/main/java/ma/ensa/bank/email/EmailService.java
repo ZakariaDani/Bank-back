@@ -35,10 +35,8 @@ public class EmailService {
             simpleMailMessage.setSubject(emailEntity.getSubject());
 
             javaMailSender.send(simpleMailMessage);
-            System.out.println("Success");
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            System.out.println("Error");
         }
     }
 

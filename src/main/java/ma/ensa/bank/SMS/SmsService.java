@@ -40,7 +40,6 @@ public class SmsService {
         com.vonage.client.sms.SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
 
         if (response.getMessages().get(0).getStatus() == com.vonage.client.sms.MessageStatus.OK) {
-            System.out.println("Message sent successfully.");
             return true;
         } else {
             System.out.println("Message failed with error: " + response.getMessages().get(0).getErrorText());

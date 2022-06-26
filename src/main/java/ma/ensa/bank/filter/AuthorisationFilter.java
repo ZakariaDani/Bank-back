@@ -43,11 +43,7 @@ public class AuthorisationFilter extends OncePerRequestFilter {
             } catch (Exception e) {
 
                 response.setHeader("Error", "you are not permitted");
-                System.out.println("**************************");
-                System.out.println(e.getCause());
-                System.out.println("**************************");
-                System.out.println(e.getMessage());
-                System.out.println("*****************************");
+
                 response.setHeader("error", e.getMessage());
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             }

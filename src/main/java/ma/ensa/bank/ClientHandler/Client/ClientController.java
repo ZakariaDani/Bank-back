@@ -76,9 +76,7 @@ public class ClientController {
         if(client==null){
             throw new IllegalStateException("No client to add");
         }else{
-            System.out.println(client.getFirstName());
-            System.out.println(client.getLastName());
-            System.out.println(client.getPlafon());
+
             clientService.registerClient(client);
         }
     }
@@ -146,8 +144,7 @@ public class ClientController {
     public boolean getStatusOfTheClient(HttpServletRequest request){
         String phoneNumber = CurrentUserInfo.getPhoneNumber(request);
         boolean clientStatus = this.clientService.getClientStatus(phoneNumber);
-        System.out.println(phoneNumber);
-        System.out.println(clientStatus);
+
         return clientStatus;
     }
 
