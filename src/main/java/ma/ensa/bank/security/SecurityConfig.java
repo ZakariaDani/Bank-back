@@ -48,7 +48,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                System.out.println("hello");
                 User user ;
 
                 Pattern pattern_of_a_phone_number = Pattern.compile("^[0-9]+");//. represents single character
@@ -69,34 +68,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     }
                 }
                 else{
-                    System.out.println("agent");
                     Agent agent = agentService.getAgentByEmail(username);
 
 
                     if(agent != null){
-                        System.out.println("agent Found");
                         Collection<GrantedAuthority> authorities = new ArrayList<>();
                         SimpleGrantedAuthority roleAuthority = new SimpleGrantedAuthority("ROLE_AGENT");
                         authorities.add(roleAuthority);
                         user = new User(agent.getEmail(),agent.getPassword(), authorities );
                     }else {
-                        System.out.println("**trrrrrrrrrrrrrrrr");
-                        System.out.println(username);
                         BackOffice backOffice = backOfficeService.getBackOfficeByEmail(username);
 
-                        System.out.println("*****************************");
-                        System.out.println(backOffice.getPassword());
-                        System.out.println("****************************");
+
                         if(backOffice != null){
-                            System.out.println("dkhelt******************");
                             Collection<GrantedAuthority> authorities = new ArrayList<>();
                             SimpleGrantedAuthority backOfficeAuthority = new SimpleGrantedAuthority("ROLE_BACKOFFICE");
                             authorities.add(backOfficeAuthority);
                             user = new User(backOffice.getEmail(),backOffice.getPassword(), authorities );
                         }
                         else {
-                            System.out.println("madkhelt******************");
-
                             user = null;
                         }
                     }}

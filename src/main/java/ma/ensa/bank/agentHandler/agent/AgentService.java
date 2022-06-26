@@ -32,7 +32,6 @@ public class AgentService {
                 return value;
             }
             else {
-                System.out.println(agent.getPassword()+"   "+agent.getEmail());
                 throw new IllegalStateException("email or password invalid");
             }
         }
@@ -51,7 +50,6 @@ public class AgentService {
         if(opt1.isPresent() || opt2.isPresent() || opt3.isPresent()){
             throw new IllegalStateException("Duplicate Data in the database!!");
         }else{
-            System.out.println(agent);
             agent.setPassword(PasswordEncoder.bCryptPasswordEncoder().encode(agent.getPassword()));
             agentRepository.save(agent);
         }

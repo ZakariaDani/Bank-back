@@ -23,7 +23,7 @@ public class VerificationCode {
     private String receiver;
     private String code;
     private String date;
-    @OneToOne()
+    @ManyToOne()
     @JoinColumn(name="transaction",referencedColumnName = "id")
     private NotValidatedTransaction transaction;
 }

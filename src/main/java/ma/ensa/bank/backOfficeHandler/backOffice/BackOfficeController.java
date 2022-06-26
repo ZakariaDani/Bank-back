@@ -105,7 +105,6 @@ public class  BackOfficeController {
 
     @PatchMapping ("/agents/{id}")
     public ResponseEntity<?> updateAgent(@PathVariable("id") final Long id, @RequestBody AgentDTO agentDTO) {
-        System.out.println("here");
         if (agentDTO == null)
             return ResponseEntity.badRequest().body("The provided agent is not valid");
 
