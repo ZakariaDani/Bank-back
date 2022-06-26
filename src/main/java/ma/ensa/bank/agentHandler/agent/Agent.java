@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.ToString;
 import ma.ensa.bank.ClientHandler.Client.Client;
 import ma.ensa.bank.backOfficeHandler.backOffice.BackOffice;
 
@@ -32,7 +31,6 @@ public class Agent {
     private String fileName;
     private LocalDate dateOfBirth;
     private boolean isFavorite;
-
     private int number_of_client=0;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -48,8 +46,8 @@ public class Agent {
     @OneToMany(
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER)
-    @JoinColumn(name = "agent_id")
+            fetch = FetchType.EAGER,
+            mappedBy = "agent")
     private List<Client> Clients = new ArrayList<>();
 
 
@@ -74,10 +72,10 @@ public class Agent {
 
     }
 
-    public Agent(String firstName, String lastName, String adress, String email, String phone, String matricule, String patente, String description, String fileName, LocalDate dateOfBirth, String password,boolean isFavorite) {
+    public Agent(String firstName, String lastName, String address, String email, String phone, String matricule, String patente, String description, String fileName, LocalDate dateOfBirth, String password,boolean isFavorite) {
         this.firstName = firstName;
         LastName = lastName;
-        this.adress = adress;
+        this.adress = address;
         this.email = email;
         this.phone = phone;
         this.matricule = matricule;

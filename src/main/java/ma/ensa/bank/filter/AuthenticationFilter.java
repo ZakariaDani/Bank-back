@@ -41,7 +41,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             username = requestMap.get("identifiant");
             password = requestMap.get("password");
 
-
             if(username != null){
                 authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
 
@@ -83,8 +82,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed)
             throws IOException, ServletException {
 
-        response.setContentType("application/json");
-        response.setHeader("Error","true");
-        new ObjectMapper().writeValue(response.getOutputStream(), "wrong credentials try again");
+        throw new RuntimeException("Wrong credentials try again");
     }
 }

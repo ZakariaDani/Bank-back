@@ -7,31 +7,29 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
 public class ClientDTO {
-    private Long id;
+
     private String firstName;
     private String lastName;
     private String phone;
     private String email;
     private String password="123456";
     private String address;
-    private LocalDate birth;
-    private Boolean isFavorite=false;
-    private Double solde;
-    private Long agentId;
+    private Double solde = 0.0;
+    private Double plafon = 0.0;
 
-    public ClientDTO(Long id, String firstName, String lastName, String phone, String email, String password, String address, LocalDate birth, Double solde,Long agentId) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
-        this.email = email;
-        this.password = password;
-        this.address = address;
-        this.birth = birth;
-        this.solde = solde;
-        this.agentId = agentId;
+    private Long agentId = 0L;
+
+    public ClientDTO(Client client){
+        this.firstName = client.getFirstName();
+        this.lastName = client.getLastName();
+        this.phone = client.getPhone();
+        this.email = client.getEmail();
+        this.password = client.getPassword();
+        this.address = client.getFirstName();
+        this.solde = client.getSolde();
+        this.plafon = client.getPlafon();
     }
 }

@@ -1,7 +1,9 @@
 package ma.ensa.bank.SMS;
 
+
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 import com.vonage.client.VonageClient;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +12,7 @@ public class SmsService {
 
     //twilio
     public static final String ACCOUNT_SID = "ACee29398a4819ecd6e704046892ed2c36";
-    public static final String AUTH_TOKEN ="b4bbde62147b8d8e05bd62f77be3f051";
+    public static final String AUTH_TOKEN ="6f52bf71d814b7398256b6b789b0f3c1";
     public static final String MY_NUMBER = "+12056513308";
 
     //Vonage

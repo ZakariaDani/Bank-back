@@ -31,7 +31,7 @@ public class NotValidatedTransactionService {
     public void deleteTransaction(Long id) {
         try{
             notValidatedTransactionRepository.deleteById(id);
-            System.out.println("delete transaction");
+
         }
         catch (Exception exception){
             throw new RuntimeException("There is something wrong with the server");
